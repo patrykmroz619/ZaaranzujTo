@@ -6,6 +6,7 @@
     "dev": "turbo run dev",
     "dev:api": "turbo run dev --filter=platform-api",
     "dev:web": "turbo run dev --filter=platform-web",
+    "dev:frontend-demo": "turbo run dev --filter=frontend-demo",
     "dev:contracts": "turbo run dev --filter=@repo/contracts",
     "start": "turbo run start",
     "lint": "turbo run lint",
