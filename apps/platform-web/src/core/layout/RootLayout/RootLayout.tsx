@@ -1,20 +1,21 @@
 import { ReactNode } from "react";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { DM_Serif_Display, DM_Sans } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { ThemeProvider } from "@/core/packages/theme";
 import { AuthProvider } from "@/core/packages/auth";
 
-import "./globals.css";
+import "@repo/ui/styles.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const dmSerifDisplay = DM_Serif_Display({
+  variable: "--font-dm-serif-display",
+  weight: "400",
   subsets: ["latin"],
 });
 
@@ -33,7 +34,7 @@ export const RootLayout = async (props: TRootLayoutProps) => {
 
   return (
     <html lang="pl" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${dmSans.variable} ${dmSerifDisplay.variable} antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
