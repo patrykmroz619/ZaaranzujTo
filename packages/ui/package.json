@@ -4,27 +4,20 @@
   "private": true,
   "types": "./src/index.ts",
   "exports": {
+    "./core/*": {
+      "types": "./src/core/*.tsx",
+      "default": "./src/core/*.tsx"
+    },
+    "./hooks/*": {
+      "types": "./src/hooks/*.tsx",
+      "default": "./src/hooks/*.tsx"
+    },
+    "./lib": {
+      "types": "./src/lib/index.ts",
+      "default": "./src/lib/index.ts"
+    },
     "./styles.css": "./src/styles/globals.css",
-    "./*": {
-      "types": "./src/*",
-      "default": "./src/*"
-    }
-  },
-  "typesVersions": {
-    "*": {
-      "core/*": [
-        "src/core/*"
-      ],
-      "hooks/*": [
-        "src/hooks/*"
-      ],
-      "lib/*": [
-        "src/lib/*"
-      ],
-      "*": [
-        "src/index.ts"
-      ]
-    }
+    "./package.json": "./package.json"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
@@ -36,7 +29,7 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@types/node": "25.3.5",
+    "@types/node": "25.5.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "eslint": "10.0.3",
@@ -81,7 +74,7 @@
     "react-day-picker": "9.14.0",
     "react-dom": "19.2.4",
     "react-hook-form": "7.71.2",
-    "react-resizable-panels": "4.7.2",
+    "react-resizable-panels": "4.7.3",
     "recharts": "3.8.0",
     "sonner": "2.0.7",
     "tailwind-merge": "3.5.0",

@@ -5,7 +5,7 @@ export default function RootPage() {
     <div>
       <h1>Welcome to the Platform Web App!</h1>
       <p>This is the root page of the application.</p>
-      <Button>Get Started</Button>
+      <Button>Click Me</Button>
     </div>
   );
 }
