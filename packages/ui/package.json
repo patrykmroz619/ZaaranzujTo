@@ -8,6 +8,10 @@
       "types": "./src/core/*.tsx",
       "default": "./src/core/*.tsx"
     },
+    "./components/*": {
+      "types": "./src/components/*.tsx",
+      "default": "./src/components/*.tsx"
+    },
     "./hooks/*": {
       "types": "./src/hooks/*.tsx",
       "default": "./src/hooks/*.tsx"
