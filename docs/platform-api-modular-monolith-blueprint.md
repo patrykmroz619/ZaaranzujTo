@@ -8,6 +8,9 @@
   - modules can export **services only**,
   - repositories and schemas are not exported.
 - `iterations` and `generation` are internal parts of the `visualizations` module.
+- `POST /projects/{projectId}/visualizations` creates visualization metadata only (no first-iteration generation).
+- `POST /visualizations/{visualizationId}/iterations` is the only endpoint that creates iterations.
+- Backend does not expose an endpoint to set active iteration; active iteration context is managed in frontend state.
 - API contract mapping is done **in services**.
 
 ---
@@ -111,27 +114,24 @@ apps/platform-api/
         services/
           create-visualization.service.ts
           get-visualization-details.service.ts
+          list-project-visualizations.service.ts
 
         generation/
           services/
-            generate-first-iteration.service.ts
-            generate-next-iteration.service.ts
+            generate-iteration-image.service.ts
             openrouter-client.service.ts
             prompt-builder.service.ts
 
         iterations/
           services/
+            create-iteration.service.ts
             list-iterations.service.ts
-            select-active-iteration.service.ts
 
       storage/
         storage.module.ts
         storage.dto.ts
         storage.controller.ts
         services/
-          upload-room-photo.service.ts
-          upload-reference-photo.service.ts
-          delete-file.service.ts
           sign-download-url.service.ts
 
 ```
@@ -204,7 +204,11 @@ graph TD
 - Public workspace module for visualizations.
 - Contains internal parts:
   - `generation/` (generation via OpenRouter),
-  - `iterations/` (iteration history and active iteration).
+  - `iterations/` (iteration history and creation).
+- `GET /visualizations/{visualizationId}` always returns visualization details with full iterations list.
+- `GET /visualizations/{visualizationId}/iterations` can be used as lightweight paginated iteration history endpoint.
+- `POST /projects/{projectId}/visualizations` creates empty visualization (without generation).
+- `POST /visualizations/{visualizationId}/iterations` is the only write endpoint for new iterations.
 - Orchestrates:
   1. credit reservation (calling `credits`),
   2. generation,
@@ -212,8 +216,8 @@ graph TD
 
 ### `storage`
 
-- Handles upload and file management (R2), including metadata validation.
-- Exposes services to `visualizations` and `profile`.
+- Exposes only signed download URL endpoint for user-owned assets.
+- Upload flow is handled through `visualizations` iteration creation endpoint.
 - Does not contain project or payment logic.
 
 ### `shared`
@@ -270,7 +274,7 @@ graph TD
 ## 6. Example synchronous flow: new iteration
 
 1. `VisualizationsController` receives the request.
-2. `generate-next-iteration.service` calls `reserve-credit.service` from `credits`.
+2. `create-iteration.service` calls `reserve-credit.service` from `credits`.
 3. `openrouter-client.service` generates the image.
 4. On success: save iteration + call `consume-credit.service`.
 5. On failure: call `compensate-credit.service`.
@@ -333,22 +337,22 @@ sequenceDiagram
   autonumber
   actor U as User
   participant VC as VisualizationsController
-  participant VS as GenerateNextIterationService
+  participant VS as CreateIterationService
   participant CS as CreditsServices
   participant OR as OpenRouterClientService
   participant VR as Visualizations/IterationsRepository
 
   U->>VC: POST /visualizations/:id/iterations
-  VC->>VS: generateNextIteration
+  VC->>VS: createIteration
   VS->>CS: reserveCredit
   CS-->>VS: reservationId
   VS->>OR: generate image
 
   alt success
     OR-->>VS: image result
-    VS->>VR: save iteration + update active
+    VS->>VR: save iteration
     VS->>CS: consumeCredit
-    VS-->>VC: visualization DTO
+    VS-->>VC: iteration DTO
     VC-->>U: 201 Created
   else failure
     OR-->>VS: error
@@ -365,5 +369,8 @@ sequenceDiagram
 1. Organize `profile` (remove duplicate `me-profile.service.ts`, keep the version in `services/`).
 2. Add modules: `credits`, `payments`, `projects`, `visualizations`, `storage`.
 3. Create internal folders in `visualizations`: `generation/` and `iterations/`.
-4. Add global technical elements to `shared/libs`.
-5. Wire dependencies only through module service exports.
+4. Remove active-iteration selection use case from `visualizations`.
+5. Keep `storage` public API limited to signed download URL endpoint.
+6. Handle upload only in `POST /visualizations/{visualizationId}/iterations` flow.
+7. Add global technical elements to `shared/libs`.
+8. Wire dependencies only through module service exports.
