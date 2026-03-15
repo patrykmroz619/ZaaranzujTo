@@ -68,9 +68,7 @@ export class UsersRepository {
     });
   }
 
-  updateProfileByClerkId = async (
-    params: TUpdateProfileByClerkIdParams,
-  ): Promise<TUserDocument> => {
+  updateProfileByClerkId = async (params: TUpdateProfileByClerkIdParams): Promise<TUserDocument> => {
     const { clerkId, profilePatch } = params;
     const update: Record<string, string> = {};
 

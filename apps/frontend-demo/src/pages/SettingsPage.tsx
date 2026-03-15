@@ -20,10 +20,7 @@ export default function SettingsPage() {
   return (
     <DashboardLayout subtitle="Konto" title={t("settings.title")}>
       <div className="p-4 md:p-6 lg:p-8 max-w-2xl space-y-5">
-        <PageHeader
-          title={t("settings.title")}
-          subtitle="Zarządzaj swoim kontem i preferencjami."
-        />
+        <PageHeader title={t("settings.title")} subtitle="Zarządzaj swoim kontem i preferencjami." />
         <Card className="shadow-card">
           <CardHeader>
             <CardTitle className="font-display text-lg">{t("settings.theme")}</CardTitle>

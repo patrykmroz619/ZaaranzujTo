@@ -93,9 +93,7 @@ export default function LandingPage() {
       {/* Features */}
       <section className="py-20">
         <div className="container">
-          <h2 className="mb-12 text-center text-3xl font-display text-foreground">
-            Jak to działa?
-          </h2>
+          <h2 className="mb-12 text-center text-3xl font-display text-foreground">Jak to działa?</h2>
           <div className="grid gap-8 md:grid-cols-3">
             {features.map((f, i) => (
               <motion.div
