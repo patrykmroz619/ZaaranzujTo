@@ -2,39 +2,39 @@ import {
   CanActivate,
   ExecutionContext,
   UnauthorizedException,
-} from '@nestjs/common';
-import { verifyToken } from '@clerk/backend';
-import { TAuthenticatedRequest } from './auth.types';
+} from "@nestjs/common";
+import { verifyToken } from "@clerk/backend";
+import { TAuthenticatedRequest } from "./auth.types";
 
 export class AuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<TAuthenticatedRequest>();
 
-    const env = process.env['ENV'];
+    const env = process.env["ENV"];
     const skipAuthInLocalEnv =
-      process.env['SKIP_AUTH_FOR_LOCAL_ENV'] === 'true';
+      process.env["SKIP_AUTH_FOR_LOCAL_ENV"] === "true";
 
-    if (env === 'local' && skipAuthInLocalEnv) {
+    if (env === "local" && skipAuthInLocalEnv) {
       request.auth = {
-        userId: request.headers['user-id'] as string,
-        email: request.headers['user-email'] as string,
+        userId: request.headers["user-id"] as string,
+        email: request.headers["user-email"] as string,
       };
 
       return true;
     }
 
-    const token = request.headers.authorization?.split(' ')[1];
+    const token = request.headers.authorization?.split(" ")[1];
 
     if (!token) {
       throw new UnauthorizedException();
     }
 
-    const secretKey = process.env['CLERK_SECRET_KEY'];
-    const authorizedParties = process.env['AUTHORIZED_PARTIES']?.split(',');
+    const secretKey = process.env["CLERK_SECRET_KEY"];
+    const authorizedParties = process.env["AUTHORIZED_PARTIES"]?.split(",");
 
     if (!secretKey || !authorizedParties) {
       console.error(
-        'Missing configuration for secret key or authorized parties.',
+        "Missing configuration for secret key or authorized parties.",
       );
       throw new UnauthorizedException();
     }
@@ -47,12 +47,12 @@ export class AuthGuard implements CanActivate {
 
       request.auth = {
         userId: payload.sub,
-        email: payload['email'] as string,
+        email: payload["email"] as string,
       };
 
       return true;
     } catch (error) {
-      console.error('Token verification failed:', error);
+      console.error("Token verification failed:", error);
       throw new UnauthorizedException();
     }
   }

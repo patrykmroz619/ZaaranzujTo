@@ -1,12 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
 import {
   meResponseSchema,
   type TMeResponse,
   type TUpdateMeProfileRequest,
-} from '@repo/contracts/me';
+} from "@repo/contracts/me";
 
-import { UsersRepository } from '../../users/users.repository';
-import { UpdateProfileDto } from '../profile.dto';
+import { UsersRepository } from "../../users/users.repository";
+import { UpdateProfileDto } from "../profile.dto";
 
 type TUpdateMeProfileParams = {
   clerkId: string;

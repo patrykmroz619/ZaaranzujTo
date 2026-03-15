@@ -1,6 +1,6 @@
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface PageHeaderProps {
   title: string;
@@ -10,7 +10,13 @@ interface PageHeaderProps {
   children?: React.ReactNode; // CTA slot
 }
 
-export function PageHeader({ title, subtitle, backTo, backLabel, children }: PageHeaderProps) {
+export function PageHeader({
+  title,
+  subtitle,
+  backTo,
+  backLabel,
+  children,
+}: PageHeaderProps) {
   const navigate = useNavigate();
 
   return (
@@ -23,7 +29,7 @@ export function PageHeader({ title, subtitle, backTo, backLabel, children }: Pag
           className="gap-1 text-muted-foreground -ml-2"
         >
           <ArrowLeft className="h-4 w-4" />
-          {backLabel || 'Wstecz'}
+          {backLabel || "Wstecz"}
         </Button>
       )}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

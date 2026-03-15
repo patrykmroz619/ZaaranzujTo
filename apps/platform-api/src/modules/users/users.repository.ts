@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import type { Model } from 'mongoose';
+import { Injectable } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import type { Model } from "mongoose";
 
-import { User, type TUserDocument } from './user.schema';
+import { User, type TUserDocument } from "./user.schema";
 
 type TGetOrProvisionByClerkIdParams = {
   clerkId: string;
@@ -17,9 +17,9 @@ type TUpdateProfileByClerkIdParams = {
 };
 
 const deriveDefaultNickname = ({ email }: { email: string }) => {
-  const localPart = email.split('@')[0]?.trim();
+  const localPart = email.split("@")[0]?.trim();
   if (localPart && localPart.length > 0) return localPart;
-  return 'User';
+  return "User";
 };
 
 @Injectable()
@@ -77,22 +77,22 @@ export class UsersRepository {
     const update: Record<string, string> = {};
 
     if (profilePatch.nickname !== undefined) {
-      update['profile.nickname'] = profilePatch.nickname;
+      update["profile.nickname"] = profilePatch.nickname;
     }
 
     if (Object.keys(update).length === 0) {
       const existingUser = await this.userModel.findOne({ clerkId });
-      if (!existingUser) throw new Error('User not found.');
+      if (!existingUser) throw new Error("User not found.");
       return existingUser;
     }
 
     const updatedUser = await this.userModel.findOneAndUpdate(
       { clerkId },
       { $set: update },
-      { returnDocument: 'after' },
+      { returnDocument: "after" },
     );
 
-    if (!updatedUser) throw new Error('User not found.');
+    if (!updatedUser) throw new Error("User not found.");
 
     return updatedUser;
   };

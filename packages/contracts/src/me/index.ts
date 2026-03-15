@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const profileSchema = z.object({
   nickname: z.string().min(1),
@@ -20,10 +20,10 @@ const nicknameUpdateSchema = z
   .string()
   .transform((value) => value.trim())
   .refine((value) => value.length >= 1 && value.length <= 32, {
-    message: 'Nickname must be 1-32 characters.',
+    message: "Nickname must be 1-32 characters.",
   })
   .refine((value) => !/[\x00-\x1F\x7F]/.test(value), {
-    message: 'Nickname contains invalid control characters.',
+    message: "Nickname contains invalid control characters.",
   });
 
 export const updateMeProfileRequestSchema = z
@@ -32,7 +32,7 @@ export const updateMeProfileRequestSchema = z
   })
   .strict()
   .refine((value) => value.nickname !== undefined, {
-    message: 'At least one field must be provided.',
+    message: "At least one field must be provided.",
   });
 
 export type TUpdateMeProfileRequest = z.infer<

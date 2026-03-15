@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 export function Footer() {
   const { t } = useTranslation();
@@ -10,11 +10,17 @@ export function Footer() {
           © {new Date().getFullYear()} ZaaranżujTo
         </p>
         <div className="flex gap-4">
-          <a href="mailto:kontakt@zaaranzujto.pl" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-            {t('footer.contact')}
+          <a
+            href="mailto:kontakt@zaaranzujto.pl"
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            {t("footer.contact")}
           </a>
-          <a href="/terms" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-            {t('footer.terms')}
+          <a
+            href="/terms"
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            {t("footer.terms")}
           </a>
         </div>
       </div>

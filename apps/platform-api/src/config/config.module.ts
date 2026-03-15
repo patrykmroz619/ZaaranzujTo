@@ -1,10 +1,10 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import path from 'path';
-import z from 'zod';
+import { Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
+import path from "path";
+import z from "zod";
 
 const configSchema = z.object({
-  env: z.enum(['local', 'staging', 'production']).default('local'),
+  env: z.enum(["local", "staging", "production"]).default("local"),
   port: z.string().transform(Number).default(8080),
   databaseUri: z.string(),
   databaseUser: z.string(),
@@ -25,7 +25,7 @@ const validateAndLoadConfig = () => {
   try {
     return configSchema.parse(configuration());
   } catch (error) {
-    console.error('Configuration validation error:', error);
+    console.error("Configuration validation error:", error);
     process.exit(1);
   }
 };

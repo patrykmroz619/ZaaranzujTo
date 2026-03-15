@@ -1,5 +1,5 @@
-import { Navbar } from '@/components/Navbar';
-import { Footer } from '@/components/Footer';
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -7,7 +7,11 @@ interface AppLayoutProps {
   creditBalance?: number;
 }
 
-export function AppLayout({ children, isAuthenticated = false, creditBalance = 0 }: AppLayoutProps) {
+export function AppLayout({
+  children,
+  isAuthenticated = false,
+  creditBalance = 0,
+}: AppLayoutProps) {
   return (
     <div className="flex min-h-screen flex-col">
       <Navbar isAuthenticated={isAuthenticated} creditBalance={creditBalance} />

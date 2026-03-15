@@ -173,10 +173,10 @@ src/
 
 Based on analysis of `apps/frontend-demo/src/components/*` and page composition patterns:
 
-| Component | Source | Why reusable | Target in `@repo/ui` | Notes |
-| --- | --- | --- | --- | --- |
-| `PageHeader` | `apps/frontend-demo/src/components/PageHeader.tsx` | Generic page title/subtitle/back + actions slot; no domain logic | `packages/ui/src/components/page-header.tsx` (or `packages/ui/src/core/page-header.tsx`) | **Must be migrated to `@repo/ui`**; replace router-specific back handling with callback prop (`onBack`) or `backHref` prop. |
-| Existing shadcn-style primitives | `apps/frontend-demo/src/components/ui/*` | Business-agnostic UI primitives | `packages/ui/src/core/*` | Most already exist; reuse from `@repo/ui` and avoid local duplicates in `platform-web`. |
+| Component                        | Source                                             | Why reusable                                                     | Target in `@repo/ui`                                                                     | Notes                                                                                                                       |
+| -------------------------------- | -------------------------------------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `PageHeader`                     | `apps/frontend-demo/src/components/PageHeader.tsx` | Generic page title/subtitle/back + actions slot; no domain logic | `packages/ui/src/components/page-header.tsx` (or `packages/ui/src/core/page-header.tsx`) | **Must be migrated to `@repo/ui`**; replace router-specific back handling with callback prop (`onBack`) or `backHref` prop. |
+| Existing shadcn-style primitives | `apps/frontend-demo/src/components/ui/*`           | Business-agnostic UI primitives                                  | `packages/ui/src/core/*`                                                                 | Most already exist; reuse from `@repo/ui` and avoid local duplicates in `platform-web`.                                     |
 
 Components that should stay in `platform-web` modules (not `@repo/ui`):
 
@@ -301,15 +301,15 @@ Pseudo composition:
 
 ### Layout and navigation
 
-| Source file                                             | What it contains                                    | Target location                                               | Migration action                                                                |
-| ------------------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| `apps/frontend-demo/src/components/AppLayout.tsx`       | Public shell (`Navbar`, `Footer`)                   | `src/app/(auth)/layout.tsx` or shared app shell component     | Recreate shell as Next layout composition.                                      |
-| `apps/frontend-demo/src/components/DashboardLayout.tsx` | Auth shell wrapper                                  | `src/app/(app)/layout.tsx`                                    | Convert into authenticated layout with Next children slot.                      |
-| `apps/frontend-demo/src/components/Navbar.tsx`          | Main nav, auth actions, mobile menu, credit badge   | `src/modules/navigation/components/AppNavbar/AppNavbar.tsx`   | Replace React Router navigation with Next `Link/useRouter`; wire Clerk session. |
-| `apps/frontend-demo/src/components/AppSidebar.tsx`      | Sidebar nav + user card + credits + sign out action | `src/modules/navigation/components/AppSidebar/AppSidebar.tsx` | Keep UI, replace router dependencies, plug in real user/credits data.           |
-| `apps/frontend-demo/src/components/Footer.tsx`          | Footer links/contact                                | `src/modules/navigation/components/AppFooter/AppFooter.tsx`   | Keep as presentational reusable app shell part.                                 |
+| Source file                                             | What it contains                                    | Target location                                               | Migration action                                                                                        |
+| ------------------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `apps/frontend-demo/src/components/AppLayout.tsx`       | Public shell (`Navbar`, `Footer`)                   | `src/app/(auth)/layout.tsx` or shared app shell component     | Recreate shell as Next layout composition.                                                              |
+| `apps/frontend-demo/src/components/DashboardLayout.tsx` | Auth shell wrapper                                  | `src/app/(app)/layout.tsx`                                    | Convert into authenticated layout with Next children slot.                                              |
+| `apps/frontend-demo/src/components/Navbar.tsx`          | Main nav, auth actions, mobile menu, credit badge   | `src/modules/navigation/components/AppNavbar/AppNavbar.tsx`   | Replace React Router navigation with Next `Link/useRouter`; wire Clerk session.                         |
+| `apps/frontend-demo/src/components/AppSidebar.tsx`      | Sidebar nav + user card + credits + sign out action | `src/modules/navigation/components/AppSidebar/AppSidebar.tsx` | Keep UI, replace router dependencies, plug in real user/credits data.                                   |
+| `apps/frontend-demo/src/components/Footer.tsx`          | Footer links/contact                                | `src/modules/navigation/components/AppFooter/AppFooter.tsx`   | Keep as presentational reusable app shell part.                                                         |
 | `apps/frontend-demo/src/components/PageHeader.tsx`      | Page title/subtitle/back action/CTA slot            | `packages/ui/src/components/page-header.tsx`                  | Migrate as business-agnostic UI component; keep optional app-level wrapper for Next router integration. |
-| `apps/frontend-demo/src/components/NavLink.tsx`         | Router NavLink compatibility wrapper                | remove or replace with Next link helper                       | No direct equivalent needed in Next; use `Link` + pathname checks.              |
+| `apps/frontend-demo/src/components/NavLink.tsx`         | Router NavLink compatibility wrapper                | remove or replace with Next link helper                       | No direct equivalent needed in Next; use `Link` + pathname checks.                                      |
 
 `PageHeader` final placement decision:
 

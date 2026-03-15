@@ -1,6 +1,6 @@
-import { ReactNode } from 'react';
+import { ReactNode } from "react";
 
-import { RootLayout } from '@/core/layout/RootLayout';
+import { RootLayout } from "@/core/layout/RootLayout";
 
 type TLayoutProps = {
   children: ReactNode;

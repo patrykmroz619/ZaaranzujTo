@@ -1,12 +1,12 @@
-import { Body, Controller, Get, Patch, Req, UseGuards } from '@nestjs/common';
-import type { TMeResponse } from '@repo/contracts/me';
+import { Body, Controller, Get, Patch, UseGuards } from "@nestjs/common";
+import type { TMeResponse } from "@repo/contracts/me";
 
-import { AuthGuard, type TAuthenticatedRequest } from '../../shared/libs/auth';
-import { MeProfileService } from './services/me-profile.service';
-import { UpdateMeProfileService } from './services/update-me-profile.service';
-import { UpdateProfileDto } from './profile.dto';
+import { AuthGuard, CurrentUser, type TAuthData } from "../../shared/auth";
+import { MeProfileService } from "./services/me-profile.service";
+import { UpdateMeProfileService } from "./services/update-me-profile.service";
+import { UpdateProfileDto } from "./profile.dto";
 
-@Controller('me')
+@Controller("me")
 export class MeController {
   constructor(
     private readonly meProfileService: MeProfileService,
@@ -16,23 +16,23 @@ export class MeController {
   @Get()
   @UseGuards(AuthGuard)
   async getMeProfile(
-    @Req() request: TAuthenticatedRequest,
+    @CurrentUser() currentUser: TAuthData,
   ): Promise<TMeResponse> {
     return await this.meProfileService.getMeProfile({
-      clerkId: request.auth.userId,
-      email: request.auth.email,
+      clerkId: currentUser.userId,
+      email: currentUser.email,
     });
   }
 
-  @Patch('profile')
+  @Patch("profile")
   @UseGuards(AuthGuard)
   async updateMeProfile(
-    @Req() request: TAuthenticatedRequest,
+    @CurrentUser() currentUser: TAuthData,
     @Body() body: UpdateProfileDto,
   ): Promise<TMeResponse> {
     return await this.updateMeProfileService.updateMeProfile({
-      clerkId: request.auth.userId,
-      email: request.auth.email,
+      clerkId: currentUser.userId,
+      email: currentUser.email,
       body,
     });
   }

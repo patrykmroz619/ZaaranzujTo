@@ -6,4 +6,4 @@ export type TUser = {
   email: string;
 };
 
-export { AuthProvider } from './AuthProvider';
+export { AuthProvider } from "./AuthProvider";

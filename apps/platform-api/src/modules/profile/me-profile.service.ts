@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
-import { meResponseSchema, type TMeResponse } from '@repo/contracts/me';
+import { Injectable } from "@nestjs/common";
+import { meResponseSchema, type TMeResponse } from "@repo/contracts/me";
 
-import { UsersRepository } from '../users/users.repository';
+import { UsersRepository } from "../users/users.repository";
 
 type TGetMeProfileInput = {
   clerkId: string;

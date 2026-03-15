@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useUser, useAuth, useClerk } from '@clerk/nextjs';
-import type { TUser } from './index';
+import { useUser, useAuth, useClerk } from "@clerk/nextjs";
+import type { TUser } from "./index";
 
 export const useCurrentUser = (): {
   user: TUser | null;
@@ -20,7 +20,7 @@ export const useCurrentUser = (): {
       firstName: user.firstName,
       lastName: user.lastName,
       fullName: user.fullName,
-      email: user.primaryEmailAddress?.emailAddress || '',
+      email: user.primaryEmailAddress?.emailAddress || "",
     },
     isLoaded,
     isSignedIn: isSignedIn ?? false,
