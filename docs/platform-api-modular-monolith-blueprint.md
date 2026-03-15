@@ -29,31 +29,13 @@ apps/platform-api/
     database/
       database.module.ts
 
-    shared/
-      libs/
-        auth/
-          auth.guard.ts
-          auth.types.ts
-          index.ts
-        pipes/
-          zod-validation.pipe.ts
-        interceptors/
-          response-logging.interceptor.ts
-        decorators/
-          current-user.decorator.ts
-        errors/
-          app-error.filter.ts
-        constants/
-          module-tokens.ts
-
     modules/
       users/
         users.module.ts
         users.repository.ts
         user.schema.ts
         services/
-          get-user-by-clerk-id.service.ts
-          create-user-if-missing.service.ts
+          get-user.service.ts
 
       profile/
         profile.module.ts

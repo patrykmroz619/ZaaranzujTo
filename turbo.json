@@ -1,6 +1,22 @@
 {
   "$schema": "https://turborepo.dev/schema.json",
   "ui": "tui",
+  "globalEnv": [
+    "ENV",
+    "PORT",
+    "SKIP_AUTH_FOR_LOCAL_ENV",
+    "AUTHORIZED_PARTIES",
+    "CLERK_SECRET_KEY",
+    "DATABASE_URI",
+    "DATABASE_USER",
+    "DATABASE_PASSWORD",
+    "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY",
+    "NEXT_PUBLIC_CLERK_SIGN_IN_URL",
+    "NEXT_PUBLIC_CLERK_SIGN_UP_URL",
+    "NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL",
+    "NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL",
+    "NEXT_PUBLIC_PLATFORM_API_URL"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],

@@ -1,11 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import {
-  meResponseSchema,
-  type TMeResponse,
-  type TUpdateMeProfileRequest,
-} from "@repo/contracts/me";
+import { meResponseSchema, type TUpdateMeProfileRequest } from "@repo/contracts/me";
 
-import { UsersRepository } from "../../users/users.repository";
+import { GetUserService } from "../../users/services/get-user.service";
+import { UpdateUserProfileService } from "../../users/services/update-user-profile.service";
 import { UpdateProfileDto } from "../profile.dto";
 
 type TUpdateMeProfileParams = {
@@ -16,14 +13,17 @@ type TUpdateMeProfileParams = {
 
 @Injectable()
 export class UpdateMeProfileService {
-  constructor(private readonly usersRepository: UsersRepository) {}
+  constructor(
+    private readonly getUserService: GetUserService,
+    private readonly updateUserProfileService: UpdateUserProfileService,
+  ) {}
 
-  updateMeProfile = async (params: TUpdateMeProfileParams): Promise<TMeResponse> => {
+  updateMeProfile = async (params: TUpdateMeProfileParams) => {
     const { clerkId, email, body } = params;
 
     const patch = body as TUpdateMeProfileRequest;
 
-    const user = await this.usersRepository.getOrProvisionByClerkId({
+    const user = await this.getUserService.getUser({
       clerkId,
       email,
     });
@@ -31,7 +31,7 @@ export class UpdateMeProfileService {
     let updatedUser = user;
 
     if (patch.nickname !== undefined) {
-      updatedUser = await this.usersRepository.updateProfileByClerkId({
+      updatedUser = await this.updateUserProfileService.updateUserProfile({
         clerkId,
         profilePatch: {
           nickname: patch.nickname,

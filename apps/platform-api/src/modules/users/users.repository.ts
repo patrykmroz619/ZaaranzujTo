@@ -9,6 +9,10 @@ type TGetOrProvisionByClerkIdParams = {
   email: string;
 };
 
+type TGetByClerkIdParams = {
+  clerkId: string;
+};
+
 type TUpdateProfileByClerkIdParams = {
   clerkId: string;
   profilePatch: {
@@ -28,6 +32,12 @@ export class UsersRepository {
     @InjectModel(User.name)
     private readonly userModel: Model<User>,
   ) {}
+
+  getByClerkId = async (params: TGetByClerkIdParams) => {
+    const { clerkId } = params;
+
+    return await this.userModel.findOne({ clerkId });
+  };
 
   async getOrProvisionByClerkId(params: TGetOrProvisionByClerkIdParams): Promise<TUserDocument> {
     const { clerkId, email } = params;
