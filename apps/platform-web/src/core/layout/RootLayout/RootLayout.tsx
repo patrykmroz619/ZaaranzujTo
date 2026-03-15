@@ -34,9 +34,7 @@ export const RootLayout = async (props: TRootLayoutProps) => {
 
   return (
     <html lang="pl" suppressHydrationWarning>
-      <body
-        className={`${dmSans.variable} ${dmSerifDisplay.variable} antialiased`}
-      >
+      <body className={`${dmSans.variable} ${dmSerifDisplay.variable} antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -44,9 +42,7 @@ export const RootLayout = async (props: TRootLayoutProps) => {
           disableTransitionOnChange
         >
           <AuthProvider>
-            <NextIntlClientProvider messages={messages}>
-              {children}
-            </NextIntlClientProvider>
+            <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>

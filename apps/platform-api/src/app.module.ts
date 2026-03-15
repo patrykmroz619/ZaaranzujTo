@@ -6,13 +6,7 @@ import { ProfileModule } from "./modules/profile/profile.module";
 import { UsersModule } from "./modules/users/users.module";
 
 @Module({
-  imports: [
-    ConfigurationModule,
-    DatabaseModule,
-    UsersModule,
-    ProfileModule,
-    HealthModule,
-  ],
+  imports: [ConfigurationModule, DatabaseModule, UsersModule, ProfileModule, HealthModule],
   controllers: [],
   providers: [],
 })

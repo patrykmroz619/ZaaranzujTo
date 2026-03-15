@@ -1,18 +1,15 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  UnauthorizedException,
-} from "@nestjs/common";
+import { CanActivate, ExecutionContext, Logger, UnauthorizedException } from "@nestjs/common";
 import { verifyToken } from "@clerk/backend";
 import { TAuthenticatedRequest } from "./auth.types";
 
 export class AuthGuard implements CanActivate {
+  private readonly logger = new Logger(AuthGuard.name);
+
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<TAuthenticatedRequest>();
 
     const env = process.env["ENV"];
-    const skipAuthInLocalEnv =
-      process.env["SKIP_AUTH_FOR_LOCAL_ENV"] === "true";
+    const skipAuthInLocalEnv = process.env["SKIP_AUTH_FOR_LOCAL_ENV"] === "true";
 
     if (env === "local" && skipAuthInLocalEnv) {
       request.auth = {
@@ -33,9 +30,7 @@ export class AuthGuard implements CanActivate {
     const authorizedParties = process.env["AUTHORIZED_PARTIES"]?.split(",");
 
     if (!secretKey || !authorizedParties) {
-      console.error(
-        "Missing configuration for secret key or authorized parties.",
-      );
+      this.logger.error("Missing configuration for secret key or authorized parties.");
       throw new UnauthorizedException();
     }
 
@@ -52,7 +47,7 @@ export class AuthGuard implements CanActivate {
 
       return true;
     } catch (error) {
-      console.error("Token verification failed:", error);
+      this.logger.error("Token verification failed.", error);
       throw new UnauthorizedException();
     }
   }

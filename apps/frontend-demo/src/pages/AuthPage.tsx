@@ -4,13 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { AppLayout } from "@/components/AppLayout";
 
@@ -41,9 +35,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
               {isLogin ? t("auth.signIn") : t("auth.signUp")}
             </CardTitle>
             <CardDescription>
-              {isLogin
-                ? "Zaloguj się, aby kontynuować"
-                : "Stwórz konto i zacznij projektować"}
+              {isLogin ? "Zaloguj się, aby kontynuować" : "Stwórz konto i zacznij projektować"}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -86,10 +78,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
                 />
               </div>
               {isLogin && (
-                <Link
-                  to="/forgot-password"
-                  className="block text-sm text-primary hover:underline"
-                >
+                <Link to="/forgot-password" className="block text-sm text-primary hover:underline">
                   {t("auth.forgotPassword")}
                 </Link>
               )}
@@ -103,10 +92,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
 
             <p className="mt-4 text-center text-sm text-muted-foreground">
               {isLogin ? t("auth.noAccount") : t("auth.hasAccount")}{" "}
-              <Link
-                to={isLogin ? "/register" : "/login"}
-                className="text-primary hover:underline"
-              >
+              <Link to={isLogin ? "/register" : "/login"} className="text-primary hover:underline">
                 {isLogin ? t("auth.signUp") : t("auth.signIn")}
               </Link>
             </p>

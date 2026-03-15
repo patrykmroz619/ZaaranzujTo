@@ -96,10 +96,7 @@ export default function ProjectsPage() {
   return (
     <DashboardLayout subtitle="Zarządzanie" title={t("dashboard.title")}>
       <div className="p-4 md:p-6 lg:p-8 space-y-5">
-        <PageHeader
-          title="Moje projekty"
-          subtitle="Zarządzaj swoimi projektami i wizualizacjami."
-        >
+        <PageHeader title="Moje projekty" subtitle="Zarządzaj swoimi projektami i wizualizacjami.">
           <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
             <DialogTrigger asChild>
               <Button className="gradient-warm text-primary-foreground border-0 gap-2 w-full sm:w-auto">
@@ -109,9 +106,7 @@ export default function ProjectsPage() {
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle className="font-display">
-                  {t("dashboard.newProject")}
-                </DialogTitle>
+                <DialogTitle className="font-display">{t("dashboard.newProject")}</DialogTitle>
               </DialogHeader>
               <div className="space-y-2">
                 <Input
@@ -123,10 +118,7 @@ export default function ProjectsPage() {
                 />
               </div>
               <DialogFooter>
-                <Button
-                  variant="outline"
-                  onClick={() => setCreateDialogOpen(false)}
-                >
+                <Button variant="outline" onClick={() => setCreateDialogOpen(false)}>
                   {t("dashboard.cancel")}
                 </Button>
                 <Button
@@ -147,17 +139,11 @@ export default function ProjectsPage() {
             animate={{ opacity: 1 }}
             className="flex flex-col items-center justify-center py-20 text-center"
           >
-            <img
-              src={emptyStateImage}
-              alt=""
-              className="mb-6 h-48 w-48 opacity-80"
-            />
+            <img src={emptyStateImage} alt="" className="mb-6 h-48 w-48 opacity-80" />
             <h2 className="mb-2 font-display text-2xl text-foreground">
               {t("dashboard.emptyTitle")}
             </h2>
-            <p className="mb-6 max-w-md text-muted-foreground">
-              {t("dashboard.emptyDescription")}
-            </p>
+            <p className="mb-6 max-w-md text-muted-foreground">{t("dashboard.emptyDescription")}</p>
             <Button
               onClick={() => setCreateDialogOpen(true)}
               className="gradient-warm text-primary-foreground border-0 gap-2"
@@ -186,20 +172,14 @@ export default function ProjectsPage() {
                           <FolderOpen className="h-5 w-5 text-accent-foreground" />
                         </div>
                         <div>
-                          <h3 className="font-medium text-card-foreground">
-                            {project.name}
-                          </h3>
+                          <h3 className="font-medium text-card-foreground">{project.name}</h3>
                           <p className="text-sm text-muted-foreground">
-                            {project.visualizationCount}{" "}
-                            {t("dashboard.visualizations")}
+                            {project.visualizationCount} {t("dashboard.visualizations")}
                           </p>
                         </div>
                       </div>
                       <DropdownMenu>
-                        <DropdownMenuTrigger
-                          asChild
-                          onClick={(e) => e.stopPropagation()}
-                        >
+                        <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
                           <Button
                             variant="ghost"
                             size="icon"
@@ -208,10 +188,7 @@ export default function ProjectsPage() {
                             <MoreVertical className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent
-                          align="end"
-                          onClick={(e) => e.stopPropagation()}
-                        >
+                        <DropdownMenuContent align="end" onClick={(e) => e.stopPropagation()}>
                           <DropdownMenuItem>
                             <Pencil className="mr-2 h-4 w-4" />
                             {t("dashboard.editName")}
@@ -241,25 +218,18 @@ export default function ProjectsPage() {
           </div>
         )}
 
-        <AlertDialog
-          open={!!deleteProjectId}
-          onOpenChange={() => setDeleteProjectId(null)}
-        >
+        <AlertDialog open={!!deleteProjectId} onOpenChange={() => setDeleteProjectId(null)}>
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle className="font-display">
                 {t("dashboard.deleteConfirmTitle")}
               </AlertDialogTitle>
-              <AlertDialogDescription>
-                {t("dashboard.deleteConfirmMessage")}
-              </AlertDialogDescription>
+              <AlertDialogDescription>{t("dashboard.deleteConfirmMessage")}</AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>{t("dashboard.cancel")}</AlertDialogCancel>
               <AlertDialogAction
-                onClick={() =>
-                  deleteProjectId && handleDeleteProject(deleteProjectId)
-                }
+                onClick={() => deleteProjectId && handleDeleteProject(deleteProjectId)}
                 className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
               >
                 {t("dashboard.delete")}

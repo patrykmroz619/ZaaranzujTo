@@ -10,13 +10,7 @@ interface PageHeaderProps {
   children?: React.ReactNode; // CTA slot
 }
 
-export function PageHeader({
-  title,
-  subtitle,
-  backTo,
-  backLabel,
-  children,
-}: PageHeaderProps) {
+export function PageHeader({ title, subtitle, backTo, backLabel, children }: PageHeaderProps) {
   const navigate = useNavigate();
 
   return (
@@ -35,9 +29,7 @@ export function PageHeader({
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="font-display text-2xl text-foreground">{title}</h1>
-          {subtitle && (
-            <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>
-          )}
+          {subtitle && <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>}
         </div>
         {children && <div className="flex w-full sm:w-auto">{children}</div>}
       </div>

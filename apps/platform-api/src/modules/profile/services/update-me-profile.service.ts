@@ -18,9 +18,7 @@ type TUpdateMeProfileParams = {
 export class UpdateMeProfileService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  updateMeProfile = async (
-    params: TUpdateMeProfileParams,
-  ): Promise<TMeResponse> => {
+  updateMeProfile = async (params: TUpdateMeProfileParams): Promise<TMeResponse> => {
     const { clerkId, email, body } = params;
 
     const patch = body as TUpdateMeProfileRequest;

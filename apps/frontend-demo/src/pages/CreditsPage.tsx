@@ -32,10 +32,7 @@ export default function CreditsPage() {
   return (
     <DashboardLayout subtitle="Płatności" title={t("credits.title")}>
       <div className="p-4 md:p-6 lg:p-8 space-y-5">
-        <PageHeader
-          title={t("credits.title")}
-          subtitle={t("credits.subtitle")}
-        />
+        <PageHeader title={t("credits.title")} subtitle={t("credits.subtitle")} />
         <div className="mx-auto grid max-w-3xl gap-6 md:grid-cols-3">
           {packages.map((pkg, i) => (
             <motion.div
@@ -54,20 +51,12 @@ export default function CreditsPage() {
                   </div>
                 )}
                 <CardContent className="flex flex-col items-center p-6 pt-8">
-                  <h3 className="font-display text-xl text-card-foreground">
-                    {pkg.name}
-                  </h3>
+                  <h3 className="font-display text-xl text-card-foreground">{pkg.name}</h3>
                   <div className="my-4 text-center">
-                    <span className="text-4xl font-bold text-foreground">
-                      {pkg.credits}
-                    </span>
-                    <p className="text-sm text-muted-foreground">
-                      {t("credits.packageCredits")}
-                    </p>
+                    <span className="text-4xl font-bold text-foreground">{pkg.credits}</span>
+                    <p className="text-sm text-muted-foreground">{t("credits.packageCredits")}</p>
                   </div>
-                  <p className="mb-4 text-2xl font-semibold text-foreground">
-                    {pkg.price} PLN
-                  </p>
+                  <p className="mb-4 text-2xl font-semibold text-foreground">{pkg.price} PLN</p>
                   <Button
                     className={`w-full ${pkg.popular ? "gradient-warm text-primary-foreground border-0" : ""}`}
                     variant={pkg.popular ? "default" : "outline"}

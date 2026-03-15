@@ -35,8 +35,6 @@ export const updateMeProfileRequestSchema = z
     message: "At least one field must be provided.",
   });
 
-export type TUpdateMeProfileRequest = z.infer<
-  typeof updateMeProfileRequestSchema
->;
+export type TUpdateMeProfileRequest = z.infer<typeof updateMeProfileRequestSchema>;
 
 export type TUpdateMeProfileResponse = TMeResponse;

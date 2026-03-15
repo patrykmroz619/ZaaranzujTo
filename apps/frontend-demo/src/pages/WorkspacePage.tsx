@@ -19,22 +19,9 @@ import { PageHeader } from "@/components/PageHeader";
 
 type GenerationMode = "photo" | "scratch";
 
-const styles = [
-  "scandinavian",
-  "industrial",
-  "minimalist",
-  "classic",
-  "boho",
-  "modern",
-] as const;
+const styles = ["scandinavian", "industrial", "minimalist", "classic", "boho", "modern"] as const;
 const palettes = ["light", "dark", "warm", "cool", "pastel"] as const;
-const roomTypes = [
-  "livingRoom",
-  "bedroom",
-  "kitchen",
-  "bathroom",
-  "office",
-] as const;
+const roomTypes = ["livingRoom", "bedroom", "kitchen", "bathroom", "office"] as const;
 
 interface Iteration {
   id: string;
@@ -110,10 +97,7 @@ export default function WorkspacePage() {
             <div className="rounded-xl border bg-card p-5 shadow-card">
               {!isEditMode && (
                 <div className="mb-5">
-                  <Tabs
-                    value={mode}
-                    onValueChange={(v) => setMode(v as GenerationMode)}
-                  >
+                  <Tabs value={mode} onValueChange={(v) => setMode(v as GenerationMode)}>
                     <TabsList className="w-full">
                       <TabsTrigger value="photo" className="flex-1">
                         {t("workspace.modeFromPhoto")}
@@ -169,9 +153,7 @@ export default function WorkspacePage() {
                   <Label>{t("workspace.style")} *</Label>
                   <Select value={style} onValueChange={setStyle}>
                     <SelectTrigger>
-                      <SelectValue
-                        placeholder={t("workspace.stylePlaceholder")}
-                      />
+                      <SelectValue placeholder={t("workspace.stylePlaceholder")} />
                     </SelectTrigger>
                     <SelectContent>
                       {styles.map((s) => (
@@ -188,9 +170,7 @@ export default function WorkspacePage() {
                   <Label>{t("workspace.colorPalette")}</Label>
                   <Select value={palette} onValueChange={setPalette}>
                     <SelectTrigger>
-                      <SelectValue
-                        placeholder={t("workspace.colorPalettePlaceholder")}
-                      />
+                      <SelectValue placeholder={t("workspace.colorPalettePlaceholder")} />
                     </SelectTrigger>
                     <SelectContent>
                       {palettes.map((p) => (
@@ -207,9 +187,7 @@ export default function WorkspacePage() {
                   <Label>{t("workspace.roomType")} *</Label>
                   <Select value={roomType} onValueChange={setRoomType}>
                     <SelectTrigger>
-                      <SelectValue
-                        placeholder={t("workspace.roomTypePlaceholder")}
-                      />
+                      <SelectValue placeholder={t("workspace.roomTypePlaceholder")} />
                     </SelectTrigger>
                     <SelectContent>
                       {roomTypes.map((r) => (
@@ -224,9 +202,7 @@ export default function WorkspacePage() {
                 {/* Prompt */}
                 <div className="space-y-2">
                   <Label>
-                    {isEditMode
-                      ? t("workspace.editPrompt")
-                      : t("workspace.prompt")}
+                    {isEditMode ? t("workspace.editPrompt") : t("workspace.prompt")}
                     {!isEditMode && mode === "scratch" && " *"}
                   </Label>
                   <Textarea
@@ -262,9 +238,7 @@ export default function WorkspacePage() {
                 {/* Generate button */}
                 {creditBalance < 1 ? (
                   <div className="rounded-lg bg-accent p-3 text-center text-sm">
-                    <p className="mb-2 text-accent-foreground">
-                      {t("workspace.noCredits")}
-                    </p>
+                    <p className="mb-2 text-accent-foreground">{t("workspace.noCredits")}</p>
                     <Button
                       size="sm"
                       onClick={() => navigate("/credits")}
@@ -319,9 +293,7 @@ export default function WorkspacePage() {
                   >
                     <div className="text-center">
                       <ImageIcon className="mx-auto mb-2 h-16 w-16 text-muted-foreground/20" />
-                      <p className="text-sm text-muted-foreground">
-                        Wygenerowana wizualizacja
-                      </p>
+                      <p className="text-sm text-muted-foreground">Wygenerowana wizualizacja</p>
                     </div>
                   </motion.div>
                 ) : (
@@ -359,9 +331,7 @@ export default function WorkspacePage() {
                     <div className="flex h-16 w-24 items-center justify-center rounded bg-muted">
                       <ImageIcon className="h-6 w-6 text-muted-foreground/30" />
                     </div>
-                    <p className="mt-1 text-center text-[10px] text-muted-foreground">
-                      {it.label}
-                    </p>
+                    <p className="mt-1 text-center text-[10px] text-muted-foreground">{it.label}</p>
                   </button>
                 ))}
               </div>

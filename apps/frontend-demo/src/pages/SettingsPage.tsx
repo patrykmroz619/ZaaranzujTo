@@ -26,9 +26,7 @@ export default function SettingsPage() {
         />
         <Card className="shadow-card">
           <CardHeader>
-            <CardTitle className="font-display text-lg">
-              {t("settings.theme")}
-            </CardTitle>
+            <CardTitle className="font-display text-lg">{t("settings.theme")}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex gap-2">
@@ -39,9 +37,7 @@ export default function SettingsPage() {
                   size="sm"
                   onClick={() => setTheme(opt.value)}
                   className={
-                    theme === opt.value
-                      ? "gradient-warm text-primary-foreground border-0"
-                      : ""
+                    theme === opt.value ? "gradient-warm text-primary-foreground border-0" : ""
                   }
                 >
                   {opt.label}
@@ -52,16 +48,12 @@ export default function SettingsPage() {
         </Card>
         <Card className="shadow-card">
           <CardHeader>
-            <CardTitle className="font-display text-lg">
-              {t("settings.account")}
-            </CardTitle>
+            <CardTitle className="font-display text-lg">{t("settings.account")}</CardTitle>
           </CardHeader>
           <CardContent>
             <Separator className="mb-4" />
             <div>
-              <Label className="text-sm text-muted-foreground">
-                {t("settings.deleteAccount")}
-              </Label>
+              <Label className="text-sm text-muted-foreground">{t("settings.deleteAccount")}</Label>
               <p className="mt-1 text-xs text-muted-foreground">
                 {t("settings.deleteAccountConfirm")}
               </p>

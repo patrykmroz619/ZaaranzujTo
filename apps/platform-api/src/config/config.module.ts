@@ -1,7 +1,8 @@
-import { Module } from "@nestjs/common";
+import { Logger, Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import path from "path";
 import z from "zod";
+
+const logger = new Logger("ConfigurationModule");
 
 const configSchema = z.object({
   env: z.enum(["local", "staging", "production"]).default("local"),
@@ -25,7 +26,7 @@ const validateAndLoadConfig = () => {
   try {
     return configSchema.parse(configuration());
   } catch (error) {
-    console.error("Configuration validation error:", error);
+    logger.error("Configuration validation error.", error);
     process.exit(1);
   }
 };

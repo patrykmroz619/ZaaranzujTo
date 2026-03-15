@@ -66,8 +66,7 @@ export default function DashboardPage() {
                 <div className="flex flex-col justify-center p-5 md:p-6 flex-1">
                   <h2 className="font-display text-lg md:text-xl leading-snug text-primary-foreground mb-3">
                     Zbieraj inspiracje, generuj warianty
-                    <br className="hidden md:block" /> i wracaj do nich bez
-                    chaosu.
+                    <br className="hidden md:block" /> i wracaj do nich bez chaosu.
                   </h2>
                   <div>
                     <Button
@@ -106,12 +105,8 @@ export default function DashboardPage() {
                   <FolderOpen className="h-4 w-4 text-accent-foreground" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-foreground">
-                    Moje projekty
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    Zarządzaj swoimi projektami
-                  </p>
+                  <p className="text-sm font-medium text-foreground">Moje projekty</p>
+                  <p className="text-xs text-muted-foreground">Zarządzaj swoimi projektami</p>
                 </div>
                 <ArrowRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
               </button>
@@ -128,9 +123,7 @@ export default function DashboardPage() {
                     <Sparkles className="h-4 w-4 text-accent-foreground" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-foreground">
-                      Ostatnia wizualizacja
-                    </p>
+                    <p className="text-sm font-medium text-foreground">Ostatnia wizualizacja</p>
                     <p className="text-xs text-muted-foreground truncate">
                       {mockLastVisualization.name}
                     </p>
@@ -146,12 +139,8 @@ export default function DashboardPage() {
                     <Coins className="h-4 w-4 text-accent-foreground" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-foreground">
-                      Doładuj kredyty
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      Kup pakiet i generuj więcej
-                    </p>
+                    <p className="text-sm font-medium text-foreground">Doładuj kredyty</p>
+                    <p className="text-xs text-muted-foreground">Kup pakiet i generuj więcej</p>
                   </div>
                   <ArrowRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
                 </button>
@@ -174,9 +163,7 @@ export default function DashboardPage() {
                     <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
                       Ostatnie projekty
                     </p>
-                    <h3 className="font-display text-lg text-foreground mt-0.5">
-                      Kontynuuj pracę
-                    </h3>
+                    <h3 className="font-display text-lg text-foreground mt-0.5">Kontynuuj pracę</h3>
                   </div>
                   <Button
                     variant="ghost"
@@ -217,22 +204,12 @@ export default function DashboardPage() {
           ) : (
             <Card className="shadow-card">
               <CardContent className="p-8 flex flex-col items-center text-center">
-                <img
-                  src={emptyState}
-                  alt=""
-                  className="h-28 w-28 mb-4 opacity-80"
-                />
-                <h3 className="font-display text-lg text-foreground">
-                  Nie masz jeszcze projektów
-                </h3>
+                <img src={emptyState} alt="" className="h-28 w-28 mb-4 opacity-80" />
+                <h3 className="font-display text-lg text-foreground">Nie masz jeszcze projektów</h3>
                 <p className="text-sm text-muted-foreground mt-1 mb-4 max-w-sm">
-                  Stwórz swój pierwszy projekt i zacznij projektować wymarzone
-                  wnętrza.
+                  Stwórz swój pierwszy projekt i zacznij projektować wymarzone wnętrza.
                 </p>
-                <Button
-                  onClick={() => navigate("/projects")}
-                  className="gap-1.5"
-                >
+                <Button onClick={() => navigate("/projects")} className="gap-1.5">
                   <Plus className="h-4 w-4" />
                   Stwórz pierwszy projekt
                 </Button>
@@ -263,9 +240,7 @@ export default function DashboardPage() {
                   <stat.icon className="h-4 w-4 text-accent-foreground" />
                 </div>
                 <div>
-                  <span className="font-display text-xl text-foreground">
-                    {stat.value}
-                  </span>
+                  <span className="font-display text-xl text-foreground">{stat.value}</span>
                   <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
                     {stat.label}
                   </p>

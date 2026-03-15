@@ -22,8 +22,7 @@ const features = [
   {
     icon: RefreshCw,
     titleKey: "Iteruj i udoskonalaj",
-    descKey:
-      "Modyfikuj wizualizację krok po kroku, aż osiągniesz idealny efekt.",
+    descKey: "Modyfikuj wizualizację krok po kroku, aż osiągniesz idealny efekt.",
   },
 ];
 
@@ -50,8 +49,8 @@ export default function LandingPage() {
             transition={{ duration: 0.6, delay: 0.15 }}
             className="max-w-xl text-lg text-muted-foreground"
           >
-            Prześlij zdjęcie wnętrza lub opisz je słowami. Sztuczna inteligencja
-            zaprojektuje Twoje wymarzone wnętrze w kilka chwil.
+            Prześlij zdjęcie wnętrza lub opisz je słowami. Sztuczna inteligencja zaprojektuje Twoje
+            wymarzone wnętrze w kilka chwil.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -67,11 +66,7 @@ export default function LandingPage() {
               {t("nav.register")}
               <ArrowRight className="h-4 w-4" />
             </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              onClick={() => navigate("/login")}
-            >
+            <Button size="lg" variant="outline" onClick={() => navigate("/login")}>
               {t("nav.signIn")}
             </Button>
           </motion.div>
@@ -114,12 +109,8 @@ export default function LandingPage() {
                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-accent">
                   <f.icon className="h-6 w-6 text-accent-foreground" />
                 </div>
-                <h3 className="mb-2 font-display text-xl text-card-foreground">
-                  {f.titleKey}
-                </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {f.descKey}
-                </p>
+                <h3 className="mb-2 font-display text-xl text-card-foreground">{f.titleKey}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{f.descKey}</p>
               </motion.div>
             ))}
           </div>

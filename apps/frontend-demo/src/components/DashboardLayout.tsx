@@ -7,11 +7,7 @@ interface DashboardLayoutProps {
   subtitle?: string;
 }
 
-export function DashboardLayout({
-  children,
-  title,
-  subtitle,
-}: DashboardLayoutProps) {
+export function DashboardLayout({ children, title, subtitle }: DashboardLayoutProps) {
   return (
     <div className="flex min-h-screen flex-col">
       <Navbar isAuthenticated={true} creditBalance={4} />

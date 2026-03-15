@@ -1,15 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import {
-  Menu,
-  X,
-  Coins,
-  Settings,
-  LogOut,
-  Home,
-  FolderOpen,
-} from "lucide-react";
+import { Menu, X, Coins, Settings, LogOut, Home, FolderOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -26,10 +18,7 @@ interface NavbarProps {
   creditBalance?: number;
 }
 
-export function Navbar({
-  isAuthenticated = false,
-  creditBalance = 0,
-}: NavbarProps) {
+export function Navbar({ isAuthenticated = false, creditBalance = 0 }: NavbarProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
@@ -49,10 +38,7 @@ export function Navbar({
     <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-md">
       <div className="container flex h-14 items-center justify-between">
         <div className="flex items-center gap-6">
-          <Link
-            to={isAuthenticated ? "/dashboard" : "/"}
-            className="flex items-center gap-2"
-          >
+          <Link to={isAuthenticated ? "/dashboard" : "/"} className="flex items-center gap-2">
             <span className="font-display text-xl tracking-tight text-foreground">
               Zaaranżuj<span className="text-primary">To</span>
             </span>
@@ -104,9 +90,7 @@ export function Navbar({
                       <p className="text-sm font-medium text-foreground leading-tight">
                         Nowy użytkownik
                       </p>
-                      <p className="text-xs text-muted-foreground">
-                        user@example.com
-                      </p>
+                      <p className="text-xs text-muted-foreground">user@example.com</p>
                     </div>
                   )}
                 </button>
@@ -115,12 +99,8 @@ export function Navbar({
                 {isMobile && (
                   <>
                     <div className="px-2 py-2 text-sm">
-                      <p className="font-medium text-foreground">
-                        Nowy użytkownik
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        user@example.com
-                      </p>
+                      <p className="font-medium text-foreground">Nowy użytkownik</p>
+                      <p className="text-xs text-muted-foreground">user@example.com</p>
                     </div>
                     <DropdownMenuSeparator />
                   </>
@@ -144,20 +124,12 @@ export function Navbar({
               className="md:hidden"
               onClick={() => setMobileOpen(!mobileOpen)}
             >
-              {mobileOpen ? (
-                <X className="h-5 w-5" />
-              ) : (
-                <Menu className="h-5 w-5" />
-              )}
+              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
           </div>
         ) : (
           <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => navigate("/login")}
-            >
+            <Button variant="ghost" size="sm" onClick={() => navigate("/login")}>
               {t("nav.signIn")}
             </Button>
             <Button

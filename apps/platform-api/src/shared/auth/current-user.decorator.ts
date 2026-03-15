@@ -1,8 +1,4 @@
-import {
-  createParamDecorator,
-  ExecutionContext,
-  UnauthorizedException,
-} from "@nestjs/common";
+import { createParamDecorator, ExecutionContext, UnauthorizedException } from "@nestjs/common";
 
 import type { TAuthData, TAuthenticatedRequest } from "./auth.types";
 
@@ -18,5 +14,4 @@ const currentUserDecoratorFactory = createParamDecorator(
   },
 );
 
-export const CurrentUser =
-  currentUserDecoratorFactory as () => ParameterDecorator;
+export const CurrentUser = currentUserDecoratorFactory as () => ParameterDecorator;

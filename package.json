@@ -10,7 +10,8 @@
     "dev:contracts": "turbo run dev --filter=@repo/contracts",
     "start": "turbo run start",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "check-types": "turbo run check-types",
     "deps:update:all": "bun run --filter \"*\" deps:update",
     "deps:update:latest:all": "bun run --filter \"*\" deps:update:latest"

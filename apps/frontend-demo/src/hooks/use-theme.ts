@@ -6,11 +6,7 @@ function applyTheme(theme: Theme) {
   const root = document.documentElement;
   if (theme === "dark") root.classList.add("dark");
   else if (theme === "light") root.classList.remove("dark");
-  else
-    root.classList.toggle(
-      "dark",
-      window.matchMedia("(prefers-color-scheme: dark)").matches,
-    );
+  else root.classList.toggle("dark", window.matchMedia("(prefers-color-scheme: dark)").matches);
 }
 
 export function useTheme() {

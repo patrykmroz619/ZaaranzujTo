@@ -1,10 +1,4 @@
-import {
-  ArgumentsHost,
-  Catch,
-  ExceptionFilter,
-  HttpException,
-  HttpStatus,
-} from "@nestjs/common";
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from "@nestjs/common";
 import type { Request, Response } from "express";
 import { randomUUID } from "node:crypto";
 
@@ -26,12 +20,9 @@ export class AppExceptionFilter implements ExceptionFilter {
     response.setHeader(REQUEST_ID_HEADER, requestId);
 
     const isHttpException = exception instanceof HttpException;
-    const statusCode = isHttpException
-      ? exception.getStatus()
-      : HttpStatus.INTERNAL_SERVER_ERROR;
+    const statusCode = isHttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    const defaultMessage =
-      statusCode >= 500 ? "Internal server error" : "Request failed";
+    const defaultMessage = statusCode >= 500 ? "Internal server error" : "Request failed";
 
     const errorResponse: TErrorResponse = {
       statusCode,
@@ -52,10 +43,7 @@ export class AppExceptionFilter implements ExceptionFilter {
           errorResponse.message = sourceMessage;
         }
 
-        if (
-          Array.isArray(sourceMessage) ||
-          sourceObject["details"] !== undefined
-        ) {
+        if (Array.isArray(sourceMessage) || sourceObject["details"] !== undefined) {
           errorResponse.details = sourceObject["details"] ?? sourceMessage;
         }
       }

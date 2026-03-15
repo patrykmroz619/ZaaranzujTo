@@ -29,9 +29,7 @@ export class UsersRepository {
     private readonly userModel: Model<User>,
   ) {}
 
-  async getOrProvisionByClerkId(
-    params: TGetOrProvisionByClerkIdParams,
-  ): Promise<TUserDocument> {
+  async getOrProvisionByClerkId(params: TGetOrProvisionByClerkIdParams): Promise<TUserDocument> {
     const { clerkId, email } = params;
 
     const fallbackNickname = deriveDefaultNickname({ email });

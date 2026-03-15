@@ -15,9 +15,7 @@ export class MeController {
 
   @Get()
   @UseGuards(AuthGuard)
-  async getMeProfile(
-    @CurrentUser() currentUser: TAuthData,
-  ): Promise<TMeResponse> {
+  async getMeProfile(@CurrentUser() currentUser: TAuthData): Promise<TMeResponse> {
     return await this.meProfileService.getMeProfile({
       clerkId: currentUser.userId,
       email: currentUser.email,
