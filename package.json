@@ -1,5 +1,5 @@
 {
-  "name": "ZaaranzujTo",
+  "name": "zaaranzujto",
   "private": true,
   "scripts": {
     "build": "turbo run build",
