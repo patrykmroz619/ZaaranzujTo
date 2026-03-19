@@ -10,6 +10,10 @@ const configSchema = z.object({
   databaseUri: z.string(),
   databaseUser: z.string(),
   databasePassword: z.string(),
+  r2Endpoint: z.string().url().optional(),
+  r2AccessKeyId: z.string().optional(),
+  r2SecretAccessKey: z.string().optional(),
+  r2BucketName: z.string().optional(),
 });
 
 const configuration = () => ({
@@ -18,6 +22,10 @@ const configuration = () => ({
   databaseUri: process.env.DATABASE_URI,
   databaseUser: process.env.DATABASE_USER,
   databasePassword: process.env.DATABASE_PASSWORD,
+  r2Endpoint: process.env.R2_ENDPOINT,
+  r2AccessKeyId: process.env.R2_ACCESS_KEY_ID,
+  r2SecretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
+  r2BucketName: process.env.R2_BUCKET_NAME,
 });
 
 export type ConfigType = z.infer<typeof configSchema>;

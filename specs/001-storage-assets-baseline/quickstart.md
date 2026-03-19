@@ -24,8 +24,10 @@ bun run start:dev
 ## Testing Signed URLs locally
 
 Once authenticated via Swagger/Clerk, call the API locally:
+
 ```bash
 curl -H "Authorization: Bearer <token>" \
   http://localhost:3000/api/v1/storage/assets/{assetId}/download-url
 ```
+
 You will receive a temporary direct R2 link.

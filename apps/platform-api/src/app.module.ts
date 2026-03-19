@@ -4,6 +4,7 @@ import { DatabaseModule } from "./database/database.module";
 import { HealthModule } from "./modules/health/health.module";
 import { ProfileModule } from "./modules/profile/profile.module";
 import { ProjectsModule } from "./modules/projects/projects.module";
+import { StorageModule } from "./modules/storage/storage.module";
 import { UsersModule } from "./modules/users/users.module";
 
 @Module({
@@ -13,6 +14,7 @@ import { UsersModule } from "./modules/users/users.module";
     UsersModule,
     ProfileModule,
     ProjectsModule,
+    StorageModule,
     HealthModule,
   ],
   controllers: [],

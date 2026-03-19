@@ -21,7 +21,7 @@ Deliver a secure backend abstraction in `platform-api` to manage uploaded assets
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+_GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
 - **[PASS] Code Quality**: We adhere to the NestJS boundary rules and prefer descriptive TS types mapping to Zod contracts.
 - **[PASS] Testing Standards**: Abstraction of `StorageService` using AWS SDK enables future unit test stubbing. Strict error boundaries included (Not Found / Unauthorized).
@@ -74,5 +74,5 @@ apps/platform-api/
 > **Fill ONLY if Constitution Check has violations that must be justified**
 
 | Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
-| N/A       | N/A        | N/A                                 |
+| --------- | ---------- | ------------------------------------ |
+| N/A       | N/A        | N/A                                  |

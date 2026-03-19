@@ -5,7 +5,7 @@
 **Status**: Draft
 **Input**: User description: "Implementation of WI-04 described in platform-api-implementation-plan.md"
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - Secure File Download (Priority: P1)
 
@@ -43,7 +43,7 @@ As the system, I need to maintain an accurate registry of all uploaded files inc
 - What happens if a file asset record exists in the database but the underlying physical file was deleted from cloud storage? (The system handles the discrepancy gracefully without crashing, returning a "Not Found" error when the user clicks the generated link).
 - How does the system handle an improperly formatted ID when requesting file metadata? (It strictly validates the input structure and immediately returns a bad request error).
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
@@ -64,7 +64,7 @@ As the system, I need to maintain an accurate registry of all uploaded files inc
 - The default expiration threshold for a signed URL is 1 hour (3600 seconds) to balance convenience and security.
 - Initial implementation focuses on download link generation and metadata read/registration; upload flows are handled subsequently depending on client direct-to-cloud methodologies.
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 
