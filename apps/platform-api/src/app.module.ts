@@ -6,6 +6,7 @@ import { ProfileModule } from "./modules/profile/profile.module";
 import { ProjectsModule } from "./modules/projects/projects.module";
 import { StorageModule } from "./modules/storage/storage.module";
 import { UsersModule } from "./modules/users/users.module";
+import { VisualizationsModule } from "./modules/visualizations/visualizations.module";
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { UsersModule } from "./modules/users/users.module";
     UsersModule,
     ProfileModule,
     ProjectsModule,
+    VisualizationsModule,
     StorageModule,
     HealthModule,
   ],

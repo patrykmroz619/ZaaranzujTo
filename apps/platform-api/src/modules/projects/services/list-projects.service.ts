@@ -37,7 +37,7 @@ export class ListProjectsService {
       userId: user._id,
       page: parsedQuery.page,
       pageSize: parsedQuery.pageSize,
-      sort: parsedQuery.sort as TProjectSort,
+      sort: parsedQuery.sort,
     };
 
     const [projects, totalItems] = await Promise.all([

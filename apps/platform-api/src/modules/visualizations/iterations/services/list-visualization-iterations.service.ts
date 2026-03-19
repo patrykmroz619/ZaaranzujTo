@@ -1,0 +1,80 @@
+import { Injectable } from "@nestjs/common";
+
+import { GetUserService } from "../../../users/services/get-user.service";
+import type { TListVisualizationIterationsSort } from "../../schemas/visualization.schema";
+import { VisualizationsRepository } from "../../repositories/visualizations.repository";
+import {
+  listVisualizationIterationsQuerySchema,
+  type TListVisualizationIterationsQuery,
+} from "../../visualizations.dto";
+import { ValidateVisualizationOwnershipService } from "../../services/validate-visualization-ownership.service";
+
+type TListVisualizationIterationsParams = {
+  clerkId: string;
+  email: string;
+  visualizationId: string;
+  query: TListVisualizationIterationsQuery;
+};
+
+@Injectable()
+export class ListVisualizationIterationsService {
+  constructor(
+    private readonly getUserService: GetUserService,
+    private readonly validateVisualizationOwnershipService: ValidateVisualizationOwnershipService,
+    private readonly visualizationsRepository: VisualizationsRepository,
+  ) {}
+
+  listVisualizationIterations = async (params: TListVisualizationIterationsParams) => {
+    const { clerkId, email, visualizationId, query } = params;
+
+    const parsedQuery = listVisualizationIterationsQuerySchema.parse(query);
+
+    const user = await this.getUserService.getUser({
+      clerkId,
+      email,
+    });
+
+    await this.validateVisualizationOwnershipService.validate({
+      userId: user._id,
+      visualizationId,
+    });
+
+    const result = await this.visualizationsRepository.listIterationsForVisualizationForUser({
+      userId: user._id,
+      visualizationId,
+      page: parsedQuery.page,
+      pageSize: parsedQuery.pageSize,
+      sort: parsedQuery.sort as TListVisualizationIterationsSort,
+    });
+
+    const totalPages =
+      result.totalItems === 0 ? 0 : Math.ceil(result.totalItems / parsedQuery.pageSize);
+
+    return {
+      items: result.items.map((iteration) => ({
+        id: iteration._id.toString(),
+        iterationNo: iteration.iterationNo,
+        baseIterationId: iteration.baseIterationId,
+        status: iteration.status,
+        generationInput: {
+          mode: iteration.generationInput.mode,
+          stylePreset: iteration.generationInput.stylePreset,
+          colors: iteration.generationInput.colors,
+          roomType: iteration.generationInput.roomType,
+          prompt: iteration.generationInput.prompt,
+          referenceAssets: iteration.generationInput.referenceAssets,
+        },
+        result: {
+          imageAssetId: iteration.result.imageAssetId,
+        },
+        createdAt: iteration.createdAt.toISOString(),
+      })),
+      pagination: {
+        page: parsedQuery.page,
+        pageSize: parsedQuery.pageSize,
+        totalItems: result.totalItems,
+        totalPages,
+      },
+    };
+  };
+}
