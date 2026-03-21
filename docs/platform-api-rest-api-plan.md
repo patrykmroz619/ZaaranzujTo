@@ -438,7 +438,6 @@ Przykład odpowiedzi dla użytkownika bez konta kredytowego:
 - **Headers**:
   - `Authorization: Bearer <token>`
   - `Content-Type: application/json`
-  - `Idempotency-Key: <uuid>`
 - **Query Parameters**: Nie dotyczy.
 - **Request Body**:
 
@@ -742,7 +741,6 @@ Przykład odpowiedzi dla użytkownika bez konta kredytowego:
   - `400 Bad Request` — walidacja pól formularza.
   - `401 Unauthorized` — brak/nieprawidłowy token.
   - `404 Not Found` — projekt nie istnieje.
-  - `409 Conflict` — duplikat `Idempotency-Key`.
 
 #### GET /visualizations/{visualizationId}
 
@@ -845,7 +843,6 @@ Przykład odpowiedzi dla użytkownika bez konta kredytowego:
 - **Headers**:
   - `Authorization: Bearer <token>`
   - `Content-Type: multipart/form-data`
-  - `Idempotency-Key: <uuid>`
 - **Query Parameters**: Nie dotyczy.
 - **Request Body**:
 
@@ -890,7 +887,7 @@ Przykład odpowiedzi dla użytkownika bez konta kredytowego:
   - `401 Unauthorized` — brak/nieprawidłowy token.
   - `402 Payment Required` — brak kredytów.
   - `404 Not Found` — wizualizacja lub iteracja bazowa nie istnieje.
-  - `409 Conflict` — aktywna generacja już trwa albo duplikat `Idempotency-Key`.
+  - `409 Conflict` — aktywna generacja już trwa.
   - `413 Payload Too Large` — przekroczony limit rozmiaru plików wejściowych.
   - `422 Unprocessable Entity` — niepoprawny technicznie obraz wejściowy.
   - `502 Bad Gateway` — błąd provider API (OpenRouter).
@@ -937,8 +934,7 @@ Przykład odpowiedzi dla użytkownika bez konta kredytowego:
 
 ### Idempotency
 
-- Endpointy mutujące operacje finansowe i generacyjne wymagają `Idempotency-Key`.
-- Powtórzenie tego samego requestu zwraca ten sam rezultat logiczny bez duplikacji efektów ubocznych.
+- Endpointy mutujące operacje finansowe mogą wymagać `Idempotency-Key`.
 
 ### Async Generation Contract
 
@@ -956,7 +952,7 @@ Przykład odpowiedzi dla użytkownika bez konta kredytowego:
 - `401` — brak lub błędny token.
 - `402` — brak kredytów dla operacji generacji.
 - `404` — zasób nie istnieje lub poza zakresem użytkownika.
-- `409` — konflikt stanu / idempotency.
+- `409` — konflikt stanu.
 - `413` — zbyt duży plik.
 - `422` — technicznie niepoprawny obraz.
 - `429` — przekroczony rate limit.

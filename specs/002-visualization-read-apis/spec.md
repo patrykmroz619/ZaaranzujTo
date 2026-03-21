@@ -33,8 +33,7 @@ As an authenticated user, I can create a new visualization record inside my proj
 **Acceptance Scenarios**:
 
 1. **Given** a user owns a project, **When** they submit valid visualization metadata, **Then** the system creates a visualization linked to that project with zero iterations.
-2. **Given** a user repeats the same create request with the same idempotency key, **When** the request is retried, **Then** the system returns the same logical result without duplicate visualizations.
-3. **Given** required metadata is invalid, **When** the request is processed, **Then** the system rejects the request with validation errors and does not create a record.
+2. **Given** required metadata is invalid, **When** the request is processed, **Then** the system rejects the request with validation errors and does not create a record.
 
 ---
 
@@ -57,7 +56,6 @@ As an authenticated user, I can open one visualization and inspect its full deta
 - A project exists but has zero visualizations; list response returns an empty items array with valid pagination fields.
 - A newly created visualization has no iterations yet; details endpoint returns an empty iterations collection.
 - An invalid visualization identifier format is supplied; request is rejected with a validation error.
-- A create request uses an idempotency key previously used with a different payload; request is rejected as a conflict.
 - Pagination parameters exceed allowed bounds; request is rejected with a validation error.
 
 ## Requirements _(mandatory)_
@@ -70,19 +68,16 @@ As an authenticated user, I can open one visualization and inspect its full deta
 - **FR-004**: The system MUST allow an authenticated user to create a visualization metadata record within a project they own.
 - **FR-005**: Visualization creation MUST NOT trigger image generation, file upload side effects, or credit balance mutation.
 - **FR-006**: A newly created visualization MUST be initialized without iterations and be retrievable immediately.
-- **FR-007**: Visualization creation MUST support idempotent retry behavior for repeated requests with the same idempotency key and identical payload.
-- **FR-008**: The system MUST reject idempotency-key replays that reuse the key with a different payload.
-- **FR-009**: The system MUST allow an authenticated user to retrieve visualization details for a visualization they own, including full iteration details available at request time.
-- **FR-010**: The system MUST allow an authenticated user to retrieve visualization iteration history through a dedicated endpoint with pagination and sorting support.
-- **FR-011**: For all visualization and project reads/writes in this feature, the system MUST enforce user data isolation and return not found for non-owned resources.
-- **FR-012**: The system MUST return consistent structured validation and domain error responses for invalid input, conflicts, unauthorized access, and missing resources.
+- **FR-007**: The system MUST allow an authenticated user to retrieve visualization details for a visualization they own, including full iteration details available at request time.
+- **FR-008**: The system MUST allow an authenticated user to retrieve visualization iteration history through a dedicated endpoint with pagination and sorting support.
+- **FR-009**: For all visualization and project reads/writes in this feature, the system MUST enforce user data isolation and return not found for non-owned resources.
+- **FR-010**: The system MUST return consistent structured validation and domain error responses for invalid input, unauthorized access, and missing resources.
 
 ### Key Entities _(include if feature involves data)_
 
 - **Project**: A user-owned container for visualization work; key attributes include identity, owner identity, name, and timestamps.
 - **Visualization**: A room/space-level design record linked to one project; key attributes include identity, owner identity, project identity, name, mode, iteration count, latest iteration summary, and timestamps.
 - **Iteration**: A historical design state within one visualization; key attributes include iteration number, generation input summary, result asset reference, status, and creation timestamp.
-- **Idempotency Record**: A uniqueness guard for mutation retries; key attributes include key value, request fingerprint, associated result reference, and status.
 
 ## Assumptions
 
@@ -96,6 +91,5 @@ As an authenticated user, I can open one visualization and inspect its full deta
 ### Measurable Outcomes
 
 - **SC-001**: 95% of successful visualization list and detail requests complete in under 2 seconds under normal MVP load.
-- **SC-002**: 100% of repeated create-visualization retries with the same idempotency key and same payload avoid duplicate record creation.
-- **SC-003**: In ownership-isolation checks, 100% of attempts to access non-owned projects or visualizations return non-success responses without exposing other users' data.
-- **SC-004**: For new visualizations created through this feature, 100% are observable immediately with zero iterations and no credit change.
+- **SC-002**: In ownership-isolation checks, 100% of attempts to access non-owned projects or visualizations return non-success responses without exposing other users' data.
+- **SC-003**: For new visualizations created through this feature, 100% are observable immediately with zero iterations and no credit change.

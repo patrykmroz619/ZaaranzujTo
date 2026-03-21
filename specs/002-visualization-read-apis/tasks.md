@@ -26,13 +26,11 @@
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete.
 
 - [x] T006 Define visualization and embedded iteration schemas in apps/platform-api/src/modules/visualizations/schemas/visualization.schema.ts
-- [x] T007 [P] Define idempotency schema for visualization create requests in apps/platform-api/src/modules/visualizations/schemas/visualization-idempotency.schema.ts
 - [x] T008 Implement visualization repository with user-scoped query helpers in apps/platform-api/src/modules/visualizations/repositories/visualizations.repository.ts
-- [x] T009 [P] Implement idempotency repository with request fingerprint support in apps/platform-api/src/modules/visualizations/repositories/visualization-idempotency.repository.ts
 - [x] T010 Implement request/response DTO zod schemas in apps/platform-api/src/modules/visualizations/visualizations.dto.ts
 - [x] T011 [P] Add visualization domain error constants/codes in apps/platform-api/src/modules/visualizations/visualizations.constants.ts
 - [x] T012 Wire repositories and schema providers in apps/platform-api/src/modules/visualizations/visualizations.module.ts
-- [x] T013 Add Mongo indexes for list/read/idempotency paths in apps/platform-api/src/modules/visualizations/schemas/visualization.schema.ts
+- [x] T013 Add Mongo indexes for list/read paths in apps/platform-api/src/modules/visualizations/schemas/visualization.schema.ts
 
 **Checkpoint**: Foundation ready; user-story endpoints can now be implemented independently.
 
@@ -60,13 +58,13 @@
 
 **Goal**: Create visualization metadata under a project without generation, uploads, or credit side effects.
 
-**Independent Test**: Call POST /projects/{projectId}/visualizations with valid/invalid payload and repeated idempotency keys; verify creation semantics and conflict handling.
+**Independent Test**: Call POST /projects/{projectId}/visualizations with valid/invalid payload; verify metadata-only creation semantics.
 
 ### Implementation for User Story 2
 
 - [x] T019 [US2] Implement create-visualization service with metadata-only defaults in apps/platform-api/src/modules/visualizations/services/create-visualization.service.ts
-- [x] T020 [US2] Implement idempotent create orchestration service in apps/platform-api/src/modules/visualizations/services/create-visualization-idempotent.service.ts
-- [x] T021 [US2] Add POST /projects/:projectId/visualizations route with Idempotency-Key handling in apps/platform-api/src/modules/visualizations/visualizations.controller.ts
+- [x] T020 [US2] Keep create orchestration minimal for metadata-only MVP in apps/platform-api/src/modules/visualizations/services/create-visualization.service.ts
+- [x] T021 [US2] Add POST /projects/:projectId/visualizations route in apps/platform-api/src/modules/visualizations/visualizations.controller.ts
 - [x] T022 [US2] Enforce no-side-effects rule (no generation, no credits, no file writes) in apps/platform-api/src/modules/visualizations/services/create-visualization.service.ts
 - [x] T023 [US2] Add response mapper for created visualization details in apps/platform-api/src/modules/visualizations/services/map-visualization-details.service.ts
 
@@ -133,7 +131,7 @@
 ## Parallel Opportunities
 
 - Phase 1: T002 and T003 can run in parallel once T001 starts.
-- Phase 2: T007, T009, and T011 can run in parallel after T006 baseline decisions are fixed.
+- Phase 2: T011 can run in parallel after T006 baseline decisions are fixed.
 - Story implementation: US1 (T014-T018), US2 (T019-T023), and US3 (T024-T029) can be staffed in parallel after Phase 2.
 - Polish: T030 and T031 can run in parallel.
 
@@ -146,8 +144,7 @@
 ### Parallel Example: User Story 2
 
 - Execute T019 and T023 in parallel (core create flow and mapper).
-- Execute T020 after T019 and T009 are complete.
-- Complete T021 after T020 and DTO validations are in place.
+- Complete T021 after DTO validations are in place.
 
 ### Parallel Example: User Story 3
 

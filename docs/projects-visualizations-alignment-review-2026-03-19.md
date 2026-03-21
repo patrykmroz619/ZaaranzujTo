@@ -21,7 +21,6 @@ Highest-priority gaps:
 
 1. Missing `POST /visualizations/{visualizationId}/iterations` endpoint.
 2. `DELETE /projects/{projectId}` currently deletes only project metadata (no documented cascade behavior).
-3. Idempotency for `POST /projects/{projectId}/visualizations` is documented and present in contracts, but not implemented in API handling.
 
 ## Findings (Ordered by Severity)
 
@@ -62,23 +61,6 @@ Observed in code:
 Impact:
 
 - Risk of orphaned visualizations/assets and contract mismatch for clients.
-
----
-
-### 3) Idempotency missing for visualization creation endpoint
-
-Documentation expectation:
-
-- `POST /projects/{projectId}/visualizations` includes `Idempotency-Key` and conflict behavior for duplicates.
-
-Observed in code:
-
-- Contracts define `createVisualizationHeadersSchema` with `idempotencyKey`.
-- Controller/service path for create visualization does not parse or use headers for idempotency.
-
-Impact:
-
-- Retry behavior can create duplicate visualizations.
 
 ---
 
@@ -164,13 +146,12 @@ Impact:
 
 ## Recommended Next Steps
 
-1. Implement `POST /visualizations/{visualizationId}/iterations` (WI-07 scope), including idempotency and documented error mapping.
-2. Implement idempotency handling for `POST /projects/{projectId}/visualizations` (`Idempotency-Key` verification and conflict policy).
-3. Decide and implement `visualizationsCount` strategy:
+1. Implement `POST /visualizations/{visualizationId}/iterations` (WI-07 scope) with documented error mapping.
+2. Decide and implement `visualizationsCount` strategy:
    - computed query-time, or
    - persisted counter updated transactionally.
-4. Align delete flow with documented cascade behavior and conflict handling for active generation.
-5. Either:
+3. Align delete flow with documented cascade behavior and conflict handling for active generation.
+4. Either:
    - align visualization schema to Mongo design (ObjectId typing + richer result metadata), or
    - update docs to explicitly reflect current simplified schema.
 

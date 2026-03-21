@@ -1,10 +1,10 @@
 # Phase 0: Research & Technical Unknowns
 
-## 1. Visualization Creation Idempotency
+## 1. Visualization Creation Simplicity
 
-- **Decision:** Persist idempotency by user and endpoint intent, storing request fingerprint and resolved visualization reference. Replays with identical payload return the same logical result; mismatched payload with reused key returns conflict.
-- **Rationale:** This matches the REST plan conflict behavior while preventing duplicate visualizations from retries caused by network instability.
-- **Alternatives considered:** Best-effort deduplication by visualization name and project only. Rejected because names are mutable and not safe as idempotency identity.
+- **Decision:** Keep visualization creation metadata-only and avoid additional replay-tracking infrastructure in MVP.
+- **Rationale:** This keeps WI-05 implementation lightweight while still enforcing ownership, validation, and no-generation/no-credit side effects.
+- **Alternatives considered:** Introducing request replay persistence and conflict fingerprinting in WI-05. Rejected because it increases complexity outside current MVP scope.
 
 ## 2. Read Model for List and Details
 

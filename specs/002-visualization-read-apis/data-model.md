@@ -63,35 +63,16 @@ Validation rules:
 - Returned chronologically for iteration history endpoint by default.
 - Included in full details endpoint as current persisted history.
 
-### Idempotency Record
-
-| Field            | Type                         | Required | Notes                             |
-| ---------------- | ---------------------------- | -------- | --------------------------------- |
-| `_id`            | ObjectId                     | Yes      | Internal identifier               |
-| `userId`         | ObjectId or string reference | Yes      | Scope partition                   |
-| `idempotencyKey` | string                       | Yes      | Client-provided key               |
-| `operation`      | string                       | Yes      | For this WI: create visualization |
-| `requestHash`    | string                       | Yes      | Fingerprint of meaningful payload |
-| `resultRef`      | ObjectId                     | Yes      | Created visualization identifier  |
-| `createdAt`      | Date                         | Yes      | First resolution timestamp        |
-
-Validation rules:
-
-- Unique on `(userId, operation, idempotencyKey)`.
-- Replayed key with same hash returns original result.
-- Replayed key with different hash returns conflict.
-
 ## Relationships
 
 - One Project has many Visualizations.
 - One Visualization embeds many Iterations.
-- One User owns Projects, Visualizations, and Idempotency Records.
+- One User owns Projects and Visualizations.
 
 ## Indexing Notes
 
 - Visualization listing: index on `(userId, projectId, updatedAt)`.
 - Visualization direct read: index on `(userId, _id)`.
-- Idempotency lookup: unique index on `(userId, operation, idempotencyKey)`.
 
 ## Non-Goals in This Feature
 

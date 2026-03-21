@@ -50,4 +50,28 @@ export class FileAssetsService {
 
     return asset;
   }
+
+  async linkAssetToIteration(params: {
+    assetId: string;
+    userId: string;
+    visualizationId: string;
+    iterationId: string;
+    assetRole: "input-primary" | "input-reference" | "output-generated";
+  }) {
+    const { assetId, userId, visualizationId, iterationId, assetRole } = params;
+
+    const updatedAsset = await this.fileAssetsRepository.linkAssetContext({
+      assetId,
+      userId,
+      visualizationId,
+      iterationId,
+      assetRole,
+    });
+
+    if (!updatedAsset) {
+      throw new NotFoundException("File asset not found");
+    }
+
+    return updatedAsset;
+  }
 }

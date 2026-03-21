@@ -84,6 +84,22 @@ export const createVisualizationRequestSchema = z
   })
   .strict();
 
+export const createVisualizationIterationBodySchema = z
+  .object({
+    stylePreset: z
+      .string()
+      .transform((value) => value.trim())
+      .refine((value) => value.length > 0, {
+        message: "stylePreset cannot be empty.",
+      })
+      .optional(),
+    promptContext: z.record(z.string(), z.unknown()).optional(),
+  })
+  .strict();
+
+export const CREATE_ITERATION_MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
+export const CREATE_ITERATION_ALLOWED_MIME_PREFIX = "image/";
+
 export class ProjectIdParamsDto extends createZodDto(visualizationProjectIdParamsSchema) {}
 
 export class VisualizationIdParamsDto extends createZodDto(visualizationIdParamsSchema) {}
@@ -105,3 +121,6 @@ export type TListVisualizationIterationsQuery = z.infer<
   typeof listVisualizationIterationsQuerySchema
 >;
 export type TCreateVisualizationRequest = z.infer<typeof createVisualizationRequestSchema>;
+export type TCreateVisualizationIterationBody = z.infer<
+  typeof createVisualizationIterationBodySchema
+>;

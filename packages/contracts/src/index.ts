@@ -3,3 +3,4 @@ export * from "./credits";
 export * from "./me";
 export * from "./projects";
 export * from "./storage";
+export * from "./visualizations";

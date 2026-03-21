@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import type { Model, Types } from "mongoose";
+import { Types, type Model } from "mongoose";
 
 import {
   Iteration,
@@ -43,6 +43,31 @@ type TListIterationsForVisualizationForUserParams = {
   page: number;
   pageSize: number;
   sort: TListVisualizationIterationsSort;
+};
+
+type TIterationAssetInput = {
+  assetId: string;
+  role: "input-primary" | "input-reference" | "output-generated";
+  mimeType: string;
+  sizeBytes: number;
+};
+
+type TAppendIterationForVisualizationForUserParams = {
+  userId: Types.ObjectId;
+  visualizationId: string;
+  status: "succeeded" | "failed";
+  generationInput: {
+    mode: string;
+    stylePreset: string | null;
+    colors: string[];
+    roomType: string | null;
+    prompt: string | null;
+    referenceAssets: string[];
+  };
+  inputAssets: TIterationAssetInput[];
+  outputAsset: TIterationAssetInput | null;
+  resultImageAssetId: string | null;
+  failureCode: string | null;
 };
 
 @Injectable()
@@ -146,5 +171,65 @@ export class VisualizationsRepository {
       items: ordered.slice(offset, offset + pageSize),
       totalItems,
     };
+  };
+
+  appendIterationForVisualizationForUser = async (
+    params: TAppendIterationForVisualizationForUserParams,
+  ): Promise<TVisualizationDocument | null> => {
+    const {
+      userId,
+      visualizationId,
+      status,
+      generationInput,
+      inputAssets,
+      outputAsset,
+      resultImageAssetId,
+      failureCode,
+    } = params;
+
+    const visualization = await this.visualizationModel.findOne({
+      _id: visualizationId,
+      userId,
+    });
+
+    if (!visualization) {
+      return null;
+    }
+
+    const nextIterationNo = visualization.iterationsCount + 1;
+    const now = new Date();
+    const iterationId = new Types.ObjectId();
+
+    visualization.iterations.push({
+      _id: iterationId,
+      iterationNo: nextIterationNo,
+      baseIterationId: null,
+      status,
+      failureCode,
+      generationInput,
+      inputAssets,
+      outputAsset,
+      result: {
+        imageAssetId: resultImageAssetId,
+      },
+      createdAt: now,
+    });
+
+    visualization.iterationsCount = nextIterationNo;
+
+    if (status === "succeeded" && resultImageAssetId) {
+      visualization.latestIteration = {
+        id: iterationId.toString(),
+        iterationNo: nextIterationNo,
+        imageAssetId: resultImageAssetId,
+        createdAt: now,
+      };
+    }
+
+    visualization.updatedAt = now;
+
+    await visualization.save();
+
+    return visualization;
   };
 }
