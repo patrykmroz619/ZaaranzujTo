@@ -7,6 +7,10 @@ import { ProjectsModule } from "../projects/projects.module";
 import { StorageModule } from "../storage/storage.module";
 import { UsersModule } from "../users/users.module";
 import { CreateIterationResponseMapper } from "./iterations/mappers/create-iteration-response.mapper";
+import { IterationAccessService } from "./iterations/services/internal/iteration-access.service";
+import { IterationAssetsService } from "./iterations/services/internal/iteration-assets.service";
+import { IterationCreditsService } from "./iterations/services/internal/iteration-credits.service";
+import { IterationFilesValidatorService } from "./iterations/services/internal/iteration-files-validator.service";
 import { ListVisualizationIterationsService } from "./iterations/services/list-visualization-iterations.service";
 import { CreateIterationService } from "./iterations/services/create-iteration.service";
 import { IterationPromptBuilderService } from "./iterations/services/iteration-prompt-builder.service";
@@ -45,6 +49,10 @@ import { VisualizationsController } from "./visualizations.controller";
     GetVisualizationDetailsService,
     ListVisualizationIterationsService,
     CreateIterationResponseMapper,
+    IterationAccessService,
+    IterationFilesValidatorService,
+    IterationAssetsService,
+    IterationCreditsService,
     IterationPromptBuilderService,
     CreateIterationService,
   ],
