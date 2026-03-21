@@ -6,13 +6,13 @@ Migrates the authenticated layout shell (navbar, footer, mobile navigation, page
 
 ## Key Files After Implementation
 
-| File | Purpose |
-|------|---------|
-| `apps/platform-web/src/app/(app)/layout.tsx` | Authenticated shell (renders Navbar + Footer around children) |
-| `apps/platform-web/src/core/layout/Navbar/Navbar.tsx` | Top navigation bar (desktop + mobile) |
-| `apps/platform-web/src/core/layout/Footer/Footer.tsx` | Site footer |
-| `packages/ui/src/components/page-header/page-header.tsx` | Reusable page header (shared UI) |
-| `apps/platform-web/src/i18n/messages/pl.json` | Polish translations (nav, footer, common keys) |
+| File                                                     | Purpose                                                       |
+| -------------------------------------------------------- | ------------------------------------------------------------- |
+| `apps/platform-web/src/app/(app)/layout.tsx`             | Authenticated shell (renders Navbar + Footer around children) |
+| `apps/platform-web/src/core/layout/Navbar/Navbar.tsx`    | Top navigation bar (desktop + mobile)                         |
+| `apps/platform-web/src/core/layout/Footer/Footer.tsx`    | Site footer                                                   |
+| `packages/ui/src/components/page-header/page-header.tsx` | Reusable page header (shared UI)                              |
+| `apps/platform-web/src/i18n/messages/pl.json`            | Polish translations (nav, footer, common keys)                |
 
 ## How to Verify
 

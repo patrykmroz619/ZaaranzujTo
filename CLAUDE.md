@@ -94,8 +94,12 @@ Defines the shared API contract between frontend and backend using Zod schemas. 
 `docs/` contains design documents and implementation plans. If a better implementation approach is discovered or a contract/schema needs to change, suggest updating the relevant doc to stay in sync.
 
 ## Active Technologies
+
 - TypeScript 5.x, React 19, Next.js 16.2 + Next.js (App Router), Tailwind CSS v4, Clerk (auth), next-intl (i18n), Zustand (state), Lucide React (icons), @repo/ui (shadcn components) (004-layout-migration)
 - N/A (layout-only, no data persistence) (004-layout-migration)
+- TypeScript 5.9, React 19, Next.js 16.2 + next-intl 4.8.3, @clerk/nextjs 7.0.6, next-themes 0.4.6, lucide-react, @repo/ui (shadcn components), Tailwind CSS v4 (005-demo-to-web-migration)
+- N/A (mock data only, no persistence) (005-demo-to-web-migration)
 
 ## Recent Changes
+
 - 004-layout-migration: Added TypeScript 5.x, React 19, Next.js 16.2 + Next.js (App Router), Tailwind CSS v4, Clerk (auth), next-intl (i18n), Zustand (state), Lucide React (icons), @repo/ui (shadcn components)

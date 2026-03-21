@@ -1,11 +1,15 @@
-import { Button } from "@repo/ui/core/button";
+import { redirect } from "next/navigation";
+import { auth } from "@clerk/nextjs/server";
+import { LandingView } from "@/views/landing";
 
-export default function RootPage() {
-  return (
-    <div>
-      <h1>Welcome to the Platform Web App!</h1>
-      <p>This is the root page of the application.</p>
-      <Button>Click Me</Button>
-    </div>
-  );
-}
+const RootPage = async () => {
+  const { userId } = await auth();
+
+  if (userId) {
+    redirect("/dashboard");
+  }
+
+  return <LandingView />;
+};
+
+export default RootPage;

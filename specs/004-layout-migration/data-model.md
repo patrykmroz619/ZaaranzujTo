@@ -6,11 +6,11 @@ This feature is UI/layout only — there are no database entities or persistent 
 
 Represents a link displayed in the navbar and mobile navigation.
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `label` | `string` | Translated display text |
-| `href` | `string` | Route path |
-| `icon` | `LucideIcon` | Lucide icon component |
+| Field   | Type         | Description             |
+| ------- | ------------ | ----------------------- |
+| `label` | `string`     | Translated display text |
+| `href`  | `string`     | Route path              |
+| `icon`  | `LucideIcon` | Lucide icon component   |
 
 ```typescript
 type TNavItem = {
@@ -26,13 +26,13 @@ type TNavItem = {
 
 Props for the reusable PageHeader component extracted to `@repo/ui`.
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `title` | `string` | Yes | Page heading |
-| `subtitle` | `string` | No | Secondary description |
-| `backHref` | `string` | No | URL for back navigation |
-| `backLabel` | `string` | No | Label for back button (defaults to "Wstecz") |
-| `children` | `ReactNode` | No | Action slot (CTA buttons) |
+| Field       | Type        | Required | Description                                  |
+| ----------- | ----------- | -------- | -------------------------------------------- |
+| `title`     | `string`    | Yes      | Page heading                                 |
+| `subtitle`  | `string`    | No       | Secondary description                        |
+| `backHref`  | `string`    | No       | URL for back navigation                      |
+| `backLabel` | `string`    | No       | Label for back button (defaults to "Wstecz") |
+| `children`  | `ReactNode` | No       | Action slot (CTA buttons)                    |
 
 ```typescript
 type TPageHeaderProps = {
@@ -48,18 +48,18 @@ type TPageHeaderProps = {
 
 Derived from Clerk's `TUser` type (already defined in `@/core/packages/auth`).
 
-| Field | Type | Source |
-|-------|------|--------|
-| `fullName` | `string \| null` | `useCurrentUser().fullName` |
-| `email` | `string` | `useCurrentUser().email` |
-| `initials` | `string` | Derived from firstName/lastName |
+| Field      | Type             | Source                          |
+| ---------- | ---------------- | ------------------------------- |
+| `fullName` | `string \| null` | `useCurrentUser().fullName`     |
+| `email`    | `string`         | `useCurrentUser().email`        |
+| `initials` | `string`         | Derived from firstName/lastName |
 
 No new type needed — uses existing `TUser` from auth package.
 
 ## Credit Balance
 
-| Field | Type | Description |
-|-------|------|-------------|
+| Field     | Type     | Description          |
+| --------- | -------- | -------------------- |
 | `balance` | `number` | Current credit count |
 
 Initially hardcoded. Will be replaced by API data in a future feature.

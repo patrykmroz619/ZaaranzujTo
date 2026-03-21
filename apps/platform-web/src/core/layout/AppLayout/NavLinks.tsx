@@ -21,11 +21,7 @@ export const NavLinks = () => {
             variant="ghost"
             size="sm"
             asChild
-            className={
-              isActive
-                ? "bg-accent text-accent-foreground"
-                : "text-muted-foreground"
-            }
+            className={isActive ? "bg-accent text-accent-foreground" : "text-muted-foreground"}
           >
             <Link href={item.href}>{t(item.labelKey)}</Link>
           </Button>

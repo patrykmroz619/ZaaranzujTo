@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(ls:*)",
-      "Bash(ls -la /c/Users/patry/Documents/Projekty/ZaaranzujTo-2/apps/platform-web/src/app/\\\\\\(auth\\\\\\)/layout.tsx)"
+      "Bash(ls -la /c/Users/patry/Documents/Projekty/ZaaranzujTo-2/apps/platform-web/src/app/\\\\\\(auth\\\\\\)/layout.tsx)",
+      "Bash(bun run:*)"
     ]
   }
 }

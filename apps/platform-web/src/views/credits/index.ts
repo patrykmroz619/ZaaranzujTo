@@ -1,0 +1,1 @@
+export { CreditsView } from "./CreditsView";

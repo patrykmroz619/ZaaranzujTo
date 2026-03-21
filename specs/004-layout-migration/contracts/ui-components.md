@@ -21,13 +21,13 @@ type TPageHeaderProps = {
 
 ### Rendering Rules
 
-| Prop Combination | Renders |
-|-----------------|---------|
-| `title` only | Heading text |
-| `title` + `subtitle` | Heading + muted subtext below |
-| `title` + `backHref` | Back button (ArrowLeft icon + label) above heading |
-| `title` + `children` | Heading on left, action slot on right (stacked on mobile) |
-| All props | Back button, heading row with title/subtitle left + actions right |
+| Prop Combination     | Renders                                                           |
+| -------------------- | ----------------------------------------------------------------- |
+| `title` only         | Heading text                                                      |
+| `title` + `subtitle` | Heading + muted subtext below                                     |
+| `title` + `backHref` | Back button (ArrowLeft icon + label) above heading                |
+| `title` + `children` | Heading on left, action slot on right (stacked on mobile)         |
+| All props            | Back button, heading row with title/subtitle left + actions right |
 
 ### Back Button Behavior
 
@@ -45,12 +45,12 @@ Not exported as a shared component — internal to the `(app)` layout.
 
 ### Sub-components
 
-| Component | Purpose | Props |
-|-----------|---------|-------|
-| `NavLinks` | Desktop horizontal nav links | None (uses i18n + pathname internally) |
-| `MobileNav` | Hamburger + Sheet overlay | None (uses i18n + pathname internally) |
-| `CreditBadge` | Credit balance pill | `balance: number` |
-| `UserMenu` | Avatar + dropdown | None (uses `useCurrentUser()` internally) |
+| Component     | Purpose                      | Props                                     |
+| ------------- | ---------------------------- | ----------------------------------------- |
+| `NavLinks`    | Desktop horizontal nav links | None (uses i18n + pathname internally)    |
+| `MobileNav`   | Hamburger + Sheet overlay    | None (uses i18n + pathname internally)    |
+| `CreditBadge` | Credit balance pill          | `balance: number`                         |
+| `UserMenu`    | Avatar + dropdown            | None (uses `useCurrentUser()` internally) |
 
 ---
 
