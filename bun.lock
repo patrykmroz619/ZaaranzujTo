@@ -106,6 +106,7 @@
       "dependencies": {
         "@clerk/nextjs": "7.0.6",
         "@clerk/themes": "2.4.57",
+        "lucide-react": "^0.577.0",
         "next": "16.2.1",
         "next-intl": "4.8.3",
         "next-themes": "0.4.6",

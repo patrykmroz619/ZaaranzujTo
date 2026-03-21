@@ -13,8 +13,8 @@
       "default": "./src/components/*.tsx"
     },
     "./hooks/*": {
-      "types": "./src/hooks/*.tsx",
-      "default": "./src/hooks/*.tsx"
+      "types": "./src/hooks/*.ts",
+      "default": "./src/hooks/*.ts"
     },
     "./lib": {
       "types": "./src/lib/index.ts",

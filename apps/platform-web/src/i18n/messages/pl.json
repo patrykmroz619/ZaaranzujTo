@@ -1,1 +1,18 @@
-{}
+{
+  "nav": {
+    "dashboard": "Pulpit",
+    "projects": "Projekty",
+    "credits": "Kredyty",
+    "settings": "Ustawienia",
+    "signOut": "Wyloguj się"
+  },
+  "footer": {
+    "contact": "Kontakt",
+    "terms": "Regulamin"
+  },
+  "common": {
+    "back": "Wstecz",
+    "loading": "Ładowanie...",
+    "error": "Wystąpił błąd"
+  }
+}

@@ -1,3 +1,5 @@
+import { AppLayout } from "@/core/layout/AppLayout";
+
 type TLayoutProps = {
   children: React.ReactNode;
 };
@@ -5,7 +7,7 @@ type TLayoutProps = {
 const Layout = async (props: TLayoutProps) => {
   const { children } = props;
 
-  return <div>{children}</div>;
+  return <AppLayout>{children}</AppLayout>;
 };
 
 export default Layout;
