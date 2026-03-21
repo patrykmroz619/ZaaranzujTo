@@ -1,11 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import type { TListProjectVisualizationsSort } from "../schemas/visualization.schema";
 
+import { ValidateProjectOwnershipService as ProjectsValidateProjectOwnershipService } from "../../projects/services/validate-project-ownership.service";
 import { GetUserService } from "../../users/services/get-user.service";
 import { type TListProjectVisualizationsQuery } from "../visualizations.dto";
 import { VisualizationsRepository } from "../repositories/visualizations.repository";
 import { MapVisualizationSummaryService } from "./map-visualization-summary.service";
-import { ValidateProjectOwnershipService } from "./validate-project-ownership.service";
 
 type TListProjectVisualizationsParams = {
   clerkId: string;
@@ -18,7 +18,7 @@ type TListProjectVisualizationsParams = {
 export class ListProjectVisualizationsService {
   constructor(
     private readonly getUserService: GetUserService,
-    private readonly validateProjectOwnershipService: ValidateProjectOwnershipService,
+    private readonly projectsValidateProjectOwnershipService: ProjectsValidateProjectOwnershipService,
     private readonly visualizationsRepository: VisualizationsRepository,
     private readonly mapVisualizationSummaryService: MapVisualizationSummaryService,
   ) {}
@@ -31,7 +31,7 @@ export class ListProjectVisualizationsService {
       email,
     });
 
-    await this.validateProjectOwnershipService.validate({
+    await this.projectsValidateProjectOwnershipService.validate({
       userId: user._id,
       projectId,
     });

@@ -10,6 +10,7 @@ import { DeleteProjectService } from "./services/delete-project.service";
 import { GetProjectService } from "./services/get-project.service";
 import { ListProjectsService } from "./services/list-projects.service";
 import { UpdateProjectService } from "./services/update-project.service";
+import { ValidateProjectOwnershipService } from "./services/validate-project-ownership.service";
 
 @Module({
   imports: [
@@ -29,6 +30,8 @@ import { UpdateProjectService } from "./services/update-project.service";
     GetProjectService,
     UpdateProjectService,
     DeleteProjectService,
+    ValidateProjectOwnershipService,
   ],
+  exports: [ValidateProjectOwnershipService],
 })
 export class ProjectsModule {}
