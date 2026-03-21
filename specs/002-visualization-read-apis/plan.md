@@ -5,7 +5,7 @@
 
 ## Summary
 
-Deliver WI-05 visualization metadata and read capabilities in `platform-api`: list visualizations within a project, create visualization metadata without generation side effects, get visualization details, and list iteration history. The technical approach keeps `visualizations` as a dedicated module with repository-private persistence, shared contract schemas in `@repo/contracts`, strict ownership isolation, and idempotent visualization creation.
+Deliver WI-05 visualization metadata and read capabilities in `platform-api`: list visualizations within a project, create visualization metadata without generation side effects, get visualization details, and list iteration history. The technical approach keeps `visualizations` as a dedicated module with repository-private persistence, shared contract schemas in `@repo/contracts`, and strict ownership isolation.
 
 ## Technical Context
 
@@ -16,7 +16,7 @@ Deliver WI-05 visualization metadata and read capabilities in `platform-api`: li
 **Target Platform**: `apps/platform-api` backend service in monorepo deployments
 **Project Type**: Modular monolith REST web-service module
 **Performance Goals**: 95% of successful list/detail requests under 2 seconds in normal MVP load
-**Constraints**: Strict per-user isolation with not-found behavior for non-owned resources; create endpoint must not trigger generation or credit mutations; idempotent create semantics with conflict on mismatched replay
+**Constraints**: Strict per-user isolation with not-found behavior for non-owned resources; create endpoint must not trigger generation or credit mutations
 **Scale/Scope**: MVP B2C workload, project-scoped visualization CRUD-read subset (no generation write flow in this feature)
 
 ## Constitution Check

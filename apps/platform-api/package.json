@@ -21,6 +21,7 @@
     "deps:update:latest": "bun update --latest"
   },
   "dependencies": {
+    "@openrouter/ai-sdk-provider": "2.3.3",
     "@aws-sdk/client-s3": "3.1014.0",
     "@aws-sdk/s3-request-presigner": "3.1014.0",
     "@clerk/backend": "3.2.2",
@@ -30,8 +31,9 @@
     "@nestjs/mongoose": "11.0.4",
     "@nestjs/platform-express": "11.1.17",
     "@repo/contracts": "workspace:*",
+    "ai": "6.0.134",
     "mongoose": "9.3.1",
-    "nestjs-zod": "5.1.1",
+    "nestjs-zod": "5.2.0",
     "reflect-metadata": "0.2.2",
     "rxjs": "7.8.2",
     "zod": "4.3.6"
@@ -43,6 +45,7 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/express": "5.0.6",
+    "@types/multer": "2.1.0",
     "@types/jest": "30.0.0",
     "@types/node": "25.5.0",
     "@types/supertest": "7.2.0",

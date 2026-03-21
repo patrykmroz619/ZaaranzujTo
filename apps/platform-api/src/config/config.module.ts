@@ -14,6 +14,9 @@ const configSchema = z.object({
   r2AccessKeyId: z.string().optional(),
   r2SecretAccessKey: z.string().optional(),
   r2BucketName: z.string().optional(),
+  openRouterApiKey: z.string().optional(),
+  openRouterBaseUrl: z.string().url().default("https://openrouter.ai/api/v1"),
+  visualizationImageModel: z.string().min(1),
 });
 
 const configuration = () => ({
@@ -26,6 +29,9 @@ const configuration = () => ({
   r2AccessKeyId: process.env.R2_ACCESS_KEY_ID,
   r2SecretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
   r2BucketName: process.env.R2_BUCKET_NAME,
+  openRouterApiKey: process.env.OPENROUTER_API_KEY,
+  openRouterBaseUrl: process.env.OPENROUTER_BASE_URL,
+  visualizationImageModel: process.env.VISUALIZATION_IMAGE_MODEL,
 });
 
 export type ConfigType = z.infer<typeof configSchema>;

@@ -55,11 +55,28 @@ const IterationInputSchema = SchemaFactory.createForClass(IterationInput);
 
 @Schema({ _id: false })
 export class IterationResult {
-  @Prop({ required: true })
-  imageAssetId: string;
+  @Prop({ required: false, default: null })
+  imageAssetId: string | null;
 }
 
 const IterationResultSchema = SchemaFactory.createForClass(IterationResult);
+
+@Schema({ _id: false })
+export class IterationAssetRef {
+  @Prop({ required: true })
+  assetId: string;
+
+  @Prop({ required: true })
+  role: "input-primary" | "input-reference" | "output-generated";
+
+  @Prop({ required: true })
+  mimeType: string;
+
+  @Prop({ required: true })
+  sizeBytes: number;
+}
+
+const IterationAssetRefSchema = SchemaFactory.createForClass(IterationAssetRef);
 
 @Schema({ _id: true })
 export class Iteration {
@@ -74,8 +91,17 @@ export class Iteration {
   @Prop({ required: true })
   status: string;
 
+  @Prop({ required: false, default: null })
+  failureCode: string | null;
+
   @Prop({ required: true, type: IterationInputSchema })
   generationInput: IterationInput;
+
+  @Prop({ required: true, type: [IterationAssetRefSchema], default: [] })
+  inputAssets: IterationAssetRef[];
+
+  @Prop({ required: false, type: IterationAssetRefSchema, default: null })
+  outputAsset: IterationAssetRef | null;
 
   @Prop({ required: true, type: IterationResultSchema })
   result: IterationResult;

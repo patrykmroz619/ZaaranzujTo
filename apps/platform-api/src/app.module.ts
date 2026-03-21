@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { ConfigurationModule } from "./config/config.module";
+import { AiModule } from "./modules/ai/ai.module";
 import { CreditsModule } from "./modules/credits/credits.module";
 import { DatabaseModule } from "./database/database.module";
 import { HealthModule } from "./modules/health/health.module";
@@ -16,6 +17,7 @@ import { VisualizationsModule } from "./modules/visualizations/visualizations.mo
     UsersModule,
     ProfileModule,
     ProjectsModule,
+    AiModule,
     VisualizationsModule,
     StorageModule,
     CreditsModule,

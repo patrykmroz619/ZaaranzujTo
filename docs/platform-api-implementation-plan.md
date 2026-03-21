@@ -234,6 +234,13 @@ Goal: deliver the MVP backend as a NestJS modular monolith, in the most efficien
 
 **Objective:** deliver core product flow: new iterations with upload + AI generation + credit reservation compensation.
 
+**Status update (2026-03-21):**
+
+- `POST /visualizations/{visualizationId}/iterations` has been added as iteration write endpoint.
+- Multipart handling for `inputPhoto` and `referencePhotos` was implemented.
+- `ai` module was introduced with prompt builder and OpenRouter integration via `@openrouter/ai-sdk-provider`.
+- Iteration orchestration now executes reserve -> generate -> persist -> consume and compensates on failures.
+
 **Actions**
 
 - Implement `POST /visualizations/{visualizationId}/iterations` as the only iteration write endpoint.
@@ -246,12 +253,11 @@ Goal: deliver the MVP backend as a NestJS modular monolith, in the most efficien
   3. persist iteration and output asset,
   4. consume credit on success,
   5. compensate on failure.
-- Handle known failure mappings (`402`, `413`, `422`, `502`, `409` for active generation/idempotency).
+- Handle known failure mappings (`402`, `413`, `422`, `502`, `409` for active generation).
 
 **Definition of Done**
 
 - End-to-end iteration generation works with proper credit behavior.
-- Idempotent retry does not create duplicate side effects.
 
 **Dependencies:** WI-04, WI-05, WI-06.
 

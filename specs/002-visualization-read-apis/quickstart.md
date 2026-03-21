@@ -43,7 +43,6 @@ Expected result:
 curl -X POST "http://localhost:3001/api/v1/projects/<projectId>/visualizations" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
-  -H "Idempotency-Key: 3f8db8d1-58fd-44d0-a5d7-2f0a61e5f8d9" \
   -d '{
     "name": "Salon",
     "mode": "fromPhoto"
@@ -85,5 +84,4 @@ Expected result:
 ## Error Verification
 
 - Non-owned project or visualization returns not-found style response.
-- Reusing an idempotency key with different payload returns conflict.
 - Invalid pagination or identifier formats return validation errors.

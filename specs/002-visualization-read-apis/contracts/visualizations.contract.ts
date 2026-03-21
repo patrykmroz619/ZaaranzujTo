@@ -43,10 +43,6 @@ export const TCreateVisualizationBodySchema = z.object({
   mode: z.enum(["fromPhoto", "fromScratch"]),
 });
 
-export const TCreateVisualizationHeadersSchema = z.object({
-  idempotencyKey: z.string().uuid(),
-});
-
 export const TGenerationInputSchema = z.object({
   mode: z.string(),
   stylePreset: z.string().nullable().optional(),
@@ -100,7 +96,6 @@ export type TListProjectVisualizationsResponse = z.infer<
   typeof TListProjectVisualizationsResponseSchema
 >;
 export type TCreateVisualizationBody = z.infer<typeof TCreateVisualizationBodySchema>;
-export type TCreateVisualizationHeaders = z.infer<typeof TCreateVisualizationHeadersSchema>;
 export type TIteration = z.infer<typeof TIterationSchema>;
 export type TVisualizationDetails = z.infer<typeof TVisualizationDetailsSchema>;
 export type TListVisualizationIterationsQuery = z.infer<

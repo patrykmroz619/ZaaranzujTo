@@ -10,6 +10,7 @@ const mapIteration = (params: { iteration: Iteration }) => {
     iterationNo: iteration.iterationNo,
     baseIterationId: iteration.baseIterationId,
     status: iteration.status,
+    failureCode: iteration.failureCode,
     generationInput: {
       mode: iteration.generationInput.mode,
       stylePreset: iteration.generationInput.stylePreset,
@@ -18,6 +19,20 @@ const mapIteration = (params: { iteration: Iteration }) => {
       prompt: iteration.generationInput.prompt,
       referenceAssets: iteration.generationInput.referenceAssets,
     },
+    inputAssets: iteration.inputAssets.map((asset) => ({
+      assetId: asset.assetId,
+      role: asset.role,
+      mimeType: asset.mimeType,
+      sizeBytes: asset.sizeBytes,
+    })),
+    outputAsset: iteration.outputAsset
+      ? {
+          assetId: iteration.outputAsset.assetId,
+          role: iteration.outputAsset.role,
+          mimeType: iteration.outputAsset.mimeType,
+          sizeBytes: iteration.outputAsset.sizeBytes,
+        }
+      : null,
     result: {
       imageAssetId: iteration.result.imageAssetId,
     },
