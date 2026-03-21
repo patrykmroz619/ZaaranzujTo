@@ -12,9 +12,16 @@ export class AuthGuard implements CanActivate {
     const skipAuthInLocalEnv = process.env["SKIP_AUTH_FOR_LOCAL_ENV"] === "true";
 
     if (env === "local" && skipAuthInLocalEnv) {
+      const userId = request.headers["user-id"];
+      const email = request.headers["user-email"];
+
+      if (typeof userId !== "string" || typeof email !== "string") {
+        throw new UnauthorizedException();
+      }
+
       request.auth = {
-        userId: request.headers["user-id"] as string,
-        email: request.headers["user-email"] as string,
+        userId,
+        email,
       };
 
       return true;

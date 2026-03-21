@@ -3,7 +3,7 @@ import { App } from "supertest/types";
 
 import type { INestApplication } from "@nestjs/common";
 
-type TAuthContext = {
+export type TAuthContext = {
   userId: string;
   email: string;
 };
@@ -27,6 +27,38 @@ export const authenticatedGet = (input: {
 
   return request(input.app.getHttpServer() as App)
     .get(input.path)
+    .set({
+      "user-id": auth.userId,
+      "user-email": auth.email,
+    });
+};
+
+export const authenticatedPatch = (input: {
+  app: INestApplication;
+  path: string;
+  auth?: TAuthContext;
+  body: Record<string, unknown>;
+}): Test => {
+  const auth = input.auth ?? defaultAuthContext;
+
+  return request(input.app.getHttpServer() as App)
+    .patch(input.path)
+    .set({
+      "user-id": auth.userId,
+      "user-email": auth.email,
+    })
+    .send(input.body);
+};
+
+export const authenticatedDelete = (input: {
+  app: INestApplication;
+  path: string;
+  auth?: TAuthContext;
+}): Test => {
+  const auth = input.auth ?? defaultAuthContext;
+
+  return request(input.app.getHttpServer() as App)
+    .delete(input.path)
     .set({
       "user-id": auth.userId,
       "user-email": auth.email,

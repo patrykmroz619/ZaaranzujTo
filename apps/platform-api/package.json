@@ -12,13 +12,13 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
-    "test:e2e:file": "jest --config ./test/jest-e2e.json --runTestsByPath",
-    "test:e2e:name": "jest --config ./test/jest-e2e.json --testNamePattern",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:cov": "vitest run --coverage",
+    "test:debug": "node --inspect-brk ./node_modules/vitest/vitest.mjs run --config ./vitest.config.ts --no-file-parallelism",
+    "test:e2e": "ENV=test vitest run --config ./test/vitest-e2e.config.ts",
+    "test:e2e:file": "ENV=test vitest run --config ./test/vitest-e2e.config.ts",
+    "test:e2e:name": "ENV=test vitest run --config ./test/vitest-e2e.config.ts --testNamePattern",
     "lint:test": "eslint \"test/**/*.ts\" --fix",
     "deps:update": "bun update",
     "deps:update:latest": "bun update --latest"
@@ -42,6 +42,8 @@
     "zod": "4.3.6"
   },
   "devDependencies": {
+    "@swc/core": "1.13.5",
+    "@vitest/coverage-v8": "3.2.4",
     "@faker-js/faker": "^10.3.0",
     "@nestjs/cli": "11.0.16",
     "@nestjs/schematics": "11.0.9",
@@ -49,33 +51,15 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/express": "5.0.6",
-    "@types/jest": "30.0.0",
     "@types/multer": "2.1.0",
     "@types/node": "25.5.0",
     "@types/supertest": "7.2.0",
     "eslint": "10.1.0",
-    "jest": "30.3.0",
     "supertest": "7.2.2",
-    "ts-jest": "29.4.6",
     "ts-node": "10.9.2",
     "tsconfig-paths": "4.2.0",
-    "typescript": "5.9.3"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": "src",
-    "testRegex": ".*\\.spec\\.ts$",
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "collectCoverageFrom": [
-      "**/*.(t|j)s"
-    ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "typescript": "5.9.3",
+    "unplugin-swc": "1.5.9",
+    "vitest": "3.2.4"
   }
 }

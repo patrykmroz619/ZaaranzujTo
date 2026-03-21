@@ -5,17 +5,17 @@ import z from "zod";
 const logger = new Logger("ConfigurationModule");
 
 const configSchema = z.object({
-  env: z.enum(["local", "staging", "production"]).default("local"),
+  env: z.enum(["local", "staging", "production", "test"]).default("local"),
   port: z.string().transform(Number).default(8080),
   databaseUri: z.string(),
   databaseUser: z.string(),
   databasePassword: z.string(),
-  r2Endpoint: z.string().url().optional(),
+  r2Endpoint: z.url().optional(),
   r2AccessKeyId: z.string().optional(),
   r2SecretAccessKey: z.string().optional(),
   r2BucketName: z.string().optional(),
   openRouterApiKey: z.string().optional(),
-  openRouterBaseUrl: z.string().url().default("https://openrouter.ai/api/v1"),
+  openRouterBaseUrl: z.url(),
   visualizationImageModel: z.string().min(1),
 });
 
@@ -45,11 +45,20 @@ const validateAndLoadConfig = () => {
   }
 };
 
+const resolveEnvFilePath = () => {
+  if (process.env.ENV === "test") {
+    return ".env.test";
+  }
+
+  return ".env";
+};
+
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       load: [validateAndLoadConfig],
+      envFilePath: resolveEnvFilePath(),
     }),
   ],
 })

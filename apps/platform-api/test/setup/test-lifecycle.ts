@@ -1,5 +1,5 @@
 import { INestApplication } from "@nestjs/common";
-import { runRegisteredCleanup } from "../helpers";
+import { clearDatabaseForApp, runRegisteredCleanup } from "../helpers";
 
 const appRegistry = new Set<INestApplication>();
 
@@ -18,7 +18,10 @@ export const cleanupRegisteredApps = async () => {
 
 afterEach(async () => {
   await runRegisteredCleanup();
-  jest.clearAllMocks();
+
+  for (const app of appRegistry) {
+    await clearDatabaseForApp({ app });
+  }
 });
 
 afterAll(async () => {

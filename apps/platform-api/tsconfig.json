@@ -3,6 +3,7 @@
   "compilerOptions": {
     "outDir": "./dist",
     "baseUrl": "./",
+    "types": ["node", "vitest/globals"],
     "paths": {
       "@/*": ["./src/*"]
     }

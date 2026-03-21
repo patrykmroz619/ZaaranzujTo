@@ -8,10 +8,10 @@ import { RequestContextInterceptor } from "./shared/request-context";
 import { ConsoleLogger } from "@nestjs/common";
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
-    logger: new ConsoleLogger({ prefix: "Platform API" }),
-  });
+  const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
+
+  app.useLogger(new ConsoleLogger({ prefix: "Platform API" }));
 
   const port = configService.getOrThrow<number>("port");
 
