@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { ConfigurationModule } from "./config/config.module";
+import { CreditsModule } from "./modules/credits/credits.module";
 import { DatabaseModule } from "./database/database.module";
 import { HealthModule } from "./modules/health/health.module";
 import { ProfileModule } from "./modules/profile/profile.module";
@@ -17,6 +18,7 @@ import { VisualizationsModule } from "./modules/visualizations/visualizations.mo
     ProjectsModule,
     VisualizationsModule,
     StorageModule,
+    CreditsModule,
     HealthModule,
   ],
   controllers: [],

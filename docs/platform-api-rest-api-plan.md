@@ -359,7 +359,7 @@ Poniższe modele są używane wielokrotnie w odpowiedziach endpointów.
 
 #### GET /credits/balance
 
-- **Description**: Pobiera bieżący bilans kredytów użytkownika (łącznie z rezerwacjami).
+- **Description**: Pobiera bieżący bilans kredytów użytkownika (łącznie z rezerwacjami). Dla użytkownika bez utworzonego jeszcze konta kredytowego endpoint zwraca poprawny obiekt zerowy zamiast błędu 404.
 - **Headers**:
   - `Authorization: Bearer <token>`
   - `Accept: application/json`
@@ -378,7 +378,17 @@ Poniższe modele są używane wielokrotnie w odpowiedziach endpointów.
 
 - **Error Responses**:
   - `401 Unauthorized` — brak/nieprawidłowy token.
-  - `404 Not Found` — konto kredytowe nie istnieje.
+
+Przykład odpowiedzi dla użytkownika bez konta kredytowego:
+
+```json
+{
+  "balance": 0,
+  "reserved": 0,
+  "available": 0,
+  "updatedAt": "2026-03-15T11:45:00.000Z"
+}
+```
 
 #### GET /credits/packages
 

@@ -197,6 +197,13 @@ Goal: deliver the MVP backend as a NestJS modular monolith, in the most efficien
 
 **Objective:** implement credit accounting independently from payments.
 
+**Status update (2026-03-21):**
+
+- `credits` module has been scaffolded and registered in app module.
+- `GET /credits/balance` and `GET /credits/packages` were implemented.
+- Balance endpoint behavior has been aligned to return a zero-valued balance object when user has no persisted credit account.
+- Reservation core services (`reserve`, `consume`, `compensate`) with idempotency storage and reservation transition guard were implemented for cross-module orchestration.
+
 **Actions**
 
 - Create `credits` module with:
