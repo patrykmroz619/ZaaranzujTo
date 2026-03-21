@@ -17,8 +17,8 @@
     "deps:update:latest:all": "bun run --filter \"*\" deps:update:latest"
   },
   "devDependencies": {
-    "prettier": "^3.7.4",
-    "turbo": "^2.8.14",
+    "prettier": "3.7.4",
+    "turbo": "2.8.14",
     "typescript": "5.9.2"
   },
   "engines": {
