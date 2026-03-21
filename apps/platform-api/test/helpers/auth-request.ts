@@ -1,0 +1,34 @@
+import request, { type Test } from "supertest";
+import { App } from "supertest/types";
+
+import type { INestApplication } from "@nestjs/common";
+
+type TAuthContext = {
+  userId: string;
+  email: string;
+};
+
+const defaultAuthContext: TAuthContext = {
+  userId: "e2e-user-1",
+  email: "e2e-user-1@example.com",
+};
+
+export const applyLocalAuthBypassEnv = () => {
+  process.env["ENV"] = "local";
+  process.env["SKIP_AUTH_FOR_LOCAL_ENV"] = "true";
+};
+
+export const authenticatedGet = (input: {
+  app: INestApplication;
+  path: string;
+  auth?: TAuthContext;
+}): Test => {
+  const auth = input.auth ?? defaultAuthContext;
+
+  return request(input.app.getHttpServer() as App)
+    .get(input.path)
+    .set({
+      "user-id": auth.userId,
+      "user-email": auth.email,
+    });
+};
