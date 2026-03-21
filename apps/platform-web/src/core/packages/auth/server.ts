@@ -25,3 +25,8 @@ export const getSession = async () => {
     sessionId: session.sessionId,
   };
 };
+
+export const getAuthToken = async (): Promise<string | null> => {
+  const session = await auth();
+  return session.getToken();
+};

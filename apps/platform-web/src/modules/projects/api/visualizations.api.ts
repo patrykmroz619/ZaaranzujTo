@@ -1,0 +1,73 @@
+import type { AxiosInstance } from "axios";
+
+import type {
+  TCreateVisualizationHeaders,
+  TCreateVisualizationRequest,
+  TListProjectVisualizationsQuery,
+  TListProjectVisualizationsResponse,
+  TVisualizationDetails,
+  TVisualizationSummary,
+} from "@repo/contracts";
+
+import { httpClient } from "@/core/packages/http";
+import { handleHttpError } from "@/core/packages/http/http-client.error";
+
+const listVisualizations = async (params: {
+  projectId: string;
+  query?: TListProjectVisualizationsQuery;
+  serverClient?: AxiosInstance;
+}) => {
+  const { projectId, query, serverClient } = params;
+  const client = serverClient ?? httpClient;
+  try {
+    const res = await client.get<TListProjectVisualizationsResponse>(
+      `/api/v1/projects/${projectId}/visualizations`,
+      { params: query },
+    );
+    return res.data;
+  } catch (error) {
+    handleHttpError(error);
+  }
+};
+
+const createVisualization = async (params: {
+  projectId: string;
+  body: TCreateVisualizationRequest;
+  headers: TCreateVisualizationHeaders;
+  serverClient?: AxiosInstance;
+}) => {
+  const { projectId, body, headers, serverClient } = params;
+  const client = serverClient ?? httpClient;
+  try {
+    const res = await client.post<TVisualizationSummary>(
+      `/api/v1/projects/${projectId}/visualizations`,
+      body,
+      { headers },
+    );
+    return res.data;
+  } catch (error) {
+    handleHttpError(error);
+  }
+};
+
+const getVisualization = async (params: {
+  visualizationId: string;
+  serverClient?: AxiosInstance;
+}) => {
+  const { visualizationId, serverClient } = params;
+  const client = serverClient ?? httpClient;
+  try {
+    const res = await client.get<TVisualizationDetails>(
+      `/api/v1/visualizations/${visualizationId}`,
+    );
+    return res.data;
+  } catch (error) {
+    handleHttpError(error);
+  }
+};
+
+export const visualizationsApi = {
+  list: listVisualizations,
+  create: createVisualization,
+  get: getVisualization,
+};
