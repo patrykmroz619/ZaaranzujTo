@@ -1,10 +1,16 @@
 {
+  "app": {
+    "name": "ZaaranżujTo",
+    "tagline": "Zaprojektuj wnętrze swoich marzeń z pomocą AI"
+  },
   "nav": {
     "dashboard": "Pulpit",
     "projects": "Projekty",
     "credits": "Kredyty",
     "settings": "Ustawienia",
-    "signOut": "Wyloguj się"
+    "signOut": "Wyloguj się",
+    "signIn": "Zaloguj się",
+    "register": "Zarejestruj się"
   },
   "footer": {
     "contact": "Kontakt",
@@ -13,6 +19,146 @@
   "common": {
     "back": "Wstecz",
     "loading": "Ładowanie...",
-    "error": "Wystąpił błąd"
+    "error": "Wystąpił błąd",
+    "save": "Zapisz",
+    "cancel": "Anuluj",
+    "confirm": "Potwierdź"
+  },
+  "landing": {
+    "heroSubtitle": "Prześlij zdjęcie wnętrza lub opisz je słowami. Sztuczna inteligencja zaprojektuje Twoje wymarzone wnętrze w kilka chwil.",
+    "howItWorks": "Jak to działa?",
+    "feature1Title": "Generuj z AI",
+    "feature1Desc": "Prześlij zdjęcie pokoju lub opisz swoją wizję — AI stworzy profesjonalną wizualizację w kilka minut.",
+    "feature2Title": "Wybierz styl",
+    "feature2Desc": "Skandynawski, industrialny, boho — wybierz styl i paletę kolorów, które Ci odpowiadają.",
+    "feature3Title": "Iteruj i udoskonalaj",
+    "feature3Desc": "Modyfikuj wizualizację krok po kroku, aż osiągniesz idealny efekt."
+  },
+  "dashboard": {
+    "title": "Moje projekty",
+    "welcome": "Witaj z powrotem 👋",
+    "welcomeSubtitle": "Twój panel projektowy — tu znajdziesz podsumowanie i skróty.",
+    "ctaHeading": "Zbieraj inspiracje, generuj warianty i wracaj do nich bez chaosu.",
+    "newProject": "Nowy projekt",
+    "quickActions": "Szybkie akcje",
+    "myProjects": "Moje projekty",
+    "manageProjects": "Zarządzaj swoimi projektami",
+    "lastVisualization": "Ostatnia wizualizacja",
+    "topUpCredits": "Doładuj kredyty",
+    "topUpCreditsDesc": "Kup pakiet i generuj więcej",
+    "recentProjects": "Ostatnie projekty",
+    "continueWork": "Kontynuuj pracę",
+    "emptyTitle": "Nie masz jeszcze żadnych projektów",
+    "emptyDescription": "Stwórz swój pierwszy projekt i zacznij projektować wymarzone wnętrza.",
+    "emptyCta": "Stwórz pierwszy projekt",
+    "visualizations": "wizualizacji",
+    "created": "Utworzono",
+    "modified": "Zmodyfikowano",
+    "deleteProject": "Usuń projekt",
+    "editName": "Edytuj nazwę",
+    "deleteConfirmTitle": "Czy na pewno chcesz usunąć projekt?",
+    "deleteConfirmMessage": "Wszystkie wizualizacje i ich iteracje w tym projekcie zostaną trwale usunięte.",
+    "cancel": "Anuluj",
+    "delete": "Usuń",
+    "statsProjects": "Projekty",
+    "statsVisualizations": "Wizualizacje",
+    "statsCredits": "Kredyty",
+    "manageSubtitle": "Zarządzaj swoimi projektami i wizualizacjami."
+  },
+  "project": {
+    "title": "Projekt",
+    "newVisualization": "Nowa wizualizacja",
+    "emptyTitle": "Brak wizualizacji",
+    "emptyDescription": "Dodaj pierwszą wizualizację, aby rozpocząć projektowanie tego wnętrza.",
+    "emptyCta": "Dodaj pierwszą wizualizację",
+    "iterations": "iteracji",
+    "latestIteration": "Ostatnia iteracja",
+    "nameLabel": "Nazwa projektu",
+    "namePlaceholder": "np. Mieszkanie na Mokotowie",
+    "nameRequired": "Nazwa projektu jest wymagana.",
+    "create": "Stwórz projekt"
+  },
+  "workspace": {
+    "modeFromPhoto": "Ze zdjęcia",
+    "modeFromScratch": "Od podstaw",
+    "roomPhoto": "Zdjęcie pokoju",
+    "roomPhotoHint": "Przeciągnij zdjęcie lub kliknij, aby wybrać",
+    "roomPhotoRequired": "Zdjęcie pokoju jest wymagane w trybie \"Ze zdjęcia\".",
+    "style": "Styl wnętrza",
+    "stylePlaceholder": "Wybierz styl",
+    "colorPalette": "Paleta kolorów",
+    "colorPalettePlaceholder": "Wybierz paletę (opcjonalnie)",
+    "roomType": "Typ pomieszczenia",
+    "roomTypePlaceholder": "Wybierz typ",
+    "prompt": "Opis wizji",
+    "promptPlaceholder": "Opisz swoją wizję wnętrza...",
+    "promptRequired": "Opis jest wymagany w trybie \"Od podstaw\".",
+    "furniturePhotos": "Zdjęcia mebli / elementów",
+    "furniturePhotosHint": "Opcjonalnie dodaj zdjęcia mebli",
+    "generate": "Generuj wizualizację",
+    "generating": "Generowanie...",
+    "generatingMessage": "Twoja wizualizacja jest generowana. Może to potrwać do kilku minut.",
+    "emptyVisualization": "Tutaj pojawi się Twoja wizualizacja",
+    "emptyVisualizationHint": "Wypełnij formularz po lewej stronie i kliknij \"Generuj\"",
+    "original": "Oryginał",
+    "iteration": "Iteracja",
+    "editTitle": "Edytuj wizualizację",
+    "newVisualization": "Nowa wizualizacja",
+    "editPrompt": "Opisz zmiany",
+    "editPromptPlaceholder": "Opisz jakie zmiany chcesz wprowadzić...",
+    "styleRequired": "To pole jest wymagane.",
+    "roomTypeRequired": "To pole jest wymagane.",
+    "noCredits": "Brak kredytów. Kup pakiet, aby generować wizualizacje.",
+    "buyCredits": "Kup kredyty",
+    "requiresCredit": "Wymaga co najmniej 1 kredytu",
+    "generatedVisualization": "Wygenerowana wizualizacja"
+  },
+  "credits": {
+    "title": "Pakiety kredytów",
+    "subtitle": "Wybierz pakiet, który najlepiej odpowiada Twoim potrzebom",
+    "balance": "kredytów",
+    "buy": "Kup",
+    "packageCredits": "kredytów",
+    "popular": "Popularny",
+    "purchaseSuccess": "Płatność zakończona pomyślnie. Kredyty zostały dodane do Twojego konta.",
+    "purchaseError": "Płatność nie powiodła się. Spróbuj ponownie."
+  },
+  "settings": {
+    "title": "Ustawienia",
+    "subtitle": "Zarządzaj swoim kontem i preferencjami.",
+    "theme": "Motyw",
+    "themeLight": "Jasny",
+    "themeDark": "Ciemny",
+    "themeSystem": "Systemowy",
+    "account": "Konto",
+    "deleteAccount": "Usuń konto",
+    "deleteAccountConfirm": "Czy na pewno chcesz usunąć konto? Wszystkie Twoje dane zostaną trwale usunięte."
+  },
+  "styles": {
+    "scandinavian": "Skandynawski",
+    "industrial": "Industrialny",
+    "minimalist": "Minimalistyczny",
+    "classic": "Klasyczny",
+    "boho": "Boho",
+    "modern": "Nowoczesny"
+  },
+  "palettes": {
+    "light": "Jasna",
+    "dark": "Ciemna",
+    "warm": "Ciepła",
+    "cool": "Chłodna",
+    "pastel": "Pastelowa"
+  },
+  "roomTypes": {
+    "livingRoom": "Salon",
+    "bedroom": "Sypialnia",
+    "kitchen": "Kuchnia",
+    "bathroom": "Łazienka",
+    "office": "Biuro"
+  },
+  "notFound": {
+    "title": "404",
+    "message": "Nie znaleziono strony, której szukasz.",
+    "backHome": "Wróć na stronę główną"
   }
 }

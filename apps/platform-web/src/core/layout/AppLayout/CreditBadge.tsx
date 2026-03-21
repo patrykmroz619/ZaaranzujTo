@@ -12,9 +12,7 @@ export const CreditBadge = (props: TCreditBadgeProps) => {
   const { balance, isLoading } = props;
 
   if (isLoading) {
-    return (
-      <div className="h-7 w-14 animate-pulse rounded-full bg-accent" />
-    );
+    return <div className="h-7 w-14 animate-pulse rounded-full bg-accent" />;
   }
 
   return (

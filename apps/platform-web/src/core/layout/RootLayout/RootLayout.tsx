@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { DM_Serif_Display, DM_Sans } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
+import { Toaster } from "@repo/ui/core/sonner";
 import { ThemeProvider } from "@/core/packages/theme";
 import { AuthProvider } from "@/core/packages/auth";
 
@@ -42,7 +43,10 @@ export const RootLayout = async (props: TRootLayoutProps) => {
           disableTransitionOnChange
         >
           <AuthProvider>
-            <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
+            <NextIntlClientProvider messages={messages}>
+              {children}
+              <Toaster />
+            </NextIntlClientProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>

@@ -31,12 +31,7 @@ export const MobileNav = () => {
 
   return (
     <>
-      <Button
-        variant="ghost"
-        size="icon"
-        className="md:hidden"
-        onClick={() => setOpen(!open)}
-      >
+      <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setOpen(!open)}>
         {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
       </Button>
 

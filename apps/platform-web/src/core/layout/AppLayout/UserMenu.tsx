@@ -42,9 +42,7 @@ export const UserMenu = () => {
           </Avatar>
           {!isMobile && isLoaded && user && (
             <div className="text-left">
-              <p className="text-sm font-medium text-foreground leading-tight">
-                {displayName}
-              </p>
+              <p className="text-sm font-medium text-foreground leading-tight">{displayName}</p>
               <p className="text-xs text-muted-foreground">{displayEmail}</p>
             </div>
           )}

@@ -5,7 +5,7 @@
 **Status**: Draft
 **Input**: User description: "Move layout of the frontend application from the legacy frontend-demo app to platform-web app"
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - Authenticated App Shell Navigation (Priority: P1)
 
@@ -97,7 +97,7 @@ A signed-in user can access a dropdown menu from their avatar in the navbar. The
 - What happens when the viewport is resized from mobile to desktop while the overlay is open? The overlay should close and desktop navigation should appear.
 - What happens when the user is on a page with a very long title? The page header should handle text overflow gracefully (truncation or wrapping).
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
@@ -130,7 +130,7 @@ A signed-in user can access a dropdown menu from their avatar in the navbar. The
 - The AppSidebar component from frontend-demo is documented but not currently wired into the layout. This migration focuses on the navbar-based layout that is actively used. Sidebar integration can be addressed separately if needed.
 - Credit balance data will initially be placeholder/mock data, with real API integration to follow in a separate feature.
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 

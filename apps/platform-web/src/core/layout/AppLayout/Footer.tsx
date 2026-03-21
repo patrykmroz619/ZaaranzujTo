@@ -8,9 +8,7 @@ export const Footer = () => {
   return (
     <footer className="border-t bg-muted/30">
       <div className="container flex flex-col items-center justify-between gap-2 py-6 sm:flex-row">
-        <p className="text-sm text-muted-foreground">
-          © {new Date().getFullYear()} ZaaranżujTo
-        </p>
+        <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} ZaaranżujTo</p>
         <div className="flex gap-4">
           <a
             href="mailto:kontakt@zaaranzujto.pl"

@@ -1,0 +1,51 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+import { Image as ImageIcon, Loader2 } from "lucide-react";
+import { IterationStrip } from "@/modules/workspace/components/IterationStrip";
+import type { TIteration } from "@/modules/projects/types/projects.types";
+
+type TWorkspacePreviewProps = {
+  isGenerating: boolean;
+  hasResult: boolean;
+  iterations: TIteration[];
+  activeIterationId: string;
+  onSelectIteration: (id: string) => void;
+};
+
+export const WorkspacePreview = (props: TWorkspacePreviewProps) => {
+  const { isGenerating, hasResult, iterations, activeIterationId, onSelectIteration } = props;
+  const t = useTranslations("workspace");
+
+  return (
+    <div className="flex-1 space-y-4">
+      <div className="rounded-xl border bg-card shadow-card overflow-hidden">
+        {isGenerating ? (
+          <div className="flex aspect-video flex-col items-center justify-center gap-4">
+            <Loader2 className="h-10 w-10 animate-spin text-primary" />
+            <p className="text-sm text-muted-foreground">{t("generatingMessage")}</p>
+          </div>
+        ) : hasResult ? (
+          <div className="aspect-video bg-muted flex items-center justify-center">
+            <div className="text-center">
+              <ImageIcon className="mx-auto mb-2 h-16 w-16 text-muted-foreground/20" />
+              <p className="text-sm text-muted-foreground">{t("generatedVisualization")}</p>
+            </div>
+          </div>
+        ) : (
+          <div className="flex aspect-video flex-col items-center justify-center gap-2">
+            <ImageIcon className="h-16 w-16 text-muted-foreground/20" />
+            <p className="text-sm text-muted-foreground">{t("emptyVisualization")}</p>
+            <p className="text-xs text-muted-foreground/70">{t("emptyVisualizationHint")}</p>
+          </div>
+        )}
+      </div>
+
+      <IterationStrip
+        iterations={iterations}
+        activeIterationId={activeIterationId}
+        onSelect={onSelectIteration}
+      />
+    </div>
+  );
+};

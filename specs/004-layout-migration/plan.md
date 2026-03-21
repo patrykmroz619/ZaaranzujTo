@@ -21,16 +21,16 @@ Migrate the authenticated layout shell (navbar, footer, mobile navigation, page 
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+_GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
-| Principle | Status | Notes |
-|-----------|--------|-------|
-| **Code Quality** | PASS | Shared ESLint/TS configs used. Arrow functions, object destructuring, type inference per style guide. |
-| **Testing Standards** | PASS | No tests written (MVP policy). Architecture remains testable — components are pure presentational with injected props. |
-| **UX Consistency** | PASS | Reusing `@repo/ui` components (Button, Avatar, DropdownMenu, Sheet). Extracting PageHeader to `@repo/ui`. No inline styles. |
-| **Performance Requirements** | PASS | Server components where possible. Client components only for interactivity (navbar state, mobile menu). No heavy blocking operations. |
-| **Architecture Guidelines** | PASS | Shared code in `packages/ui`, app-specific layouts in `apps/platform-web`. No circular dependencies. |
-| **Development Workflow** | PASS | Type-checking and linting enforced. No DB/API changes — no docs to update. |
+| Principle                    | Status | Notes                                                                                                                                 |
+| ---------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| **Code Quality**             | PASS   | Shared ESLint/TS configs used. Arrow functions, object destructuring, type inference per style guide.                                 |
+| **Testing Standards**        | PASS   | No tests written (MVP policy). Architecture remains testable — components are pure presentational with injected props.                |
+| **UX Consistency**           | PASS   | Reusing `@repo/ui` components (Button, Avatar, DropdownMenu, Sheet). Extracting PageHeader to `@repo/ui`. No inline styles.           |
+| **Performance Requirements** | PASS   | Server components where possible. Client components only for interactivity (navbar state, mobile menu). No heavy blocking operations. |
+| **Architecture Guidelines**  | PASS   | Shared code in `packages/ui`, app-specific layouts in `apps/platform-web`. No circular dependencies.                                  |
+| **Development Workflow**     | PASS   | Type-checking and linting enforced. No DB/API changes — no docs to update.                                                            |
 
 **Gate result: PASS — no violations.**
 

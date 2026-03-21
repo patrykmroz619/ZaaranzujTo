@@ -7,6 +7,7 @@
 **Rationale**: Next.js App Router route groups `(app)` already exist in platform-web and naturally scope layouts. The `(app)` group is protected by Clerk middleware (`proxy.ts`), so any layout component inside it can safely assume an authenticated user. Server component layout avoids unnecessary client JS for the static shell structure.
 
 **Alternatives considered**:
+
 - Wrapping each page individually (rejected — violates FR-011 and DRY)
 - Using a client-only layout (rejected — unnecessary client bundle for static shell)
 
@@ -17,6 +18,7 @@
 **Rationale**: platform-web uses Next.js App Router, not React Router. Direct 1:1 mapping exists for all navigation patterns used in the frontend-demo Navbar and PageHeader.
 
 **Alternatives considered**:
+
 - None — this is a mandatory framework migration.
 
 ## R3: Replacing react-i18next with next-intl
@@ -26,6 +28,7 @@
 **Rationale**: platform-web already has next-intl configured with `NextIntlClientProvider` and `getMessages()`. The API differs slightly: `t("nav.dashboard")` in react-i18next becomes `t("dashboard")` with namespace `useTranslations("nav")`, or a flat `useTranslations()` with dot-path access.
 
 **Alternatives considered**:
+
 - Using react-i18next in platform-web (rejected — next-intl is already integrated and recommended for Next.js App Router)
 
 ## R4: Clerk Integration for User Info and Sign-Out
@@ -35,6 +38,7 @@
 **Rationale**: platform-web already wraps Clerk via typed hooks (`useCurrentUser`, `useSignOut`) that return strongly typed `TUser` objects. This replaces the hardcoded mock data in frontend-demo.
 
 **Alternatives considered**:
+
 - Using Clerk's `<UserButton>` component directly (rejected — doesn't match the custom dropdown design from frontend-demo)
 - Keeping mock data (rejected — real auth is available and spec requires it)
 
@@ -45,6 +49,7 @@
 **Rationale**: The spec explicitly states "Credit balance data will initially be placeholder/mock data, with real API integration to follow in a separate feature." The CreditBadge component will accept a `balance` prop, making it easy to swap in real data later.
 
 **Alternatives considered**:
+
 - Integrating the credits API now (rejected — out of scope per spec assumptions)
 - Hiding the badge until API is ready (rejected — FR-009 requires it visible)
 
@@ -55,6 +60,7 @@
 **Rationale**: FR-008 requires PageHeader to be reusable across applications. It must not depend on react-router-dom or next/navigation directly. The consuming app passes the navigation handler.
 
 **Alternatives considered**:
+
 - Keeping PageHeader in platform-web only (rejected — FR-008 explicitly requires shared UI package)
 - Making it a server component (rejected — back button needs client interactivity)
 
@@ -65,6 +71,7 @@
 **Rationale**: The `@repo/ui` package already includes a `Sheet` component which provides accessible overlay behavior (focus trap, escape to close, backdrop click to close) out of the box. This is more robust than the custom implementation and aligns with the constitution's UX consistency principle.
 
 **Alternatives considered**:
+
 - Porting the custom overlay as-is (rejected — Sheet component provides better accessibility and is already available)
 - Using Radix Dialog directly (rejected — Sheet wraps Dialog with slide-in animation, better UX for mobile nav)
 
@@ -75,4 +82,5 @@
 **Rationale**: `usePathname()` is the Next.js App Router equivalent of react-router-dom's `useLocation().pathname`. Using `startsWith()` instead of exact match handles nested routes more gracefully.
 
 **Alternatives considered**:
+
 - Exact match only (rejected — would not highlight parent nav item on child pages)

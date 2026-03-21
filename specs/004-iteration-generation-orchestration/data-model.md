@@ -8,18 +8,18 @@ This feature adds the iteration write workflow with upload inputs, AI generation
 
 ### Iteration Creation Command
 
-| Field               | Type     | Required | Notes                                                       |
-| ------------------- | -------- | -------- | ----------------------------------------------------------- |
-| `commandId`         | string   | Yes      | Internal operation identifier for tracing                   |
-| `userId`            | string   | Yes      | Authenticated owner                                         |
-| `visualizationId`   | string   | Yes      | Target visualization                                        |
-| `inputPhotoAssetId` | string   | Yes      | Required primary image asset                                |
-| `referenceAssetIds` | string[] | No       | Optional support images                                     |
-| `stylePreset`       | string   | No       | Optional generation style selector                          |
-| `promptContext`     | object   | No       | Optional structured generation context                      |
+| Field               | Type     | Required | Notes                                           |
+| ------------------- | -------- | -------- | ----------------------------------------------- |
+| `commandId`         | string   | Yes      | Internal operation identifier for tracing       |
+| `userId`            | string   | Yes      | Authenticated owner                             |
+| `visualizationId`   | string   | Yes      | Target visualization                            |
+| `inputPhotoAssetId` | string   | Yes      | Required primary image asset                    |
+| `referenceAssetIds` | string[] | No       | Optional support images                         |
+| `stylePreset`       | string   | No       | Optional generation style selector              |
+| `promptContext`     | object   | No       | Optional structured generation context          |
 | `status`            | enum     | Yes      | `received`, `processing`, `completed`, `failed` |
-| `createdAt`         | Date     | Yes      | Creation timestamp                                          |
-| `updatedAt`         | Date     | Yes      | Last transition timestamp                                   |
+| `createdAt`         | Date     | Yes      | Creation timestamp                              |
+| `updatedAt`         | Date     | Yes      | Last transition timestamp                       |
 
 Validation rules:
 
