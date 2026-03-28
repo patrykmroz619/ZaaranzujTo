@@ -1,4 +1,4 @@
-import { AppLayout } from "@/core/layout/AppLayout";
+import { AppLayout } from "@/layouts/AppLayout";
 
 type TLayoutProps = {
   children: React.ReactNode;
