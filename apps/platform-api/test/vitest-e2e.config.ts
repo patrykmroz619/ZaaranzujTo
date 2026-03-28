@@ -29,5 +29,6 @@ export default defineConfig({
     clearMocks: true,
     include: ["test/**/*.e2e-spec.ts"],
     setupFiles: ["./test/setup/test-lifecycle.ts"],
+    fileParallelism: false,
   },
 });

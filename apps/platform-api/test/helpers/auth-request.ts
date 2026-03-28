@@ -33,6 +33,23 @@ export const authenticatedGet = (input: {
     });
 };
 
+export const authenticatedPost = (input: {
+  app: INestApplication;
+  path: string;
+  auth?: TAuthContext;
+  body: Record<string, unknown>;
+}): Test => {
+  const auth = input.auth ?? defaultAuthContext;
+
+  return request(input.app.getHttpServer() as App)
+    .post(input.path)
+    .set({
+      "user-id": auth.userId,
+      "user-email": auth.email,
+    })
+    .send(input.body);
+};
+
 export const authenticatedPatch = (input: {
   app: INestApplication;
   path: string;
