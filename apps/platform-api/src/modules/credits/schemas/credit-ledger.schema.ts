@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import type { HydratedDocument, Types } from "mongoose";
+import mongoose, { type HydratedDocument, type Types } from "mongoose";
 
 export type TCreditLedgerEventType = "reserve" | "consume" | "compensate" | "topUp";
 
@@ -18,10 +18,10 @@ const CreditLedgerSourceSchema = SchemaFactory.createForClass(CreditLedgerSource
 
 @Schema({ collection: "credit_ledger", timestamps: { createdAt: true, updatedAt: false } })
 export class CreditLedger {
-  @Prop({ required: true, index: true })
+  @Prop({ required: true, index: true, type: mongoose.Schema.Types.ObjectId })
   userId: Types.ObjectId;
 
-  @Prop({ required: true, enum: ["reserve", "consume", "compensate", "topUp"] })
+  @Prop({ required: true, type: String, enum: ["reserve", "consume", "compensate", "topUp"] })
   type: TCreditLedgerEventType;
 
   @Prop({ required: true, min: 1 })

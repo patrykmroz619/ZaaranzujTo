@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { meResponseSchema } from "@repo/contracts/me";
 
+import { GetBalanceService } from "../../credits/services/get-balance.service";
 import { GetUserService } from "../../users/services/get-user.service";
 
 type TGetMeProfileParams = {
@@ -10,7 +11,10 @@ type TGetMeProfileParams = {
 
 @Injectable()
 export class MeProfileService {
-  constructor(private readonly getUserService: GetUserService) {}
+  constructor(
+    private readonly getUserService: GetUserService,
+    private readonly getBalanceService: GetBalanceService,
+  ) {}
 
   getMeProfile = async (params: TGetMeProfileParams) => {
     const { clerkId, email } = params;
@@ -20,12 +24,21 @@ export class MeProfileService {
       email,
     });
 
+    const balance = await this.getBalanceService.getBalance({
+      clerkId,
+      email,
+    });
+
     return meResponseSchema.parse({
-      userId: clerkId,
-      email: user.email,
-      profile: {
-        nickname: user.profile.nickname,
+      user: {
+        id: user._id.toString(),
+        clerkUserId: user.clerkId,
+        email: user.email,
+        createdAt: user.createdAt.toISOString(),
+        updatedAt: user.updatedAt.toISOString(),
       },
+      creditBalance: balance.balance,
+      theme: user.theme ?? "system",
     });
   };
 }

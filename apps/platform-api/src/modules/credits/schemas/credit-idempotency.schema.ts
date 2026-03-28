@@ -1,11 +1,11 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import type { HydratedDocument, Types } from "mongoose";
+import mongoose, { type HydratedDocument, type Types } from "mongoose";
 
 export type TCreditIdempotencyDocument = HydratedDocument<CreditIdempotencyRecord>;
 
 @Schema({ collection: "credit_idempotency", timestamps: true })
 export class CreditIdempotencyRecord {
-  @Prop({ required: true, index: true })
+  @Prop({ required: true, index: true, type: mongoose.Schema.Types.ObjectId })
   userId: Types.ObjectId;
 
   @Prop({ required: true })

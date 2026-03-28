@@ -20,6 +20,12 @@ export class User {
   profile: {
     nickname: string;
   };
+
+  @Prop({ default: "system" })
+  theme: string;
+
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

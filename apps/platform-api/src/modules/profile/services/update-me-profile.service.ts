@@ -1,50 +1,52 @@
 import { Injectable } from "@nestjs/common";
-import { meResponseSchema, type TUpdateMeProfileRequest } from "@repo/contracts/me";
+import { meResponseSchema, type TUpdateMeRequest } from "@repo/contracts/me";
 
+import { GetBalanceService } from "../../credits/services/get-balance.service";
 import { GetUserService } from "../../users/services/get-user.service";
-import { UpdateUserProfileService } from "../../users/services/update-user-profile.service";
-import { UpdateProfileDto } from "../profile.dto";
+import { UpdateUserThemeService } from "../../users/services/update-user-theme.service";
+import { UpdateMeDto } from "../profile.dto";
 
 type TUpdateMeProfileParams = {
   clerkId: string;
   email: string;
-  body: UpdateProfileDto;
+  body: UpdateMeDto;
 };
 
 @Injectable()
 export class UpdateMeProfileService {
   constructor(
     private readonly getUserService: GetUserService,
-    private readonly updateUserProfileService: UpdateUserProfileService,
+    private readonly updateUserThemeService: UpdateUserThemeService,
+    private readonly getBalanceService: GetBalanceService,
   ) {}
 
   updateMeProfile = async (params: TUpdateMeProfileParams) => {
     const { clerkId, email, body } = params;
 
-    const patch = body as TUpdateMeProfileRequest;
+    const patch = body as TUpdateMeRequest;
 
-    const user = await this.getUserService.getUser({
+    await this.getUserService.getUser({ clerkId, email });
+
+    const updatedUser = await this.updateUserThemeService.updateUserTheme({
+      clerkId,
+      theme: patch.theme,
+    });
+
+    const balance = await this.getBalanceService.getBalance({
       clerkId,
       email,
     });
 
-    let updatedUser = user;
-
-    if (patch.nickname !== undefined) {
-      updatedUser = await this.updateUserProfileService.updateUserProfile({
-        clerkId,
-        profilePatch: {
-          nickname: patch.nickname,
-        },
-      });
-    }
-
     return meResponseSchema.parse({
-      userId: clerkId,
-      email: updatedUser.email,
-      profile: {
-        nickname: updatedUser.profile.nickname,
+      user: {
+        id: updatedUser._id.toString(),
+        clerkUserId: updatedUser.clerkId,
+        email: updatedUser.email,
+        createdAt: updatedUser.createdAt.toISOString(),
+        updatedAt: updatedUser.updatedAt.toISOString(),
       },
+      creditBalance: balance.balance,
+      theme: updatedUser.theme,
     });
   };
 }

@@ -71,13 +71,16 @@ export const authenticatedDelete = (input: {
   app: INestApplication;
   path: string;
   auth?: TAuthContext;
+  body?: Record<string, unknown>;
 }): Test => {
   const auth = input.auth ?? defaultAuthContext;
 
-  return request(input.app.getHttpServer() as App)
+  const req = request(input.app.getHttpServer() as App)
     .delete(input.path)
     .set({
       "user-id": auth.userId,
       "user-email": auth.email,
     });
+
+  return input.body ? req.send(input.body) : req;
 };

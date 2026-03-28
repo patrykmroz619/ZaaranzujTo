@@ -1,40 +1,54 @@
 import { z } from "zod";
 
-export const profileSchema = z.object({
-  nickname: z.string().min(1),
-});
+export const themeSchema = z.enum(["light", "dark", "system"]);
 
-export type TProfile = z.infer<typeof profileSchema>;
+export type TTheme = z.infer<typeof themeSchema>;
+
+export const userObjectSchema = z
+  .object({
+    id: z.string().min(1),
+    clerkUserId: z.string().min(1),
+    email: z.string().email(),
+    createdAt: z.string().datetime(),
+    updatedAt: z.string().datetime(),
+  })
+  .strict();
+
+export type TUserObject = z.infer<typeof userObjectSchema>;
 
 export const meResponseSchema = z
   .object({
-    userId: z.string().min(1),
-    email: z.string().email(),
-    profile: profileSchema,
+    user: userObjectSchema,
+    creditBalance: z.number().int().nonnegative(),
+    theme: themeSchema,
   })
   .strict();
 
 export type TMeResponse = z.infer<typeof meResponseSchema>;
 
-const nicknameUpdateSchema = z
-  .string()
-  .transform((value) => value.trim())
-  .refine((value) => value.length >= 1 && value.length <= 32, {
-    message: "Nickname must be 1-32 characters.",
-  })
-  .refine((value) => !/[\x00-\x1F\x7F]/.test(value), {
-    message: "Nickname contains invalid control characters.",
-  });
-
-export const updateMeProfileRequestSchema = z
+export const updateMeRequestSchema = z
   .object({
-    nickname: nicknameUpdateSchema.optional(),
+    theme: themeSchema,
   })
-  .strict()
-  .refine((value) => value.nickname !== undefined, {
-    message: "At least one field must be provided.",
-  });
+  .strict();
 
-export type TUpdateMeProfileRequest = z.infer<typeof updateMeProfileRequestSchema>;
+export type TUpdateMeRequest = z.infer<typeof updateMeRequestSchema>;
 
-export type TUpdateMeProfileResponse = TMeResponse;
+export type TUpdateMeResponse = TMeResponse;
+
+export const deleteMeRequestSchema = z
+  .object({
+    confirm: z.literal(true),
+  })
+  .strict();
+
+export type TDeleteMeRequest = z.infer<typeof deleteMeRequestSchema>;
+
+export const deleteMeResponseSchema = z
+  .object({
+    deleted: z.boolean(),
+    scheduledAt: z.string().datetime(),
+  })
+  .strict();
+
+export type TDeleteMeResponse = z.infer<typeof deleteMeResponseSchema>;

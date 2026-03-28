@@ -20,6 +20,11 @@ type TUpdateProfileByClerkIdParams = {
   };
 };
 
+type TUpdateThemeByClerkIdParams = {
+  clerkId: string;
+  theme: string;
+};
+
 const deriveDefaultNickname = ({ email }: { email: string }) => {
   const localPart = email.split("@")[0]?.trim();
   if (localPart && localPart.length > 0) return localPart;
@@ -95,6 +100,20 @@ export class UsersRepository {
     const updatedUser = await this.userModel.findOneAndUpdate(
       { clerkId },
       { $set: update },
+      { returnDocument: "after" },
+    );
+
+    if (!updatedUser) throw new Error("User not found.");
+
+    return updatedUser;
+  };
+
+  updateThemeByClerkId = async (params: TUpdateThemeByClerkIdParams): Promise<TUserDocument> => {
+    const { clerkId, theme } = params;
+
+    const updatedUser = await this.userModel.findOneAndUpdate(
+      { clerkId },
+      { $set: { theme } },
       { returnDocument: "after" },
     );
 

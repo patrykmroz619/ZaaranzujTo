@@ -5,7 +5,6 @@ import { type App } from "supertest/types";
 import { ConfigurationModule } from "../src/config/config.module";
 import { DatabaseModule } from "../src/database/database.module";
 import { ProfileModule } from "../src/modules/profile/profile.module";
-import { fixtureEmail } from "./fixtures/factory";
 import { buildTestUserFixture } from "./fixtures/test-user.fixture";
 import {
   applyLocalAuthBypassEnv,
@@ -17,12 +16,18 @@ import {
 import { createTestApp } from "./setup/create-test-app";
 import { registerTestApp } from "./setup/test-lifecycle";
 
-type TMeResponseBody = {
-  userId: string;
+type TUserObject = {
+  id: string;
+  clerkUserId: string;
   email: string;
-  profile: {
-    nickname: string;
-  };
+  createdAt: string;
+  updatedAt: string;
+};
+
+type TMeResponseBody = {
+  user: TUserObject;
+  creditBalance: number;
+  theme: string;
 };
 
 type TErrorResponseBody = {
@@ -36,10 +41,6 @@ const profilePath = "/api/v1/me";
 
 const buildAuthContext = (): TAuthContext => {
   return buildTestUserFixture();
-};
-
-const buildAnotherEmail = () => {
-  return fixtureEmail();
 };
 
 const getMeResponseBody = (response: { body: unknown }) => {
@@ -78,7 +79,6 @@ describe("Profile module (e2e)", () => {
 
     it("should provision and return current user profile", async () => {
       const auth = buildAuthContext();
-      const expectedNickname = auth.email.split("@")[0]?.trim() ?? "User";
 
       const response = await authenticatedGet({
         app,
@@ -87,19 +87,18 @@ describe("Profile module (e2e)", () => {
       }).expect(200);
       const meBody = getMeResponseBody(response);
 
-      expect(meBody).toEqual({
-        userId: auth.userId,
-        email: auth.email,
-        profile: {
-          nickname: expectedNickname.length > 0 ? expectedNickname : "User",
-        },
-      });
+      expect(meBody.user.clerkUserId).toBe(auth.userId);
+      expect(meBody.user.email).toBe(auth.email);
+      expect(typeof meBody.user.id).toBe("string");
+      expect(typeof meBody.user.createdAt).toBe("string");
+      expect(typeof meBody.user.updatedAt).toBe("string");
+      expect(meBody.creditBalance).toBe(0);
+      expect(meBody.theme).toBe("system");
     });
 
-    it("should update email on reprovision while preserving existing nickname", async () => {
+    it("should update email on reprovision while preserving other user data", async () => {
       const seed = buildAuthContext();
-      const changedEmail = buildAnotherEmail();
-      const firstNickname = seed.email.split("@")[0]?.trim() ?? "User";
+      const changedEmail = `changed-${seed.email}`;
 
       await authenticatedGet({
         app,
@@ -117,9 +116,8 @@ describe("Profile module (e2e)", () => {
       }).expect(200);
       const meBody = getMeResponseBody(response);
 
-      expect(meBody.userId).toBe(seed.userId);
-      expect(meBody.email).toBe(changedEmail);
-      expect(meBody.profile.nickname).toBe(firstNickname.length > 0 ? firstNickname : "User");
+      expect(meBody.user.clerkUserId).toBe(seed.userId);
+      expect(meBody.user.email).toBe(changedEmail);
     });
   });
 
@@ -127,7 +125,7 @@ describe("Profile module (e2e)", () => {
     it("should return 401 when no auth provided", async () => {
       const response = await request(app.getHttpServer() as App)
         .patch(profilePath)
-        .send({ nickname: "AnyNickname" })
+        .send({ theme: "dark" })
         .expect(401);
       const errorBody = getErrorResponseBody(response);
 
@@ -135,7 +133,7 @@ describe("Profile module (e2e)", () => {
       expect(typeof errorBody.requestId).toBe("string");
     });
 
-    it("should update nickname and persist it", async () => {
+    it("should update theme and persist it", async () => {
       const auth = buildAuthContext();
 
       await authenticatedGet({
@@ -148,11 +146,11 @@ describe("Profile module (e2e)", () => {
         app,
         path: profilePath,
         auth,
-        body: { nickname: "NowyNick" },
+        body: { theme: "dark" },
       }).expect(200);
       const patchBody = getMeResponseBody(patchResponse);
 
-      expect(patchBody.profile.nickname).toBe("NowyNick");
+      expect(patchBody.theme).toBe("dark");
 
       const getResponse = await authenticatedGet({
         app,
@@ -161,7 +159,24 @@ describe("Profile module (e2e)", () => {
       }).expect(200);
       const meBody = getMeResponseBody(getResponse);
 
-      expect(meBody.profile.nickname).toBe("NowyNick");
+      expect(meBody.theme).toBe("dark");
+    });
+
+    it("should accept all valid theme values", async () => {
+      const auth = buildAuthContext();
+
+      await authenticatedGet({ app, path: profilePath, auth }).expect(200);
+
+      for (const theme of ["light", "dark", "system"] as const) {
+        const response = await authenticatedPatch({
+          app,
+          path: profilePath,
+          auth,
+          body: { theme },
+        }).expect(200);
+
+        expect(getMeResponseBody(response).theme).toBe(theme);
+      }
     });
 
     it("should return 400 for empty body", async () => {
@@ -180,46 +195,14 @@ describe("Profile module (e2e)", () => {
       expect(errorBody.message).toBe("Validation failed");
     });
 
-    it("should return 400 for nickname longer than 32 chars", async () => {
+    it("should return 400 for invalid theme value", async () => {
       const auth = buildAuthContext();
 
       const response = await authenticatedPatch({
         app,
         path: profilePath,
         auth,
-        body: { nickname: "a".repeat(33) },
-      }).expect(400);
-      const errorBody = getErrorResponseBody(response);
-
-      expect(errorBody.statusCode).toBe(400);
-      expect(typeof errorBody.requestId).toBe("string");
-      expect(errorBody.message).toBe("Validation failed");
-    });
-
-    it("should return 400 for nickname containing control characters", async () => {
-      const auth = buildAuthContext();
-
-      const response = await authenticatedPatch({
-        app,
-        path: profilePath,
-        auth,
-        body: { nickname: "abc\u0007def" },
-      }).expect(400);
-      const errorBody = getErrorResponseBody(response);
-
-      expect(errorBody.statusCode).toBe(400);
-      expect(typeof errorBody.requestId).toBe("string");
-      expect(errorBody.message).toBe("Validation failed");
-    });
-
-    it("should return 400 for whitespace-only nickname", async () => {
-      const auth = buildAuthContext();
-
-      const response = await authenticatedPatch({
-        app,
-        path: profilePath,
-        auth,
-        body: { nickname: "     " },
+        body: { theme: "rainbow" },
       }).expect(400);
       const errorBody = getErrorResponseBody(response);
 
@@ -240,13 +223,46 @@ describe("Profile module (e2e)", () => {
       expect(typeof errorBody.requestId).toBe("string");
     });
 
-    it("should return 501 placeholder response for authenticated user", async () => {
+    it("should return 400 when confirm field is missing", async () => {
       const auth = buildAuthContext();
 
       const response = await authenticatedDelete({
         app,
         path: profilePath,
         auth,
+        body: {},
+      }).expect(400);
+      const errorBody = getErrorResponseBody(response);
+
+      expect(errorBody.statusCode).toBe(400);
+      expect(typeof errorBody.requestId).toBe("string");
+      expect(errorBody.message).toBe("Validation failed");
+    });
+
+    it("should return 400 when confirm is not true", async () => {
+      const auth = buildAuthContext();
+
+      const response = await authenticatedDelete({
+        app,
+        path: profilePath,
+        auth,
+        body: { confirm: false },
+      }).expect(400);
+      const errorBody = getErrorResponseBody(response);
+
+      expect(errorBody.statusCode).toBe(400);
+      expect(typeof errorBody.requestId).toBe("string");
+      expect(errorBody.message).toBe("Validation failed");
+    });
+
+    it("should return 501 placeholder response for authenticated user with valid body", async () => {
+      const auth = buildAuthContext();
+
+      const response = await authenticatedDelete({
+        app,
+        path: profilePath,
+        auth,
+        body: { confirm: true },
       }).expect(501);
       const errorBody = getErrorResponseBody(response);
 

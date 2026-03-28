@@ -1,5 +1,7 @@
 import { createZodDto } from "nestjs-zod";
 
-import { updateMeProfileRequestSchema } from "@repo/contracts/me";
+import { deleteMeRequestSchema, updateMeRequestSchema } from "@repo/contracts/me";
 
-export class UpdateProfileDto extends createZodDto(updateMeProfileRequestSchema) {}
+export class UpdateMeDto extends createZodDto(updateMeRequestSchema) {}
+
+export class DeleteMeDto extends createZodDto(deleteMeRequestSchema) {}
