@@ -15,11 +15,12 @@ import type { TProjectObject } from "@repo/contracts";
 
 type TProjectCardProps = {
   project: TProjectObject;
+  onEdit: (id: string) => void;
   onDelete: (id: string) => void;
 };
 
 export const ProjectCard = (props: TProjectCardProps) => {
-  const { project, onDelete } = props;
+  const { project, onEdit, onDelete } = props;
   const router = useRouter();
   const t = useTranslations("dashboard");
 
@@ -52,11 +53,22 @@ export const ProjectCard = (props: TProjectCardProps) => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" onClick={(e) => e.stopPropagation()}>
-              <DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEdit(project.id);
+                }}
+              >
                 <Pencil className="mr-2 h-4 w-4" />
                 {t("editName")}
               </DropdownMenuItem>
-              <DropdownMenuItem className="text-destructive" onClick={() => onDelete(project.id)}>
+              <DropdownMenuItem
+                className="text-destructive"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete(project.id);
+                }}
+              >
                 <Trash2 className="mr-2 h-4 w-4" />
                 {t("deleteProject")}
               </DropdownMenuItem>

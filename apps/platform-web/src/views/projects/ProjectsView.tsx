@@ -8,35 +8,48 @@ import { PageHeader } from "@repo/ui/components/page-header";
 import { ProjectCard } from "@/modules/projects/components/ProjectCard";
 import { CreateProjectDialog } from "@/modules/projects/components/CreateProjectDialog";
 import { DeleteProjectDialog } from "@/modules/projects/components/DeleteProjectDialog";
+import { EditProjectNameDialog } from "@/modules/projects/components/EditProjectNameDialog";
 import { useProjects } from "@/modules/projects/hooks/use-projects";
 import { useCreateProject } from "@/modules/projects/hooks/use-create-project";
 import { useDeleteProject } from "@/modules/projects/hooks/use-delete-project";
+import { useUpdateProject } from "@/modules/projects/hooks/use-update-project";
 
 export const ProjectsView = () => {
   const t = useTranslations();
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [deleteProjectId, setDeleteProjectId] = useState<string | null>(null);
+  const [editProjectId, setEditProjectId] = useState<string | null>(null);
 
   const { projects, isLoading, error } = useProjects();
   const { mutate: createProject, isPending: isCreating } = useCreateProject();
   const { mutate: deleteProject, isPending: isDeleting } = useDeleteProject();
+  const { mutate: updateProject, isPending: isUpdating } = useUpdateProject();
 
   const handleCreateProject = (name: string) => {
-    createProject(
-      { body: { name } },
-      { onSuccess: () => setCreateDialogOpen(false) },
-    );
+    createProject({ body: { name } }, { onSuccess: () => setCreateDialogOpen(false) });
   };
 
   const handleDeleteProject = () => {
     if (!deleteProjectId) return;
-    deleteProject(
-      { projectId: deleteProjectId },
-      { onSuccess: () => setDeleteProjectId(null) },
+    deleteProject({ projectId: deleteProjectId }, { onSuccess: () => setDeleteProjectId(null) });
+  };
+
+  const handleEditProjectName = (name: string) => {
+    if (!editProjectId) return;
+
+    updateProject(
+      {
+        projectId: editProjectId,
+        body: { name },
+      },
+      {
+        onSuccess: () => setEditProjectId(null),
+      },
     );
   };
 
   const projectItems = projects?.items ?? [];
+  const editProject = projectItems.find((project) => project.id === editProjectId) ?? null;
 
   return (
     <div className="space-y-5">
@@ -75,7 +88,12 @@ export const ProjectsView = () => {
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {projectItems.map((project) => (
-            <ProjectCard key={project.id} project={project} onDelete={setDeleteProjectId} />
+            <ProjectCard
+              key={project.id}
+              project={project}
+              onEdit={setEditProjectId}
+              onDelete={setDeleteProjectId}
+            />
           ))}
         </div>
       )}
@@ -84,6 +102,14 @@ export const ProjectsView = () => {
         open={!!deleteProjectId}
         onOpenChange={() => setDeleteProjectId(null)}
         onConfirm={handleDeleteProject}
+      />
+
+      <EditProjectNameDialog
+        open={!!editProject}
+        onOpenChange={() => setEditProjectId(null)}
+        currentName={editProject?.name ?? ""}
+        onSave={handleEditProjectName}
+        isPending={isUpdating}
       />
     </div>
   );
