@@ -430,6 +430,41 @@ Przykład odpowiedzi dla użytkownika bez konta kredytowego:
 - **Error Responses**:
   - `401 Unauthorized` — brak/nieprawidłowy token.
 
+#### POST /credits/topup
+
+- **Description**: Ręcznie doładowuje konto kredytowe wskazanego użytkownika. Endpoint techniczny przeznaczony do użycia operatorskiego/integracyjnego i zabezpieczony kluczem API.
+- **Headers**:
+  - `x-api-key: <MANUAL_TOPUP_API_KEY>`
+  - `Content-Type: application/json`
+- **Query Parameters**: Nie dotyczy.
+- **Request Body**:
+
+```json
+{
+  "userId": "65f10430d27f4f3d31e33c01",
+  "amount": 20,
+  "reason": "Manual correction"
+}
+```
+
+- **Success Response**: `201 Created`
+
+```json
+{
+  "toppedUpAmount": 20,
+  "balance": {
+    "balance": 32,
+    "reserved": 1,
+    "available": 31,
+    "updatedAt": "2026-03-29T12:10:00.000Z"
+  }
+}
+```
+
+- **Error Responses**:
+  - `400 Bad Request` — niepoprawne dane wejściowe (`userId`, `amount`, `reason`).
+  - `401 Unauthorized` — brak/niepoprawny `x-api-key`.
+
 ### Payments
 
 #### POST /payments

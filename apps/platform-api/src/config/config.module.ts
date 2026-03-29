@@ -18,6 +18,7 @@ const configSchema = z.object({
   openRouterApiKey: z.string().optional(),
   openRouterBaseUrl: z.url(),
   visualizationImageModel: z.string().min(1),
+  manualTopupApiKey: z.string().min(1).optional(),
 });
 
 const configuration = () => ({
@@ -33,6 +34,7 @@ const configuration = () => ({
   openRouterApiKey: process.env.OPENROUTER_API_KEY,
   openRouterBaseUrl: process.env.OPENROUTER_BASE_URL,
   visualizationImageModel: process.env.VISUALIZATION_IMAGE_MODEL,
+  manualTopupApiKey: process.env.MANUAL_TOPUP_API_KEY,
 });
 
 export type ConfigType = z.infer<typeof configSchema>;

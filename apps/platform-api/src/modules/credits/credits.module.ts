@@ -21,6 +21,7 @@ import { CreditsOperationsLogger } from "./services/internal/credits-operations.
 import { ReservationTransitionGuard } from "./services/internal/reservation-transition.guard";
 import { ListCreditPackagesService } from "./services/list-credit-packages.service";
 import { ReserveCreditService } from "./services/reserve-credit.service";
+import { TopUpCreditService } from "./services/top-up-credit.service";
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { ReserveCreditService } from "./services/reserve-credit.service";
     CreditsOperationsLogger,
     GetBalanceService,
     ListCreditPackagesService,
+    TopUpCreditService,
     ReserveCreditService,
     ConsumeCreditService,
     CompensateCreditService,
@@ -58,6 +60,7 @@ import { ReserveCreditService } from "./services/reserve-credit.service";
   exports: [
     CreditPackagesConfig,
     GetBalanceService,
+    TopUpCreditService,
     ReserveCreditService,
     ConsumeCreditService,
     CompensateCreditService,

@@ -203,6 +203,7 @@ Goal: deliver the MVP backend as a NestJS modular monolith, in the most efficien
 - `GET /credits/balance` and `GET /credits/packages` were implemented.
 - Balance endpoint behavior has been aligned to return a zero-valued balance object when user has no persisted credit account.
 - Reservation core services (`reserve`, `consume`, `compensate`) with idempotency storage and reservation transition guard were implemented for cross-module orchestration.
+- `POST /credits/topup` endpoint was added for manual operator/integration top-up, protected by `x-api-key` (`MANUAL_TOPUP_API_KEY`) and writing audit entries to `credit_ledger`.
 
 **Actions**
 
@@ -213,6 +214,7 @@ Goal: deliver the MVP backend as a NestJS modular monolith, in the most efficien
 - Implement endpoints:
   - `GET /credits/balance`
   - `GET /credits/packages` (config-driven package catalog)
+  - `POST /credits/topup` (manual top-up with API key)
 - Implement services:
   - `get-balance.service.ts`
   - `reserve-credit.service.ts`

@@ -18,6 +18,11 @@ type TFinalizeReservedParams = {
   amount: number;
 };
 
+type TTopUpBalanceParams = {
+  userId: Types.ObjectId;
+  amount: number;
+};
+
 @Injectable()
 export class CreditAccountsRepository {
   constructor(
@@ -111,6 +116,30 @@ export class CreditAccountsRepository {
         },
       },
       { returnDocument: "after" },
+    );
+  };
+
+  topUpBalance = async (params: TTopUpBalanceParams): Promise<TCreditAccountDocument> => {
+    const { userId, amount } = params;
+
+    return await this.creditAccountModel.findOneAndUpdate(
+      { userId },
+      {
+        $setOnInsert: {
+          userId,
+          balance: 0,
+          reserved: 0,
+          version: 0,
+        },
+        $inc: {
+          balance: amount,
+          version: 1,
+        },
+      },
+      {
+        upsert: true,
+        returnDocument: "after",
+      },
     );
   };
 }

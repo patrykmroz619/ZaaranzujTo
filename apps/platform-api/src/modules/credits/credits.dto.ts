@@ -7,6 +7,25 @@ export class CreditBalanceResponseDto extends createZodDto(creditBalanceSchema) 
 
 export class CreditPackagesResponseDto extends createZodDto(getCreditPackagesResponseSchema) {}
 
+export const manualCreditTopupInputSchema = z
+  .object({
+    userId: z.string().regex(/^[a-f\d]{24}$/i),
+    amount: z.number().int().positive(),
+    reason: z.string().trim().min(1).max(256).optional(),
+  })
+  .strict();
+
+export const manualCreditTopupResultSchema = z
+  .object({
+    toppedUpAmount: z.number().int().positive(),
+    balance: creditBalanceSchema,
+  })
+  .strict();
+
+export class ManualCreditTopupRequestDto extends createZodDto(manualCreditTopupInputSchema) {}
+
+export class ManualCreditTopupResponseDto extends createZodDto(manualCreditTopupResultSchema) {}
+
 const creditOperationSourceSchema = z
   .object({
     module: z.string().min(1),
@@ -63,5 +82,7 @@ export const finalizeCreditResultSchema = z
 export type TReserveCreditInput = z.infer<typeof reserveCreditInputSchema>;
 export type TConsumeCreditInput = z.infer<typeof consumeCreditInputSchema>;
 export type TCompensateCreditInput = z.infer<typeof compensateCreditInputSchema>;
+export type TManualCreditTopupInput = z.infer<typeof manualCreditTopupInputSchema>;
 export type TReserveCreditResult = z.infer<typeof reserveCreditResultSchema>;
 export type TFinalizeCreditResult = z.infer<typeof finalizeCreditResultSchema>;
+export type TManualCreditTopupResult = z.infer<typeof manualCreditTopupResultSchema>;

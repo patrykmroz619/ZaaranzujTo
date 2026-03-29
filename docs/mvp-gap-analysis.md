@@ -145,9 +145,10 @@ The platform-web frontend is now connected to all 18 existing platform-api endpo
 | POST | `/api/v1/visualizations/:id/iterations` | Create iteration (AI generation) |
 | GET | `/api/v1/credits/balance` | Get credit balance |
 | GET | `/api/v1/credits/packages` | List credit packages |
+| POST | `/api/v1/credits/topup` | Manual credit top-up (x-api-key) |
 | GET | `/api/v1/storage/assets/:id/download-url` | Get signed download URL |
 
-**Total**: 16 endpoints implemented (payments: 0 of 2, me cascade: partial)
+**Total**: 17 endpoints implemented (payments: 0 of 2, me cascade: partial)
 
 ---
 

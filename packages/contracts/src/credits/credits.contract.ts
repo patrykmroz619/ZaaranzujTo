@@ -37,3 +37,22 @@ export const getCreditPackagesResponseSchema = z
   .strict();
 
 export type TGetCreditPackagesResponse = z.infer<typeof getCreditPackagesResponseSchema>;
+
+export const manualCreditTopupRequestSchema = z
+  .object({
+    userId: z.string().regex(/^[a-f\d]{24}$/i),
+    amount: z.number().int().positive(),
+    reason: z.string().trim().min(1).max(256).optional(),
+  })
+  .strict();
+
+export type TManualCreditTopupRequest = z.infer<typeof manualCreditTopupRequestSchema>;
+
+export const manualCreditTopupResponseSchema = z
+  .object({
+    toppedUpAmount: z.number().int().positive(),
+    balance: creditBalanceSchema,
+  })
+  .strict();
+
+export type TManualCreditTopupResponse = z.infer<typeof manualCreditTopupResponseSchema>;
