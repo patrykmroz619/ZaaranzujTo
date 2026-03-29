@@ -18,10 +18,11 @@ type TCreateProjectDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onCreate: (name: string) => void;
+  isPending?: boolean;
 };
 
 export const CreateProjectDialog = (props: TCreateProjectDialogProps) => {
-  const { open, onOpenChange, onCreate } = props;
+  const { open, onOpenChange, onCreate, isPending } = props;
   const [name, setName] = useState("");
   const t = useTranslations();
 
@@ -58,7 +59,7 @@ export const CreateProjectDialog = (props: TCreateProjectDialogProps) => {
           </Button>
           <Button
             onClick={handleCreate}
-            disabled={!name.trim()}
+            disabled={!name.trim() || isPending}
             className="gradient-warm text-primary-foreground border-0"
           >
             {t("project.create")}

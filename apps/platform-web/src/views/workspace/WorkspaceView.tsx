@@ -1,12 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
+import { toast } from "@repo/ui/core/sonner";
 import { PageHeader } from "@repo/ui/components/page-header";
 import { WorkspaceForm } from "@/modules/workspace/components/WorkspaceForm";
 import { WorkspacePreview } from "@/modules/workspace/components/WorkspacePreview";
+import { useProfile } from "@/core/packages/profile/use-profile";
+import { useVisualization } from "@/modules/workspace/hooks/use-visualization";
+import { useCreateVisualization } from "@/modules/workspace/hooks/use-create-visualization";
+import { useCreateIteration } from "@/modules/workspace/hooks/use-create-iteration";
 import type { TGenerationMode } from "@/modules/workspace/types/workspace.types";
-import type { TIteration } from "@/modules/projects/types/projects.types";
 
 type TWorkspaceViewProps = {
   projectId: string;
@@ -18,61 +22,83 @@ export const WorkspaceView = (props: TWorkspaceViewProps) => {
   const t = useTranslations();
 
   const isNew = visualizationId === "new";
+  const [createdVizId, setCreatedVizId] = useState<string | null>(null);
+  const effectiveVizId = isNew ? createdVizId : visualizationId;
+
+  // Form state
   const [mode, setMode] = useState<TGenerationMode>("photo");
   const [style, setStyle] = useState("");
   const [palette, setPalette] = useState("");
   const [roomType, setRoomType] = useState("");
   const [prompt, setPrompt] = useState("");
-  const [isGenerating, setIsGenerating] = useState(false);
+  const [roomPhotoFile, setRoomPhotoFile] = useState<File | null>(null);
+  const [roomPhotoPreview, setRoomPhotoPreview] = useState<string | null>(null);
+
+  // UI state
   const [hasResult, setHasResult] = useState(!isNew);
   const [isEditMode, setIsEditMode] = useState(!isNew);
-  const [roomPhotoPreview, setRoomPhotoPreview] = useState<string | null>(null);
-  const creditBalance = 12;
+  const [activeIterationId, setActiveIterationId] = useState("");
 
-  const [iterations] = useState<TIteration[]>(
-    isNew
-      ? []
-      : [
-          {
-            id: "orig",
-            label: t("workspace.original"),
-            isOriginal: true,
-          },
-          {
-            id: "it1",
-            label: `${t("workspace.iteration")} 1`,
-            isOriginal: false,
-          },
-          {
-            id: "it2",
-            label: `${t("workspace.iteration")} 2`,
-            isOriginal: false,
-          },
-          {
-            id: "it3",
-            label: `${t("workspace.iteration")} 3`,
-            isOriginal: false,
-          },
-        ],
-  );
-  const [activeIteration, setActiveIteration] = useState(
-    iterations.length > 0 ? iterations[iterations.length - 1]!.id : "",
-  );
+  // Real data
+  const { profile } = useProfile();
+  const { visualization } = useVisualization(effectiveVizId);
+  const realIterations = visualization?.iterations ?? [];
+
+  // Set active iteration when visualization loads
+  useEffect(() => {
+    if (realIterations.length > 0 && !activeIterationId) {
+      const last = realIterations[realIterations.length - 1];
+      if (last) setActiveIterationId(last.id);
+    }
+  }, [realIterations, activeIterationId]);
+
+  // Mutations
+  const createVisualization = useCreateVisualization();
+  const createIteration = useCreateIteration();
+
+  const creditBalance = profile?.creditBalance ?? 0;
+  const isGenerating = createVisualization.isPending || createIteration.isPending;
 
   const handleRoomPhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setRoomPhotoFile(file);
       setRoomPhotoPreview(URL.createObjectURL(file));
     }
   };
 
-  const handleGenerate = () => {
-    setIsGenerating(true);
-    setTimeout(() => {
-      setIsGenerating(false);
-      setHasResult(true);
-      setIsEditMode(true);
-    }, 3000);
+  const handleGenerate = async () => {
+    try {
+      let vizId = effectiveVizId;
+
+      if (isNew && !createdVizId) {
+        const contractMode = mode === "photo" ? "fromPhoto" : "fromScratch";
+        const newViz = await createVisualization.mutateAsync({
+          projectId,
+          body: { name: t("workspace.newVisualization"), mode: contractMode },
+        });
+        if (!newViz) return;
+        vizId = newViz.id;
+        setCreatedVizId(newViz.id);
+      }
+
+      if (!vizId) return;
+
+      const formData = new FormData();
+      if (roomPhotoFile) formData.append("inputPhoto", roomPhotoFile);
+      formData.append("stylePreset", style);
+      if (prompt) formData.append("promptContext", prompt);
+
+      const result = await createIteration.mutateAsync({ visualizationId: vizId, formData });
+
+      if (result) {
+        setHasResult(true);
+        setIsEditMode(true);
+        setActiveIterationId(result.iteration.iterationId);
+      }
+    } catch {
+      toast.error(t("errors.500"));
+    }
   };
 
   const canGenerate =
@@ -104,7 +130,10 @@ export const WorkspaceView = (props: TWorkspaceViewProps) => {
           onPromptChange={setPrompt}
           roomPhotoPreview={roomPhotoPreview}
           onRoomPhotoUpload={handleRoomPhotoUpload}
-          onRoomPhotoRemove={() => setRoomPhotoPreview(null)}
+          onRoomPhotoRemove={() => {
+            setRoomPhotoFile(null);
+            setRoomPhotoPreview(null);
+          }}
           isGenerating={isGenerating}
           canGenerate={canGenerate}
           creditBalance={creditBalance}
@@ -114,9 +143,9 @@ export const WorkspaceView = (props: TWorkspaceViewProps) => {
         <WorkspacePreview
           isGenerating={isGenerating}
           hasResult={hasResult}
-          iterations={iterations}
-          activeIterationId={activeIteration}
-          onSelectIteration={setActiveIteration}
+          iterations={realIterations}
+          activeIterationId={activeIterationId}
+          onSelectIteration={setActiveIterationId}
         />
       </div>
     </div>

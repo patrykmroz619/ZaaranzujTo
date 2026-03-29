@@ -34,7 +34,7 @@ type TWorkspaceFormProps = {
   isGenerating: boolean;
   canGenerate: boolean;
   creditBalance: number;
-  onGenerate: () => void;
+  onGenerate: () => void | Promise<void>;
 };
 
 export const WorkspaceForm = (props: TWorkspaceFormProps) => {

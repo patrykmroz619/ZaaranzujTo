@@ -94,6 +94,8 @@ Defines the shared API contract between frontend and backend using Zod schemas. 
 `docs/` contains design documents and implementation plans. If a better implementation approach is discovered or a contract/schema needs to change, suggest updating the relevant doc to stay in sync.
 
 ## Active Technologies
+- TypeScript 5.x + Next.js 16.2 (App Router), React 19, @tanstack/react-query, Axios, Clerk, next-intl, Tailwind CSS v4, Zustand, @repo/ui (shadcn), @repo/contracts (Zod schemas) (006-web-api-integration)
+- MongoDB (backend), Cloudflare R2 (file assets via signed URLs) (006-web-api-integration)
 
 - TypeScript 5.x, React 19, Next.js 16.2 + Next.js (App Router), Tailwind CSS v4, Clerk (auth), next-intl (i18n), Zustand (state), Lucide React (icons), @repo/ui (shadcn components) (004-layout-migration)
 - N/A (layout-only, no data persistence) (004-layout-migration)

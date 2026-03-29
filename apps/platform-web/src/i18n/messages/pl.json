@@ -160,5 +160,14 @@
     "title": "404",
     "message": "Nie znaleziono strony, której szukasz.",
     "backHome": "Wróć na stronę główną"
+  },
+  "errors": {
+    "401": "Sesja wygasła. Zaloguj się ponownie.",
+    "402": "Brak wystarczającej liczby kredytów.",
+    "404": "Nie znaleziono zasobu.",
+    "409": "Generowanie już trwa. Poczekaj na zakończenie.",
+    "500": "Wystąpił błąd serwera. Spróbuj ponownie.",
+    "network": "Błąd połączenia. Sprawdź swoje połączenie z internetem.",
+    "retry": "Spróbuj ponownie"
   }
 }

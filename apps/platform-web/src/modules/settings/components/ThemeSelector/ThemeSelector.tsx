@@ -4,17 +4,24 @@ import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { Button } from "@repo/ui/core/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/core/card";
-import type { TThemeOption } from "../../types/settings.types";
+import type { TTheme } from "@repo/contracts";
+import { useUpdateProfile } from "@/modules/settings/hooks/use-update-profile";
 
 export const ThemeSelector = () => {
   const t = useTranslations("settings");
   const { theme, setTheme } = useTheme();
+  const { mutate: updateProfile, isPending } = useUpdateProfile();
 
-  const themeOptions: { value: TThemeOption; label: string }[] = [
+  const themeOptions: { value: TTheme; label: string }[] = [
     { value: "light", label: t("themeLight") },
     { value: "dark", label: t("themeDark") },
     { value: "system", label: t("themeSystem") },
   ];
+
+  const handleThemeChange = (value: TTheme) => {
+    setTheme(value);
+    updateProfile({ body: { theme: value } });
+  };
 
   return (
     <Card className="shadow-card">
@@ -28,7 +35,8 @@ export const ThemeSelector = () => {
               key={opt.value}
               variant={theme === opt.value ? "default" : "outline"}
               size="sm"
-              onClick={() => setTheme(opt.value)}
+              disabled={isPending}
+              onClick={() => handleThemeChange(opt.value)}
               className={theme === opt.value ? "gradient-warm text-primary-foreground border-0" : ""}
             >
               {opt.label}

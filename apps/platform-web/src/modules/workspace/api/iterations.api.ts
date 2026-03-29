@@ -2,7 +2,6 @@ import type { AxiosInstance } from "axios";
 
 import type {
   TCreateIterationHeaders,
-  TCreateIterationRequestBody,
   TCreateIterationResponse,
   TListVisualizationIterationsQuery,
   TListVisualizationIterationsResponse,
@@ -31,7 +30,7 @@ const listIterations = async (params: {
 
 const createIteration = async (params: {
   visualizationId: string;
-  body: TCreateIterationRequestBody;
+  body: FormData;
   headers: TCreateIterationHeaders;
   serverClient?: AxiosInstance;
 }) => {

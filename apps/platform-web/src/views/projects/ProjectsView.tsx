@@ -8,32 +8,35 @@ import { PageHeader } from "@repo/ui/components/page-header";
 import { ProjectCard } from "@/modules/projects/components/ProjectCard";
 import { CreateProjectDialog } from "@/modules/projects/components/CreateProjectDialog";
 import { DeleteProjectDialog } from "@/modules/projects/components/DeleteProjectDialog";
-import { MOCK_PROJECTS } from "@/modules/projects/data/mock-projects";
-import type { TProject } from "@/modules/projects/types/projects.types";
+import { useProjects } from "@/modules/projects/hooks/use-projects";
+import { useCreateProject } from "@/modules/projects/hooks/use-create-project";
+import { useDeleteProject } from "@/modules/projects/hooks/use-delete-project";
 
 export const ProjectsView = () => {
   const t = useTranslations();
-  const [projects, setProjects] = useState<TProject[]>(MOCK_PROJECTS);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [deleteProjectId, setDeleteProjectId] = useState<string | null>(null);
 
+  const { projects, isLoading, error } = useProjects();
+  const { mutate: createProject, isPending: isCreating } = useCreateProject();
+  const { mutate: deleteProject, isPending: isDeleting } = useDeleteProject();
+
   const handleCreateProject = (name: string) => {
-    const newProject: TProject = {
-      id: Date.now().toString(),
-      name,
-      createdAt: new Date().toISOString().split("T")[0] ?? "",
-      modifiedAt: new Date().toISOString().split("T")[0] ?? "",
-      visualizationCount: 0,
-    };
-    setProjects([newProject, ...projects]);
-    setCreateDialogOpen(false);
+    createProject(
+      { body: { name } },
+      { onSuccess: () => setCreateDialogOpen(false) },
+    );
   };
 
   const handleDeleteProject = () => {
     if (!deleteProjectId) return;
-    setProjects(projects.filter((p) => p.id !== deleteProjectId));
-    setDeleteProjectId(null);
+    deleteProject(
+      { projectId: deleteProjectId },
+      { onSuccess: () => setDeleteProjectId(null) },
+    );
   };
+
+  const projectItems = projects?.items ?? [];
 
   return (
     <div className="space-y-5">
@@ -42,10 +45,22 @@ export const ProjectsView = () => {
           open={createDialogOpen}
           onOpenChange={setCreateDialogOpen}
           onCreate={handleCreateProject}
+          isPending={isCreating}
         />
       </PageHeader>
 
-      {projects.length === 0 ? (
+      {isLoading ? (
+        <div className="flex justify-center py-20">
+          <p className="text-muted-foreground">{t("common.loading")}</p>
+        </div>
+      ) : error ? (
+        <div className="flex flex-col items-center justify-center py-20 text-center gap-3">
+          <p className="text-muted-foreground">{t("errors.500")}</p>
+          <Button variant="outline" onClick={() => window.location.reload()}>
+            {t("errors.retry")}
+          </Button>
+        </div>
+      ) : projectItems.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <h2 className="mb-2 font-display text-2xl text-foreground">{t("dashboard.emptyTitle")}</h2>
           <p className="mb-6 max-w-md text-muted-foreground">{t("dashboard.emptyDescription")}</p>
@@ -59,7 +74,7 @@ export const ProjectsView = () => {
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {projects.map((project) => (
+          {projectItems.map((project) => (
             <ProjectCard key={project.id} project={project} onDelete={setDeleteProjectId} />
           ))}
         </div>

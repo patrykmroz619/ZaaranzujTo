@@ -11,10 +11,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@repo/ui/core/dropdown-menu";
-import type { TProject } from "../../types/projects.types";
+import type { TProjectObject } from "@repo/contracts";
 
 type TProjectCardProps = {
-  project: TProject;
+  project: TProjectObject;
   onDelete: (id: string) => void;
 };
 
@@ -37,7 +37,7 @@ export const ProjectCard = (props: TProjectCardProps) => {
             <div>
               <h3 className="font-medium text-card-foreground">{project.name}</h3>
               <p className="text-sm text-muted-foreground">
-                {project.visualizationCount} {t("visualizations")}
+                {project.visualizationsCount} {t("visualizations")}
               </p>
             </div>
           </div>
@@ -65,10 +65,10 @@ export const ProjectCard = (props: TProjectCardProps) => {
         </div>
         <div className="mt-4 flex justify-between text-xs text-muted-foreground">
           <span>
-            {t("created")}: {project.createdAt}
+            {t("created")}: {project.createdAt.split("T")[0]}
           </span>
           <span>
-            {t("modified")}: {project.modifiedAt}
+            {t("modified")}: {project.updatedAt.split("T")[0]}
           </span>
         </div>
       </CardContent>

@@ -9,15 +9,27 @@ import { PageHeader } from "@repo/ui/components/page-header";
 import { StatsCard } from "@/modules/dashboard/components/StatsCard";
 import { QuickActions } from "@/modules/dashboard/components/QuickActions";
 import { RecentProjects } from "@/modules/dashboard/components/RecentProjects";
-import {
-  MOCK_STATS,
-  MOCK_RECENT_PROJECTS,
-  MOCK_LAST_VISUALIZATION,
-} from "@/modules/dashboard/data/mock-dashboard";
+import { useProjects } from "@/modules/projects/hooks/use-projects";
+import { useProfile } from "@/core/packages/profile/use-profile";
 
 export const DashboardView = () => {
   const router = useRouter();
   const t = useTranslations("dashboard");
+
+  const { projects, isLoading } = useProjects({ query: { page: 1, sort: "updatedAt:desc", pageSize: 5 } });
+  const { profile } = useProfile();
+
+  const projectItems = projects?.items ?? [];
+  const projectCount = projects?.pagination.totalItems ?? 0;
+  const visualizationCount = projectItems.reduce((sum, p) => sum + p.visualizationsCount, 0);
+  const creditBalance = profile?.creditBalance ?? 0;
+
+  const recentProjects = projectItems.map((p) => ({
+    id: p.id,
+    name: p.name,
+    visualizations: p.visualizationsCount,
+    thumbnail: null,
+  }));
 
   return (
     <div className="space-y-5">
@@ -52,21 +64,17 @@ export const DashboardView = () => {
           </CardContent>
         </Card>
 
-        <QuickActions lastVisualization={MOCK_LAST_VISUALIZATION} />
+        <QuickActions lastVisualization={null} />
       </div>
 
       {/* Recent projects / empty state */}
-      <RecentProjects projects={MOCK_RECENT_PROJECTS} />
+      <RecentProjects projects={isLoading ? [] : recentProjects} />
 
       {/* Stats row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-        <StatsCard label={t("statsProjects")} value={MOCK_STATS.projectCount} icon={Layers} />
-        <StatsCard
-          label={t("statsVisualizations")}
-          value={MOCK_STATS.visualizationCount}
-          icon={ImageIcon}
-        />
-        <StatsCard label={t("statsCredits")} value={MOCK_STATS.creditBalance} icon={Coins} />
+        <StatsCard label={t("statsProjects")} value={projectCount} icon={Layers} />
+        <StatsCard label={t("statsVisualizations")} value={visualizationCount} icon={ImageIcon} />
+        <StatsCard label={t("statsCredits")} value={creditBalance} icon={Coins} />
       </div>
     </div>
   );

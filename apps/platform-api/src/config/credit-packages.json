@@ -1,0 +1,32 @@
+[
+  {
+    "packageCode": "starter",
+    "name": "Starter",
+    "credits": 10,
+    "price": {
+      "amount": 9.99,
+      "currency": "PLN"
+    },
+    "isActive": true
+  },
+  {
+    "packageCode": "standard",
+    "name": "Standard",
+    "credits": 30,
+    "price": {
+      "amount": 24.99,
+      "currency": "PLN"
+    },
+    "isActive": true
+  },
+  {
+    "packageCode": "pro",
+    "name": "Pro",
+    "credits": 100,
+    "price": {
+      "amount": 69.99,
+      "currency": "PLN"
+    },
+    "isActive": true
+  }
+]

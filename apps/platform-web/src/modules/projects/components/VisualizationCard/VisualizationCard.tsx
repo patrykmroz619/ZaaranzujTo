@@ -4,10 +4,11 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Image as ImageIcon } from "lucide-react";
 import { Card, CardContent } from "@repo/ui/core/card";
-import type { TVisualization } from "../../types/projects.types";
+import type { TVisualizationSummary } from "@repo/contracts";
+import { useAssetUrl } from "@/modules/storage/hooks/use-asset-url";
 
 type TVisualizationCardProps = {
-  visualization: TVisualization;
+  visualization: TVisualizationSummary;
   projectId: string;
 };
 
@@ -15,6 +16,7 @@ export const VisualizationCard = (props: TVisualizationCardProps) => {
   const { visualization, projectId } = props;
   const router = useRouter();
   const t = useTranslations("project");
+  const { url: thumbnailUrl } = useAssetUrl(visualization.latestIteration?.imageAssetId);
 
   return (
     <Card
@@ -22,9 +24,9 @@ export const VisualizationCard = (props: TVisualizationCardProps) => {
       onClick={() => router.push(`/projects/${projectId}/workspace/${visualization.id}`)}
     >
       <div className="aspect-video bg-muted flex items-center justify-center">
-        {visualization.thumbnailUrl ? (
+        {thumbnailUrl ? (
           <img
-            src={visualization.thumbnailUrl}
+            src={thumbnailUrl}
             alt={visualization.name}
             className="h-full w-full object-cover"
           />
@@ -36,9 +38,9 @@ export const VisualizationCard = (props: TVisualizationCardProps) => {
         <h3 className="font-medium text-card-foreground">{visualization.name}</h3>
         <div className="mt-1 flex justify-between text-xs text-muted-foreground">
           <span>
-            {visualization.iterationCount} {t("iterations")}
+            {visualization.iterationsCount} {t("iterations")}
           </span>
-          <span>{visualization.latestDate}</span>
+          <span>{visualization.updatedAt.split("T")[0]}</span>
         </div>
       </CardContent>
     </Card>

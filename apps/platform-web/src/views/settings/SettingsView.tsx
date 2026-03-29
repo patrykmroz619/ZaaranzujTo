@@ -1,12 +1,23 @@
 "use client";
 
+import { useEffect } from "react";
 import { useTranslations } from "next-intl";
+import { useTheme } from "next-themes";
 import { PageHeader } from "@repo/ui/components/page-header";
 import { ThemeSelector } from "@/modules/settings/components/ThemeSelector";
 import { AccountActions } from "@/modules/settings/components/AccountActions";
+import { useProfile } from "@/core/packages/profile/use-profile";
 
 export const SettingsView = () => {
   const t = useTranslations("settings");
+  const { profile } = useProfile();
+  const { setTheme } = useTheme();
+
+  useEffect(() => {
+    if (profile?.theme) {
+      setTheme(profile.theme);
+    }
+  }, [profile?.theme, setTheme]);
 
   return (
     <div className="max-w-2xl space-y-5">
