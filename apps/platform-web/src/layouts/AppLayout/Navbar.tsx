@@ -21,7 +21,7 @@ export const Navbar = () => {
         </div>
 
         <div className="flex items-center gap-3">
-          <CreditBadge balance={4} />
+          <CreditBadge />
           <UserMenu />
           <MobileNav />
         </div>

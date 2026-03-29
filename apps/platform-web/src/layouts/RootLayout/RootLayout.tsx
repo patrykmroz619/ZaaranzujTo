@@ -6,6 +6,7 @@ import { getMessages } from "next-intl/server";
 import { Toaster } from "@repo/ui/core/sonner";
 import { ThemeProvider } from "@/core/packages/theme";
 import { AuthProvider } from "@/core/packages/auth";
+import { QueryProvider } from "@/core/packages/query";
 
 import "@repo/ui/styles.css";
 
@@ -43,10 +44,12 @@ export const RootLayout = async (props: TRootLayoutProps) => {
           disableTransitionOnChange
         >
           <AuthProvider>
-            <NextIntlClientProvider messages={messages}>
-              {children}
-              <Toaster />
-            </NextIntlClientProvider>
+            <QueryProvider>
+              <NextIntlClientProvider messages={messages}>
+                {children}
+                <Toaster />
+              </NextIntlClientProvider>
+            </QueryProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>

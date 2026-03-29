@@ -3,13 +3,10 @@
 import Link from "next/link";
 import { Coins } from "lucide-react";
 
-type TCreditBadgeProps = {
-  balance: number;
-  isLoading?: boolean;
-};
+import { useProfile } from "@/core/packages/profile";
 
-export const CreditBadge = (props: TCreditBadgeProps) => {
-  const { balance, isLoading } = props;
+export const CreditBadge = () => {
+  const { profile, isLoading } = useProfile();
 
   if (isLoading) {
     return <div className="h-7 w-14 animate-pulse rounded-full bg-accent" />;
@@ -21,7 +18,7 @@ export const CreditBadge = (props: TCreditBadgeProps) => {
       className="flex items-center gap-1.5 rounded-full bg-accent px-3 py-1.5 text-sm font-medium text-accent-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
     >
       <Coins className="h-3.5 w-3.5" />
-      {balance}
+      {profile?.creditBalance ?? 0}
     </Link>
   );
 };

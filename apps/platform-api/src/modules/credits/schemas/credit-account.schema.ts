@@ -22,5 +22,3 @@ export class CreditAccount {
 }
 
 export const CreditAccountSchema = SchemaFactory.createForClass(CreditAccount);
-
-CreditAccountSchema.index({ userId: 1 }, { unique: true });

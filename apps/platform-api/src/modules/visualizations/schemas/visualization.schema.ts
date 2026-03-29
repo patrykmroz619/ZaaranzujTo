@@ -35,16 +35,16 @@ export class IterationInput {
   @Prop({ required: true })
   mode: string;
 
-  @Prop({ required: false, default: null })
+  @Prop({ required: false, default: null, type: String })
   stylePreset: string | null;
 
   @Prop({ type: [String], required: true, default: [] })
   colors: string[];
 
-  @Prop({ required: false, default: null })
+  @Prop({ required: false, default: null, type: String })
   roomType: string | null;
 
-  @Prop({ required: false, default: null })
+  @Prop({ required: false, default: null, type: String })
   prompt: string | null;
 
   @Prop({ type: [String], required: true, default: [] })
@@ -55,7 +55,7 @@ const IterationInputSchema = SchemaFactory.createForClass(IterationInput);
 
 @Schema({ _id: false })
 export class IterationResult {
-  @Prop({ required: false, default: null })
+  @Prop({ required: false, default: null, type: String })
   imageAssetId: string | null;
 }
 
@@ -85,13 +85,13 @@ export class Iteration {
   @Prop({ required: true })
   iterationNo: number;
 
-  @Prop({ required: false, default: null })
+  @Prop({ required: false, default: null, type: String })
   baseIterationId: string | null;
 
   @Prop({ required: true })
   status: string;
 
-  @Prop({ required: false, default: null })
+  @Prop({ required: false, default: null, type: String })
   failureCode: string | null;
 
   @Prop({ required: true, type: IterationInputSchema })
@@ -126,7 +126,7 @@ export class Visualization {
   @Prop({ required: true, enum: ["fromPhoto", "fromScratch"] })
   mode: TVisualizationMode;
 
-  @Prop({ required: false, default: null })
+  @Prop({ required: false, default: null, type: String })
   inputRoomPhotoAssetId: string | null;
 
   @Prop({ type: [IterationSchema], required: true, default: [] })
