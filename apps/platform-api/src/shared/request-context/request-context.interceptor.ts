@@ -24,23 +24,16 @@ export class RequestContextInterceptor implements NestInterceptor {
     response.setHeader(REQUEST_ID_HEADER, requestId);
 
     return next.handle().pipe(
-      tap({
-        next: () => {
-          const durationMs = Date.now() - startTime;
-          const method = request.method;
-          const route = request.originalUrl;
-          const statusCode = response.statusCode;
-
-          this.logger.log(
-            JSON.stringify({
-              requestId,
-              method,
-              route,
-              statusCode,
-              durationMs,
-            }),
-          );
-        },
+      tap(() => {
+        this.logger.log(
+          JSON.stringify({
+            requestId,
+            method: request.method,
+            route: request.originalUrl,
+            statusCode: response.statusCode,
+            durationMs: Date.now() - startTime,
+          }),
+        );
       }),
     );
   };

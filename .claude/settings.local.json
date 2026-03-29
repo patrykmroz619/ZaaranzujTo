@@ -4,7 +4,9 @@
       "Bash(ls:*)",
       "Bash(ls -la /c/Users/patry/Documents/Projekty/ZaaranzujTo-2/apps/platform-web/src/app/\\\\\\(auth\\\\\\)/layout.tsx)",
       "Bash(bun run:*)",
-      "Bash(xargs grep:*)"
+      "Bash(xargs grep:*)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__query-docs"
     ]
   }
 }
