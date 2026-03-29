@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Settings, LogOut } from "lucide-react";
@@ -11,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/core/dropdown-menu";
 import { Avatar, AvatarFallback } from "@repo/ui/core/avatar";
+import { Button } from "@repo/ui/core/button";
 import { useIsMobile } from "@repo/ui/hooks/use-mobile";
 import { useCurrentUser, useSignOut } from "@/core/packages/auth/client";
 
@@ -23,9 +25,19 @@ const getInitials = (firstName: string | null, lastName: string | null) => {
 export const UserMenu = () => {
   const router = useRouter();
   const t = useTranslations("nav");
-  const { user, isLoaded } = useCurrentUser();
+  const { user, isLoaded, isSignedIn } = useCurrentUser();
   const signOut = useSignOut();
   const isMobile = useIsMobile();
+
+  if (!isLoaded) return null;
+
+  if (!isSignedIn) {
+    return (
+      <Button asChild size="sm">
+        <Link href="/sign-in">{t("signIn")}</Link>
+      </Button>
+    );
+  }
 
   const initials = user ? getInitials(user.firstName, user.lastName) : "?";
   const displayName = user?.fullName ?? user?.email ?? "";

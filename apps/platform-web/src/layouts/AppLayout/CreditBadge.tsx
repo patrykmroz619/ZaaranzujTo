@@ -3,10 +3,16 @@
 import Link from "next/link";
 import { Coins } from "lucide-react";
 
+import { useCurrentUser } from "@/core/packages/auth/client";
 import { useProfile } from "@/core/packages/profile";
 
 export const CreditBadge = () => {
+  const { isSignedIn } = useCurrentUser();
   const { profile, isLoading } = useProfile();
+
+  if (!isSignedIn) {
+    return null;
+  }
 
   if (isLoading) {
     return <div className="h-7 w-14 animate-pulse rounded-full bg-accent" />;

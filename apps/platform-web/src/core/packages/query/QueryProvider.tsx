@@ -10,7 +10,18 @@ type TQueryProviderProps = {
 export const QueryProvider = (props: TQueryProviderProps) => {
   const { children } = props;
 
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            refetchOnWindowFocus: false,
+            refetchOnMount: false,
+            retry: 1,
+          },
+        },
+      }),
+  );
 
   return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
 };
