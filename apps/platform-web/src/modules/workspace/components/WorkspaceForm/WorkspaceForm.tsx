@@ -1,11 +1,15 @@
 "use client";
 
+import { useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Upload, Loader2 } from "lucide-react";
+import { Upload, Loader2, X } from "lucide-react";
+import type { UseFormReturn } from "react-hook-form";
 import { Button } from "@repo/ui/core/button";
+import { Input } from "@repo/ui/core/input";
 import { Label } from "@repo/ui/core/label";
 import { Textarea } from "@repo/ui/core/textarea";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@repo/ui/core/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui/core/select";
 import { ModeToggle } from "@/modules/workspace/components/ModeToggle";
 import { PhotoUpload } from "@/modules/workspace/components/PhotoUpload";
@@ -14,23 +18,11 @@ import {
   COLOR_PALETTES,
   ROOM_TYPES,
 } from "@/modules/workspace/data/mock-workspace";
-import type { TGenerationMode } from "../../types/workspace.types";
+import type { TWorkspaceFormValues } from "../../types/workspace.types";
 
 type TWorkspaceFormProps = {
   isEditMode: boolean;
-  mode: TGenerationMode;
-  onModeChange: (mode: TGenerationMode) => void;
-  style: string;
-  onStyleChange: (style: string) => void;
-  palette: string;
-  onPaletteChange: (palette: string) => void;
-  roomType: string;
-  onRoomTypeChange: (roomType: string) => void;
-  prompt: string;
-  onPromptChange: (prompt: string) => void;
-  roomPhotoPreview: string | null;
-  onRoomPhotoUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onRoomPhotoRemove: () => void;
+  form: UseFormReturn<TWorkspaceFormValues>;
   isGenerating: boolean;
   canGenerate: boolean;
   creditBalance: number;
@@ -38,158 +30,297 @@ type TWorkspaceFormProps = {
 };
 
 export const WorkspaceForm = (props: TWorkspaceFormProps) => {
-  const {
-    isEditMode,
-    mode,
-    onModeChange,
-    style,
-    onStyleChange,
-    palette,
-    onPaletteChange,
-    roomType,
-    onRoomTypeChange,
-    prompt,
-    onPromptChange,
-    roomPhotoPreview,
-    onRoomPhotoUpload,
-    onRoomPhotoRemove,
-    isGenerating,
-    canGenerate,
-    creditBalance,
-    onGenerate,
-  } = props;
+  const { isEditMode, form, isGenerating, canGenerate, creditBalance, onGenerate } = props;
   const router = useRouter();
   const t = useTranslations();
+  const mode = form.watch("mode");
+  const roomPhotoFile = form.watch("roomPhotoFile");
+  const furniturePhotoFiles = form.watch("furniturePhotoFiles");
+
+  const roomPhotoPreview = useMemo(() => {
+    if (!roomPhotoFile) return null;
+    return URL.createObjectURL(roomPhotoFile);
+  }, [roomPhotoFile]);
+
+  const furniturePhotoPreviews = useMemo(() => {
+    return furniturePhotoFiles.map((file) => URL.createObjectURL(file));
+  }, [furniturePhotoFiles]);
+
+  useEffect(() => {
+    return () => {
+      if (roomPhotoPreview) {
+        URL.revokeObjectURL(roomPhotoPreview);
+      }
+    };
+  }, [roomPhotoPreview]);
+
+  useEffect(() => {
+    return () => {
+      furniturePhotoPreviews.forEach((previewUrl) => {
+        URL.revokeObjectURL(previewUrl);
+      });
+    };
+  }, [furniturePhotoPreviews]);
 
   return (
     <div className="w-full space-y-5 lg:w-[400px] lg:shrink-0">
       <div className="rounded-xl border bg-card p-5 shadow-card">
-        {!isEditMode && <ModeToggle mode={mode} onModeChange={onModeChange} />}
-
-        <div className="space-y-4">
-          {/* Room photo upload — only in creation + photo mode */}
-          {!isEditMode && mode === "photo" && (
-            <PhotoUpload
-              preview={roomPhotoPreview}
-              onUpload={onRoomPhotoUpload}
-              onRemove={onRoomPhotoRemove}
-            />
-          )}
-
-          {/* Style */}
-          <div className="space-y-2">
-            <Label>{t("workspace.style")} *</Label>
-            <Select value={style} onValueChange={onStyleChange}>
-              <SelectTrigger>
-                <SelectValue placeholder={t("workspace.stylePlaceholder")} />
-              </SelectTrigger>
-              <SelectContent>
-                {WORKSPACE_STYLES.map((s) => (
-                  <SelectItem key={s} value={s}>
-                    {t(`styles.${s}`)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Color palette */}
-          <div className="space-y-2">
-            <Label>{t("workspace.colorPalette")}</Label>
-            <Select value={palette} onValueChange={onPaletteChange}>
-              <SelectTrigger>
-                <SelectValue placeholder={t("workspace.colorPalettePlaceholder")} />
-              </SelectTrigger>
-              <SelectContent>
-                {COLOR_PALETTES.map((p) => (
-                  <SelectItem key={p} value={p}>
-                    {t(`palettes.${p}`)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Room type */}
-          <div className="space-y-2">
-            <Label>{t("workspace.roomType")} *</Label>
-            <Select value={roomType} onValueChange={onRoomTypeChange}>
-              <SelectTrigger>
-                <SelectValue placeholder={t("workspace.roomTypePlaceholder")} />
-              </SelectTrigger>
-              <SelectContent>
-                {ROOM_TYPES.map((r) => (
-                  <SelectItem key={r} value={r}>
-                    {t(`roomTypes.${r}`)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Prompt */}
-          <div className="space-y-2">
-            <Label>
-              {isEditMode ? t("workspace.editPrompt") : t("workspace.prompt")}
-              {!isEditMode && mode === "scratch" && " *"}
-            </Label>
-            <Textarea
-              placeholder={
-                isEditMode ? t("workspace.editPromptPlaceholder") : t("workspace.promptPlaceholder")
-              }
-              value={prompt}
-              onChange={(e) => onPromptChange(e.target.value)}
-              maxLength={1000}
-              rows={3}
-            />
-          </div>
-
-          {/* Furniture photos */}
-          <div className="space-y-2">
-            <Label>{t("workspace.furniturePhotos")}</Label>
-            <label className="flex h-20 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-border transition-colors hover:border-primary hover:bg-accent/50">
-              <Upload className="mb-1 h-5 w-5 text-muted-foreground" />
-              <span className="text-xs text-muted-foreground">
-                {t("workspace.furniturePhotosHint")}
-              </span>
-              <input
-                type="file"
-                className="hidden"
-                accept=".jpg,.jpeg,.png,.webp,.avif,.heic"
-                multiple
+        {!isEditMode && (
+          <FormField
+            control={form.control}
+            name="mode"
+            render={({ field }) => (
+              <ModeToggle
+                mode={field.value}
+                onModeChange={(nextMode) => {
+                  field.onChange(nextMode);
+                }}
               />
-            </label>
-          </div>
+            )}
+          />
+        )}
 
-          {/* Generate button */}
-          {creditBalance < 1 ? (
-            <div className="rounded-lg bg-accent p-3 text-center text-sm">
-              <p className="mb-2 text-accent-foreground">{t("workspace.noCredits")}</p>
-              <Button
-                size="sm"
-                onClick={() => router.push("/credits")}
-                className="gradient-warm text-primary-foreground border-0"
-              >
-                {t("workspace.buyCredits")}
-              </Button>
-            </div>
-          ) : (
-            <Button
-              onClick={onGenerate}
-              disabled={!canGenerate || isGenerating}
-              className="w-full gradient-warm text-primary-foreground border-0"
-            >
-              {isGenerating ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {t("workspace.generating")}
-                </>
-              ) : (
-                t("workspace.generate")
+        <Form {...form}>
+          <div className="space-y-4">
+            <FormField
+              control={form.control}
+              name="name"
+              rules={{
+                validate: (value) =>
+                  value.trim().length > 0 || t("workspace.visualizationNameRequired"),
+              }}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("workspace.visualizationName")} *</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder={t("workspace.visualizationNamePlaceholder")}
+                      value={field.value}
+                      onChange={field.onChange}
+                      maxLength={120}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
-            </Button>
-          )}
-        </div>
+            />
+
+            {mode === "photo" && (
+              <PhotoUpload
+                preview={roomPhotoPreview}
+                onUpload={(event) => {
+                  const nextFile = event.target.files?.[0] ?? null;
+                  form.setValue("roomPhotoFile", nextFile, {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  });
+                }}
+                onRemove={() => {
+                  form.setValue("roomPhotoFile", null, {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  });
+                }}
+              />
+            )}
+
+            <FormField
+              control={form.control}
+              name="style"
+              rules={{
+                validate: (value) => value.trim().length > 0 || t("workspace.styleRequired"),
+              }}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("workspace.style")} *</FormLabel>
+                  <FormControl>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger>
+                        <SelectValue placeholder={t("workspace.stylePlaceholder")} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {WORKSPACE_STYLES.map((styleValue) => (
+                          <SelectItem key={styleValue} value={styleValue}>
+                            {t(`styles.${styleValue}`)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="palette"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("workspace.colorPalette")}</FormLabel>
+                  <FormControl>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger>
+                        <SelectValue placeholder={t("workspace.colorPalettePlaceholder")} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {COLOR_PALETTES.map((paletteValue) => (
+                          <SelectItem key={paletteValue} value={paletteValue}>
+                            {t(`palettes.${paletteValue}`)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="roomType"
+              rules={{
+                validate: (value) => value.trim().length > 0 || t("workspace.roomTypeRequired"),
+              }}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("workspace.roomType")} *</FormLabel>
+                  <FormControl>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger>
+                        <SelectValue placeholder={t("workspace.roomTypePlaceholder")} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {ROOM_TYPES.map((roomTypeValue) => (
+                          <SelectItem key={roomTypeValue} value={roomTypeValue}>
+                            {t(`roomTypes.${roomTypeValue}`)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="prompt"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    {isEditMode ? t("workspace.editPrompt") : t("workspace.prompt")}
+                    {!isEditMode && mode === "scratch" && " *"}
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder={
+                        isEditMode
+                          ? t("workspace.editPromptPlaceholder")
+                          : t("workspace.promptPlaceholder")
+                      }
+                      value={field.value}
+                      onChange={field.onChange}
+                      maxLength={1000}
+                      rows={3}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="space-y-2">
+              <Label>{t("workspace.furniturePhotos")}</Label>
+              <label className="flex h-20 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-border transition-colors hover:border-primary hover:bg-accent/50">
+                <Upload className="mb-1 h-5 w-5 text-muted-foreground" />
+                <span className="text-xs text-muted-foreground">
+                  {t("workspace.furniturePhotosHint")}
+                </span>
+                <input
+                  type="file"
+                  className="hidden"
+                  accept=".jpg,.jpeg,.png,.webp,.avif,.heic"
+                  multiple
+                  onChange={(event) => {
+                    const uploadedFiles = Array.from(event.target.files ?? []);
+                    if (uploadedFiles.length === 0) return;
+
+                    const currentFiles = form.getValues("furniturePhotoFiles");
+                    form.setValue("furniturePhotoFiles", [...currentFiles, ...uploadedFiles], {
+                      shouldDirty: true,
+                      shouldValidate: true,
+                    });
+                    event.target.value = "";
+                  }}
+                />
+              </label>
+
+              {furniturePhotoPreviews.length > 0 && (
+                <div className="grid grid-cols-4 gap-2">
+                  {furniturePhotoPreviews.map((previewUrl, index) => (
+                    <div key={`${previewUrl}-${index}`} className="relative">
+                      <img
+                        src={previewUrl}
+                        alt={`${t("workspace.furniturePhotoAlt")} ${index + 1}`}
+                        className="h-16 w-full rounded-md object-cover"
+                      />
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        size="icon"
+                        className="absolute right-1 top-1 h-5 w-5"
+                        onClick={() => {
+                          const nextFiles = form
+                            .getValues("furniturePhotoFiles")
+                            .filter((_, fileIndex) => fileIndex !== index);
+                          form.setValue("furniturePhotoFiles", nextFiles, {
+                            shouldDirty: true,
+                            shouldValidate: true,
+                          });
+                        }}
+                      >
+                        <X className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {creditBalance < 1 ? (
+              <div className="rounded-lg bg-accent p-3 text-center text-sm">
+                <p className="mb-2 text-accent-foreground">{t("workspace.noCredits")}</p>
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={() => router.push("/credits")}
+                  className="gradient-warm text-primary-foreground border-0"
+                >
+                  {t("workspace.buyCredits")}
+                </Button>
+              </div>
+            ) : (
+              <Button
+                type="button"
+                onClick={onGenerate}
+                disabled={!canGenerate || isGenerating}
+                className="w-full gradient-warm text-primary-foreground border-0"
+              >
+                {isGenerating ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    {t("workspace.generating")}
+                  </>
+                ) : (
+                  t("workspace.generate")
+                )}
+              </Button>
+            )}
+          </div>
+        </Form>
       </div>
     </div>
   );

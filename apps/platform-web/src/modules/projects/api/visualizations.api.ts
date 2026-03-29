@@ -5,6 +5,8 @@ import type {
   TCreateVisualizationRequest,
   TListProjectVisualizationsQuery,
   TListProjectVisualizationsResponse,
+  TUpdateVisualizationRequest,
+  TUpdateVisualizationResponse,
   TVisualizationDetails,
   TVisualizationSummary,
 } from "@repo/contracts";
@@ -57,8 +59,24 @@ const getVisualization = async (params: {
   const { visualizationId, serverClient } = params;
   const client = serverClient ?? httpClient;
   try {
-    const res = await client.get<TVisualizationDetails>(
+    const res = await client.get<TVisualizationDetails>(`/api/v1/visualizations/${visualizationId}`);
+    return res.data;
+  } catch (error) {
+    handleHttpError(error);
+  }
+};
+
+const updateVisualization = async (params: {
+  visualizationId: string;
+  body: TUpdateVisualizationRequest;
+  serverClient?: AxiosInstance;
+}) => {
+  const { visualizationId, body, serverClient } = params;
+  const client = serverClient ?? httpClient;
+  try {
+    const res = await client.patch<TUpdateVisualizationResponse>(
       `/api/v1/visualizations/${visualizationId}`,
+      body,
     );
     return res.data;
   } catch (error) {
@@ -70,4 +88,5 @@ export const visualizationsApi = {
   list: listVisualizations,
   create: createVisualization,
   get: getVisualization,
+  update: updateVisualization,
 };

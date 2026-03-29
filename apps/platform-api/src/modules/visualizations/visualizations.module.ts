@@ -21,6 +21,7 @@ import { GetVisualizationDetailsService } from "./services/get-visualization-det
 import { ListProjectVisualizationsService } from "./services/list-project-visualizations.service";
 import { MapVisualizationDetailsService } from "./services/map-visualization-details.service";
 import { MapVisualizationSummaryService } from "./services/map-visualization-summary.service";
+import { UpdateVisualizationService } from "./services/update-visualization.service";
 import { ValidateVisualizationOwnershipService } from "./services/validate-visualization-ownership.service";
 import { VisualizationsController } from "./visualizations.controller";
 
@@ -46,6 +47,7 @@ import { VisualizationsController } from "./visualizations.controller";
     MapVisualizationDetailsService,
     ListProjectVisualizationsService,
     CreateVisualizationService,
+    UpdateVisualizationService,
     GetVisualizationDetailsService,
     ListVisualizationIterationsService,
     CreateIterationResponseMapper,

@@ -127,6 +127,17 @@ export const createVisualizationRequestSchema = z
 
 export type TCreateVisualizationRequest = z.infer<typeof createVisualizationRequestSchema>;
 
+export const updateVisualizationRequestSchema = z
+  .object({
+    name: visualizationNameSchema.optional(),
+  })
+  .strict()
+  .refine((value) => value.name !== undefined, {
+    message: "At least one field must be provided.",
+  });
+
+export type TUpdateVisualizationRequest = z.infer<typeof updateVisualizationRequestSchema>;
+
 export const createVisualizationHeadersSchema = z
   .object({
     idempotencyKey: z.string().uuid(),
@@ -184,6 +195,10 @@ export const visualizationDetailsSchema = z
   .strict();
 
 export type TVisualizationDetails = z.infer<typeof visualizationDetailsSchema>;
+
+export const updateVisualizationResponseSchema = visualizationDetailsSchema;
+
+export type TUpdateVisualizationResponse = z.infer<typeof updateVisualizationResponseSchema>;
 
 export const listVisualizationIterationsSortSchema = z.enum(["iterationNo:asc", "iterationNo:desc"]);
 

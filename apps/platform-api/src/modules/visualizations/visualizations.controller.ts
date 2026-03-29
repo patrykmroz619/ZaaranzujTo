@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  Patch,
   Post,
   Query,
   UploadedFiles,
@@ -18,6 +19,7 @@ import {
   createVisualizationIterationBodySchema,
   listProjectVisualizationsQuerySchema,
   listVisualizationIterationsQuerySchema,
+  updateVisualizationRequestSchema,
   visualizationIdParamsSchema,
   visualizationProjectIdParamsSchema,
 } from "./visualizations.dto";
@@ -27,6 +29,7 @@ import { CreateVisualizationService } from "./services/create-visualization.serv
 import { GetVisualizationDetailsService } from "./services/get-visualization-details.service";
 import { ListVisualizationIterationsService } from "./iterations/services/list-visualization-iterations.service";
 import { CreateIterationService } from "./iterations/services/create-iteration.service";
+import { UpdateVisualizationService } from "./services/update-visualization.service";
 
 type TUploadedIterationFile = {
   originalname: string;
@@ -41,6 +44,7 @@ export class VisualizationsController {
   constructor(
     private readonly listProjectVisualizationsService: ListProjectVisualizationsService,
     private readonly createVisualizationService: CreateVisualizationService,
+    private readonly updateVisualizationService: UpdateVisualizationService,
     private readonly getVisualizationDetailsService: GetVisualizationDetailsService,
     private readonly listVisualizationIterationsService: ListVisualizationIterationsService,
     private readonly createIterationService: CreateIterationService,
@@ -88,6 +92,23 @@ export class VisualizationsController {
       clerkId: currentUser.userId,
       email: currentUser.email,
       visualizationId: parsedParams.visualizationId,
+    });
+  }
+
+  @Patch("visualizations/:visualizationId")
+  updateVisualization(
+    @CurrentUser() currentUser: TAuthData,
+    @Param() params: unknown,
+    @Body() body: unknown,
+  ) {
+    const parsedParams = visualizationIdParamsSchema.parse(params);
+    const parsedBody = updateVisualizationRequestSchema.parse(body);
+
+    return this.updateVisualizationService.updateVisualization({
+      clerkId: currentUser.userId,
+      email: currentUser.email,
+      visualizationId: parsedParams.visualizationId,
+      body: parsedBody,
     });
   }
 

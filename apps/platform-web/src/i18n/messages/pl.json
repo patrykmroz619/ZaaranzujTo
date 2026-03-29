@@ -81,6 +81,9 @@
   "workspace": {
     "modeFromPhoto": "Ze zdjęcia",
     "modeFromScratch": "Od podstaw",
+    "visualizationName": "Nazwa wizualizacji",
+    "visualizationNamePlaceholder": "np. Salon dzienny",
+    "visualizationNameRequired": "Nazwa wizualizacji jest wymagana.",
     "roomPhoto": "Zdjęcie pokoju",
     "roomPhotoHint": "Przeciągnij zdjęcie lub kliknij, aby wybrać",
     "roomPhotoRequired": "Zdjęcie pokoju jest wymagane w trybie \"Ze zdjęcia\".",
@@ -95,6 +98,7 @@
     "promptRequired": "Opis jest wymagany w trybie \"Od podstaw\".",
     "furniturePhotos": "Zdjęcia mebli / elementów",
     "furniturePhotosHint": "Opcjonalnie dodaj zdjęcia mebli",
+    "furniturePhotoAlt": "Zdjęcie referencyjne",
     "generate": "Generuj wizualizację",
     "generating": "Generowanie...",
     "generatingMessage": "Twoja wizualizacja jest generowana. Może to potrwać do kilku minut.",

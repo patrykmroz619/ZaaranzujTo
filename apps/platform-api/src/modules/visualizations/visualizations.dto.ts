@@ -84,6 +84,24 @@ export const createVisualizationRequestSchema = z
   })
   .strict();
 
+export const updateVisualizationRequestSchema = z
+  .object({
+    name: z
+      .string()
+      .transform((value) => value.trim())
+      .refine((value) => value.length >= 1, {
+        message: "Visualization name is required.",
+      })
+      .refine((value) => value.length <= 120, {
+        message: "Visualization name must be at most 120 characters.",
+      })
+      .optional(),
+  })
+  .strict()
+  .refine((value) => value.name !== undefined, {
+    message: "At least one field must be provided.",
+  });
+
 export const createVisualizationIterationBodySchema = z
   .object({
     stylePreset: z
@@ -114,6 +132,8 @@ export class ListVisualizationIterationsQueryDto extends createZodDto(
 
 export class CreateVisualizationDto extends createZodDto(createVisualizationRequestSchema) {}
 
+export class UpdateVisualizationDto extends createZodDto(updateVisualizationRequestSchema) {}
+
 export type TProjectIdParams = z.infer<typeof visualizationProjectIdParamsSchema>;
 export type TVisualizationIdParams = z.infer<typeof visualizationIdParamsSchema>;
 export type TListProjectVisualizationsQuery = z.infer<typeof listProjectVisualizationsQuerySchema>;
@@ -121,6 +141,7 @@ export type TListVisualizationIterationsQuery = z.infer<
   typeof listVisualizationIterationsQuerySchema
 >;
 export type TCreateVisualizationRequest = z.infer<typeof createVisualizationRequestSchema>;
+export type TUpdateVisualizationRequest = z.infer<typeof updateVisualizationRequestSchema>;
 export type TCreateVisualizationIterationBody = z.infer<
   typeof createVisualizationIterationBodySchema
 >;

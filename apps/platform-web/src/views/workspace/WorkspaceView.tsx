@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { useTranslations } from "next-intl";
 import { toast } from "@repo/ui/core/sonner";
 import { PageHeader } from "@repo/ui/components/page-header";
@@ -10,7 +11,8 @@ import { useProfile } from "@/core/packages/profile/use-profile";
 import { useVisualization } from "@/modules/workspace/hooks/use-visualization";
 import { useCreateVisualization } from "@/modules/workspace/hooks/use-create-visualization";
 import { useCreateIteration } from "@/modules/workspace/hooks/use-create-iteration";
-import type { TGenerationMode } from "@/modules/workspace/types/workspace.types";
+import { useUpdateVisualization } from "@/modules/workspace/hooks/use-update-visualization";
+import type { TWorkspaceFormValues } from "@/modules/workspace/types/workspace.types";
 
 type TWorkspaceViewProps = {
   projectId: string;
@@ -23,16 +25,29 @@ export const WorkspaceView = (props: TWorkspaceViewProps) => {
 
   const isNew = visualizationId === "new";
   const [createdVizId, setCreatedVizId] = useState<string | null>(null);
+  const [lastSavedVisualizationName, setLastSavedVisualizationName] = useState<string | null>(null);
   const effectiveVizId = isNew ? createdVizId : visualizationId;
 
-  // Form state
-  const [mode, setMode] = useState<TGenerationMode>("photo");
-  const [style, setStyle] = useState("");
-  const [palette, setPalette] = useState("");
-  const [roomType, setRoomType] = useState("");
-  const [prompt, setPrompt] = useState("");
-  const [roomPhotoFile, setRoomPhotoFile] = useState<File | null>(null);
-  const [roomPhotoPreview, setRoomPhotoPreview] = useState<string | null>(null);
+  const form = useForm<TWorkspaceFormValues>({
+    defaultValues: {
+      name: "",
+      mode: "photo",
+      style: "",
+      palette: "",
+      roomType: "",
+      prompt: "",
+      roomPhotoFile: null,
+      furniturePhotoFiles: [],
+    },
+  });
+
+  const mode = form.watch("mode");
+  const style = form.watch("style");
+  const roomType = form.watch("roomType");
+  const prompt = form.watch("prompt");
+  const roomPhotoFile = form.watch("roomPhotoFile");
+  const furniturePhotoFiles = form.watch("furniturePhotoFiles");
+  const visualizationName = form.watch("name");
 
   // UI state
   const [hasResult, setHasResult] = useState(!isNew);
@@ -54,20 +69,43 @@ export const WorkspaceView = (props: TWorkspaceViewProps) => {
 
   // Mutations
   const createVisualization = useCreateVisualization();
+  const updateVisualization = useUpdateVisualization();
   const createIteration = useCreateIteration();
 
   const creditBalance = profile?.creditBalance ?? 0;
-  const isGenerating = createVisualization.isPending || createIteration.isPending;
+  const isGenerating =
+    createVisualization.isPending || updateVisualization.isPending || createIteration.isPending;
 
-  const handleRoomPhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setRoomPhotoFile(file);
-      setRoomPhotoPreview(URL.createObjectURL(file));
+  useEffect(() => {
+    if (!visualization) return;
+
+    if (!form.getValues("name")) {
+      form.setValue("name", visualization.name);
     }
-  };
+
+    if (lastSavedVisualizationName === null) {
+      setLastSavedVisualizationName(visualization.name);
+    }
+  }, [form, visualization, lastSavedVisualizationName]);
 
   const handleGenerate = async () => {
+    const name = visualizationName.trim();
+
+    if (name.length === 0) {
+      form.setError("name", { message: t("workspace.visualizationNameRequired") });
+      return;
+    }
+
+    if (!isEditMode && mode === "photo" && !roomPhotoFile) {
+      form.setError("roomPhotoFile", { message: t("workspace.roomPhotoRequired") });
+      return;
+    }
+
+    if (mode === "scratch" && !prompt.trim()) {
+      form.setError("prompt", { message: t("workspace.promptRequired") });
+      return;
+    }
+
     try {
       let vizId = effectiveVizId;
 
@@ -75,19 +113,36 @@ export const WorkspaceView = (props: TWorkspaceViewProps) => {
         const contractMode = mode === "photo" ? "fromPhoto" : "fromScratch";
         const newViz = await createVisualization.mutateAsync({
           projectId,
-          body: { name: t("workspace.newVisualization"), mode: contractMode },
+          body: { name, mode: contractMode },
         });
         if (!newViz) return;
         vizId = newViz.id;
         setCreatedVizId(newViz.id);
+        setLastSavedVisualizationName(name);
       }
 
       if (!vizId) return;
+
+      if (lastSavedVisualizationName !== null && name !== lastSavedVisualizationName) {
+        const updatedVisualization = await updateVisualization.mutateAsync({
+          visualizationId: vizId,
+          body: {
+            name,
+          },
+        });
+
+        if (updatedVisualization) {
+          setLastSavedVisualizationName(updatedVisualization.name);
+        }
+      }
 
       const formData = new FormData();
       if (roomPhotoFile) formData.append("inputPhoto", roomPhotoFile);
       formData.append("stylePreset", style);
       if (prompt) formData.append("promptContext", prompt);
+      furniturePhotoFiles.forEach((photoFile) => {
+        formData.append("referencePhotos", photoFile);
+      });
 
       const result = await createIteration.mutateAsync({ visualizationId: vizId, formData });
 
@@ -103,9 +158,10 @@ export const WorkspaceView = (props: TWorkspaceViewProps) => {
 
   const canGenerate =
     creditBalance >= 1 &&
+    visualizationName.trim() !== "" &&
     style !== "" &&
     roomType !== "" &&
-    (mode === "photo" ? !!roomPhotoPreview : !!prompt.trim());
+    (mode === "photo" ? isEditMode || !!roomPhotoFile : !!prompt.trim());
 
   return (
     <div className="space-y-5">
@@ -118,22 +174,7 @@ export const WorkspaceView = (props: TWorkspaceViewProps) => {
       <div className="flex flex-col gap-6 lg:flex-row">
         <WorkspaceForm
           isEditMode={isEditMode}
-          mode={mode}
-          onModeChange={setMode}
-          style={style}
-          onStyleChange={setStyle}
-          palette={palette}
-          onPaletteChange={setPalette}
-          roomType={roomType}
-          onRoomTypeChange={setRoomType}
-          prompt={prompt}
-          onPromptChange={setPrompt}
-          roomPhotoPreview={roomPhotoPreview}
-          onRoomPhotoUpload={handleRoomPhotoUpload}
-          onRoomPhotoRemove={() => {
-            setRoomPhotoFile(null);
-            setRoomPhotoPreview(null);
-          }}
+          form={form}
           isGenerating={isGenerating}
           canGenerate={canGenerate}
           creditBalance={creditBalance}

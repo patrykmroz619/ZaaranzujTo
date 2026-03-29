@@ -24,6 +24,12 @@ type TFindVisualizationByIdForUserParams = {
   visualizationId: string;
 };
 
+type TUpdateVisualizationNameByIdForUserParams = {
+  userId: Types.ObjectId;
+  visualizationId: string;
+  name: string;
+};
+
 type TListVisualizationsForProjectForUserParams = {
   userId: Types.ObjectId;
   projectId: string;
@@ -103,6 +109,27 @@ export class VisualizationsRepository {
       _id: visualizationId,
       userId,
     });
+  };
+
+  updateVisualizationNameByIdForUser = async (
+    params: TUpdateVisualizationNameByIdForUserParams,
+  ): Promise<TVisualizationDocument | null> => {
+    const { userId, visualizationId, name } = params;
+
+    return await this.visualizationModel.findOneAndUpdate(
+      {
+        _id: visualizationId,
+        userId,
+      },
+      {
+        $set: {
+          name,
+        },
+      },
+      {
+        returnDocument: "after",
+      },
+    );
   };
 
   listVisualizationsForProjectForUser = async (
