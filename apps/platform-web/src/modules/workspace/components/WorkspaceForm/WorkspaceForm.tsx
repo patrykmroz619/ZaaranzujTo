@@ -11,7 +11,6 @@ import { Label } from "@repo/ui/core/label";
 import { Textarea } from "@repo/ui/core/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@repo/ui/core/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui/core/select";
-import { ModeToggle } from "@/modules/workspace/components/ModeToggle";
 import { PhotoUpload } from "@/modules/workspace/components/PhotoUpload";
 import {
   WORKSPACE_STYLES,
@@ -33,7 +32,6 @@ export const WorkspaceForm = (props: TWorkspaceFormProps) => {
   const { isEditMode, form, isGenerating, canGenerate, creditBalance, onGenerate } = props;
   const router = useRouter();
   const t = useTranslations();
-  const mode = form.watch("mode");
   const roomPhotoFile = form.watch("roomPhotoFile");
   const furniturePhotoFiles = form.watch("furniturePhotoFiles");
 
@@ -65,21 +63,6 @@ export const WorkspaceForm = (props: TWorkspaceFormProps) => {
   return (
     <div className="w-full space-y-5 lg:w-[400px] lg:shrink-0">
       <div className="rounded-xl border bg-card p-5 shadow-card">
-        {!isEditMode && (
-          <FormField
-            control={form.control}
-            name="mode"
-            render={({ field }) => (
-              <ModeToggle
-                mode={field.value}
-                onModeChange={(nextMode) => {
-                  field.onChange(nextMode);
-                }}
-              />
-            )}
-          />
-        )}
-
         <Form {...form}>
           <div className="space-y-4">
             <FormField
@@ -105,7 +88,7 @@ export const WorkspaceForm = (props: TWorkspaceFormProps) => {
               )}
             />
 
-            {mode === "photo" && (
+            {!isEditMode && (
               <PhotoUpload
                 preview={roomPhotoPreview}
                 onUpload={(event) => {
@@ -212,7 +195,6 @@ export const WorkspaceForm = (props: TWorkspaceFormProps) => {
                 <FormItem>
                   <FormLabel>
                     {isEditMode ? t("workspace.editPrompt") : t("workspace.prompt")}
-                    {!isEditMode && mode === "scratch" && " *"}
                   </FormLabel>
                   <FormControl>
                     <Textarea

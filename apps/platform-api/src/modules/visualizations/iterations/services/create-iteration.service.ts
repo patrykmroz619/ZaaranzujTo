@@ -26,7 +26,7 @@ type TCreateIterationParams = {
   email: string;
   visualizationId: string;
   body: TCreateVisualizationIterationBody;
-  inputPhoto: TUploadedFile;
+  inputPhoto: TUploadedFile | undefined;
   referencePhotos: TUploadedFile[];
 };
 
@@ -72,7 +72,9 @@ export class CreateIterationService {
 
     const prompt = this.iterationPromptBuilderService.buildVisualizationPrompt({
       stylePreset: body.stylePreset,
-      promptContext: body.promptContext,
+      palette: body.palette,
+      roomType: body.roomType,
+      prompt: body.prompt,
     });
 
     const baseGenerationInput = this.buildBaseGenerationInput({
@@ -110,7 +112,7 @@ export class CreateIterationService {
         inputPhoto,
         referencePhotos,
         outputMediaType: generationResult.mediaType,
-        outputSizeBytes: generationResult.uint8Array.byteLength,
+        outputBytes: generationResult.uint8Array,
       });
 
       const visualization =
@@ -273,20 +275,8 @@ export class CreateIterationService {
       mode: "generation",
       stylePreset: body.stylePreset ?? null,
       colors: [],
-      roomType: this.getStringField({ value: body.promptContext?.["roomType"] }),
+      roomType: body.roomType ?? null,
       prompt,
     };
-  };
-
-  private getStringField = (params: { value: unknown }): string | null => {
-    const { value } = params;
-
-    if (typeof value !== "string") {
-      return null;
-    }
-
-    const normalized = value.trim();
-
-    return normalized.length > 0 ? normalized : null;
   };
 }

@@ -18,6 +18,7 @@ export class StorageController {
     const { downloadUrl, expiresAt } = await this.fileAssetsService.generateDownloadUrl(
       assetId,
       user.userId,
+      user.email,
     );
 
     return {

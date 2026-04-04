@@ -19,6 +19,7 @@ const configSchema = z.object({
   openRouterBaseUrl: z.url(),
   visualizationImageModel: z.string().min(1),
   manualTopupApiKey: z.string().min(1).optional(),
+  logDir: z.string().default("logs"),
 });
 
 const configuration = () => ({
@@ -35,6 +36,7 @@ const configuration = () => ({
   openRouterBaseUrl: process.env.OPENROUTER_BASE_URL,
   visualizationImageModel: process.env.VISUALIZATION_IMAGE_MODEL,
   manualTopupApiKey: process.env.MANUAL_TOPUP_API_KEY,
+  logDir: process.env.LOG_DIR,
 });
 
 export type ConfigType = z.infer<typeof configSchema>;

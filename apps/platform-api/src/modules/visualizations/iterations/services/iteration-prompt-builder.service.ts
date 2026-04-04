@@ -2,22 +2,32 @@ import { Injectable } from "@nestjs/common";
 
 type TBuildIterationVisualizationPromptParams = {
   stylePreset?: string;
-  promptContext?: Record<string, unknown>;
+  palette?: string;
+  roomType?: string;
+  prompt?: string;
 };
 
 @Injectable()
 export class IterationPromptBuilderService {
   buildVisualizationPrompt = (params: TBuildIterationVisualizationPromptParams): string => {
-    const { stylePreset, promptContext } = params;
+    const { stylePreset, palette, roomType, prompt } = params;
 
     const contextParts: string[] = [];
 
     if (stylePreset && stylePreset.trim().length > 0) {
-      contextParts.push(`Style preset: ${stylePreset.trim()}`);
+      contextParts.push(`Style: ${stylePreset.trim()}`);
     }
 
-    if (promptContext && Object.keys(promptContext).length > 0) {
-      contextParts.push(`Context: ${JSON.stringify(promptContext)}`);
+    if (palette && palette.trim().length > 0) {
+      contextParts.push(`Palette: ${palette.trim()}`);
+    }
+
+    if (roomType && roomType.trim().length > 0) {
+      contextParts.push(`Room type: ${roomType.trim()}`);
+    }
+
+    if (prompt && prompt.trim().length > 0) {
+      contextParts.push(`Additional notes: ${prompt.trim()}`);
     }
 
     const contextText = contextParts.length > 0 ? ` ${contextParts.join(". ")}.` : "";

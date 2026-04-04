@@ -12,11 +12,11 @@ import {
   visualizationSortMapping,
 } from "../schemas/visualization.schema";
 
+
 type TCreateVisualizationForUserParams = {
   userId: Types.ObjectId;
   projectId: string;
   name: string;
-  mode: "fromPhoto" | "fromScratch";
 };
 
 type TFindVisualizationByIdForUserParams = {
@@ -86,14 +86,12 @@ export class VisualizationsRepository {
   createVisualizationForUser = async (
     params: TCreateVisualizationForUserParams,
   ): Promise<TVisualizationDocument> => {
-    const { userId, projectId, name, mode } = params;
+    const { userId, projectId, name } = params;
 
     return await this.visualizationModel.create({
       userId,
       projectId,
       name,
-      mode,
-      inputRoomPhotoAssetId: null,
       iterations: [],
       iterationsCount: 0,
       latestIteration: null,

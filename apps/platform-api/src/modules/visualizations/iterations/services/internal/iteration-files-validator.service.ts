@@ -8,7 +8,7 @@ import { toIterationOrchestrationHttpException } from "../../../errors/iteration
 import type { TUploadedFile } from "./iteration.types";
 
 type TValidateFilesParams = {
-  inputPhoto: TUploadedFile;
+  inputPhoto: TUploadedFile | undefined;
   referencePhotos: TUploadedFile[];
 };
 
@@ -17,7 +17,9 @@ export class IterationFilesValidatorService {
   validateFiles = (params: TValidateFilesParams) => {
     const { inputPhoto, referencePhotos } = params;
 
-    this.validateFile({ file: inputPhoto });
+    if (inputPhoto) {
+      this.validateFile({ file: inputPhoto });
+    }
     referencePhotos.forEach((file) => this.validateFile({ file }));
   };
 

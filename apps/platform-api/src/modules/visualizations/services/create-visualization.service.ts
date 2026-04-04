@@ -39,7 +39,6 @@ export class CreateVisualizationService {
       userId: user._id,
       projectId,
       name: body.name,
-      mode: body.mode,
     });
 
     return this.mapVisualizationDetailsService.map({

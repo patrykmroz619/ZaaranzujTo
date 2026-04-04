@@ -11,7 +11,6 @@ export class MapVisualizationSummaryService {
       id: visualizationDocument._id.toString(),
       projectId: visualizationDocument.projectId.toString(),
       name: visualizationDocument.name,
-      mode: visualizationDocument.mode,
       iterationsCount: visualizationDocument.iterationsCount,
       latestIteration: visualizationDocument.latestIteration
         ? {

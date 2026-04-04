@@ -35,10 +35,6 @@ const visualizationNameSchema = z
     message: "Visualization name contains invalid control characters.",
   });
 
-export const visualizationModeSchema = z.enum(["fromPhoto", "fromScratch"]);
-
-export type TVisualizationMode = z.infer<typeof visualizationModeSchema>;
-
 export const visualizationProjectIdParamsSchema = z
   .object({
     projectId: objectIdSchema,
@@ -97,7 +93,6 @@ export const visualizationSummarySchema = z
     id: objectIdSchema,
     projectId: objectIdSchema,
     name: z.string().min(1),
-    mode: visualizationModeSchema,
     iterationsCount: z.number().int().nonnegative(),
     latestIteration: latestIterationSummarySchema.nullable(),
     createdAt: z.string().datetime(),
@@ -121,7 +116,6 @@ export type TListProjectVisualizationsResponse = z.infer<
 export const createVisualizationRequestSchema = z
   .object({
     name: visualizationNameSchema,
-    mode: visualizationModeSchema,
   })
   .strict();
 
@@ -145,6 +139,25 @@ export const createVisualizationHeadersSchema = z
   .strict();
 
 export type TCreateVisualizationHeaders = z.infer<typeof createVisualizationHeadersSchema>;
+
+export const createVisualizationIterationBodySchema = z
+  .object({
+    stylePreset: z
+      .string()
+      .transform((value) => value.trim())
+      .refine((value) => value.length > 0, {
+        message: "stylePreset cannot be empty.",
+      })
+      .optional(),
+    palette: z.string().transform((v) => v.trim()).optional(),
+    roomType: z.string().transform((v) => v.trim()).optional(),
+    prompt: z.string().transform((v) => v.trim()).optional(),
+  })
+  .strict();
+
+export type TCreateVisualizationIterationBody = z.infer<
+  typeof createVisualizationIterationBodySchema
+>;
 
 export const iterationInputSchema = z
   .object({
@@ -186,8 +199,6 @@ export const visualizationDetailsSchema = z
     id: objectIdSchema,
     projectId: objectIdSchema,
     name: z.string().min(1),
-    mode: visualizationModeSchema,
-    inputRoomPhotoAssetId: objectIdSchema.nullable(),
     iterations: z.array(iterationObjectSchema),
     createdAt: z.string().datetime(),
     updatedAt: z.string().datetime(),

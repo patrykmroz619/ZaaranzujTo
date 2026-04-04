@@ -11,17 +11,17 @@ import type {
 
 type TRegisterAssetsForIterationParams = {
   userId: string;
-  inputPhoto: TUploadedFile;
+  inputPhoto: TUploadedFile | undefined;
   referencePhotos: TUploadedFile[];
   outputMediaType: string;
-  outputSizeBytes: number;
+  outputBytes: Uint8Array;
 };
 
 type TLinkAssetsToIterationParams = {
   userId: string;
   visualizationId: string;
   iterationId: string;
-  inputAssetId: string;
+  inputAssetId: string | null;
   referenceAssetIds: string[];
   outputAssetId: string;
 };
@@ -33,33 +33,41 @@ export class IterationAssetsService {
   registerAssetsForIteration = async (
     params: TRegisterAssetsForIterationParams,
   ): Promise<TRegisteredIterationAssetsBundle> => {
-    const { userId, inputPhoto, referencePhotos, outputMediaType, outputSizeBytes } = params;
+    const { userId, inputPhoto, referencePhotos, outputMediaType, outputBytes } = params;
 
-    const inputAsset = await this.fileAssetsService.registerFileAsset(
-      userId,
-      `${userId}/iterations/${randomUUID()}-${inputPhoto.originalname}`,
-      inputPhoto.mimetype,
-      inputPhoto.size,
-    );
+    const inputAssets: TInputIterationAsset[] = [];
+    let inputAssetId: string | null = null;
 
-    const inputAssets: TInputIterationAsset[] = [
-      {
+    if (inputPhoto) {
+      const key = `${userId}/iterations/${randomUUID()}-${inputPhoto.originalname}`;
+      const inputAsset = await this.fileAssetsService.registerFileAsset(
+        userId,
+        key,
+        inputPhoto.mimetype,
+        inputPhoto.size,
+      );
+      await this.fileAssetsService.uploadFileAsset(key, inputPhoto.buffer, inputPhoto.mimetype);
+      inputAssetId = inputAsset._id.toString();
+      inputAssets.push({
         assetId: inputAsset._id.toString(),
         role: "input-primary",
         mimeType: inputAsset.mimeType,
         sizeBytes: inputAsset.sizeBytes,
-      },
-    ];
+      });
+    }
 
     const referenceAssets = await Promise.all(
-      referencePhotos.map(async (file) =>
-        this.fileAssetsService.registerFileAsset(
+      referencePhotos.map(async (file) => {
+        const key = `${userId}/iterations/${randomUUID()}-${file.originalname}`;
+        const asset = await this.fileAssetsService.registerFileAsset(
           userId,
-          `${userId}/iterations/${randomUUID()}-${file.originalname}`,
+          key,
           file.mimetype,
           file.size,
-        ),
-      ),
+        );
+        await this.fileAssetsService.uploadFileAsset(key, file.buffer, file.mimetype);
+        return asset;
+      }),
     );
 
     referenceAssets.forEach((asset) => {
@@ -71,15 +79,17 @@ export class IterationAssetsService {
       });
     });
 
+    const outputKey = `${userId}/iterations/${randomUUID()}.${this.getImageExtension({ mediaType: outputMediaType })}`;
     const outputAsset = await this.fileAssetsService.registerFileAsset(
       userId,
-      `${userId}/iterations/${randomUUID()}.${this.getImageExtension({ mediaType: outputMediaType })}`,
+      outputKey,
       outputMediaType,
-      Math.max(outputSizeBytes, 1),
+      Math.max(outputBytes.byteLength, 1),
     );
+    await this.fileAssetsService.uploadFileAsset(outputKey, outputBytes, outputMediaType);
 
     return {
-      inputAssetId: inputAsset._id.toString(),
+      inputAssetId,
       referenceAssetIds: referenceAssets.map((asset) => asset._id.toString()),
       outputAssetId: outputAsset._id.toString(),
       inputAssets,
@@ -96,13 +106,15 @@ export class IterationAssetsService {
     const { userId, visualizationId, iterationId, inputAssetId, referenceAssetIds, outputAssetId } =
       params;
 
-    await this.fileAssetsService.linkAssetToIteration({
-      assetId: inputAssetId,
-      userId,
-      visualizationId,
-      iterationId,
-      assetRole: "input-primary",
-    });
+    if (inputAssetId) {
+      await this.fileAssetsService.linkAssetToIteration({
+        assetId: inputAssetId,
+        userId,
+        visualizationId,
+        iterationId,
+        assetRole: "input-primary",
+      });
+    }
 
     await Promise.all(
       referenceAssetIds.map((assetId) =>

@@ -32,7 +32,7 @@ bun run build            # All apps
 
 # Lint & type check
 bun run lint
-bun run check-types
+bun run check-types      # TypeScript type check
 bun run format           # Prettier write
 bun run format:check     # Prettier check
 
@@ -94,6 +94,7 @@ Defines the shared API contract between frontend and backend using Zod schemas. 
 `docs/` contains design documents and implementation plans. If a better implementation approach is discovered or a contract/schema needs to change, suggest updating the relevant doc to stay in sync.
 
 ## Active Technologies
+
 - TypeScript 5.x + Next.js 16.2 (App Router), React 19, @tanstack/react-query, Axios, Clerk, next-intl, Tailwind CSS v4, Zustand, @repo/ui (shadcn), @repo/contracts (Zod schemas) (006-web-api-integration)
 - MongoDB (backend), Cloudflare R2 (file assets via signed URLs) (006-web-api-integration)
 

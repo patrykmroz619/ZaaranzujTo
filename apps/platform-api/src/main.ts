@@ -5,13 +5,14 @@ import { AppModule } from "./app.module";
 import { ZodValidationPipe } from "nestjs-zod";
 import { AppExceptionFilter } from "./shared/exception-handling";
 import { RequestContextInterceptor } from "./shared/request-context";
-import { ConsoleLogger } from "@nestjs/common";
+import { AppLogger } from "./shared/logging";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
 
-  app.useLogger(new ConsoleLogger({ prefix: "Platform API" }));
+  const logDir = configService.getOrThrow<string>("logDir");
+  app.useLogger(new AppLogger({ prefix: "Platform API", logDir }));
 
   const port = configService.getOrThrow<number>("port");
 

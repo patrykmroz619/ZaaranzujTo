@@ -144,7 +144,7 @@ export class VisualizationsController {
     files: {
       inputPhoto?: TUploadedIterationFile[];
       referencePhotos?: TUploadedIterationFile[];
-    },
+    } = {},
   ) {
     const parsedParams = visualizationIdParamsSchema.parse(params);
     const bodyResult = createVisualizationIterationBodySchema.safeParse(body);
@@ -156,18 +156,12 @@ export class VisualizationsController {
       });
     }
 
-    const inputPhoto = files.inputPhoto?.[0];
-
-    if (!inputPhoto) {
-      throw toIterationOrchestrationHttpException({ code: "INVALID_INPUT" });
-    }
-
     return this.createIterationService.createIteration({
       clerkId: currentUser.userId,
       email: currentUser.email,
       visualizationId: parsedParams.visualizationId,
       body: bodyResult.data,
-      inputPhoto,
+      inputPhoto: files.inputPhoto?.[0],
       referencePhotos: files.referencePhotos ?? [],
     });
   }

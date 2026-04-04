@@ -20,7 +20,7 @@ export type TOutputIterationAsset = {
 };
 
 export type TRegisteredIterationAssetsBundle = {
-  inputAssetId: string;
+  inputAssetId: string | null;
   referenceAssetIds: string[];
   outputAssetId: string;
   inputAssets: TInputIterationAsset[];

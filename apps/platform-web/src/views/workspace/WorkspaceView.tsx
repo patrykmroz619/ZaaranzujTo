@@ -31,7 +31,6 @@ export const WorkspaceView = (props: TWorkspaceViewProps) => {
   const form = useForm<TWorkspaceFormValues>({
     defaultValues: {
       name: "",
-      mode: "photo",
       style: "",
       palette: "",
       roomType: "",
@@ -41,11 +40,10 @@ export const WorkspaceView = (props: TWorkspaceViewProps) => {
     },
   });
 
-  const mode = form.watch("mode");
   const style = form.watch("style");
+  const palette = form.watch("palette");
   const roomType = form.watch("roomType");
   const prompt = form.watch("prompt");
-  const roomPhotoFile = form.watch("roomPhotoFile");
   const furniturePhotoFiles = form.watch("furniturePhotoFiles");
   const visualizationName = form.watch("name");
 
@@ -96,24 +94,13 @@ export const WorkspaceView = (props: TWorkspaceViewProps) => {
       return;
     }
 
-    if (!isEditMode && mode === "photo" && !roomPhotoFile) {
-      form.setError("roomPhotoFile", { message: t("workspace.roomPhotoRequired") });
-      return;
-    }
-
-    if (mode === "scratch" && !prompt.trim()) {
-      form.setError("prompt", { message: t("workspace.promptRequired") });
-      return;
-    }
-
     try {
       let vizId = effectiveVizId;
 
       if (isNew && !createdVizId) {
-        const contractMode = mode === "photo" ? "fromPhoto" : "fromScratch";
         const newViz = await createVisualization.mutateAsync({
           projectId,
-          body: { name, mode: contractMode },
+          body: { name },
         });
         if (!newViz) return;
         vizId = newViz.id;
@@ -136,10 +123,13 @@ export const WorkspaceView = (props: TWorkspaceViewProps) => {
         }
       }
 
+      const roomPhotoFile = form.getValues("roomPhotoFile");
       const formData = new FormData();
       if (roomPhotoFile) formData.append("inputPhoto", roomPhotoFile);
-      formData.append("stylePreset", style);
-      if (prompt) formData.append("promptContext", prompt);
+      if (style) formData.append("stylePreset", style);
+      if (palette) formData.append("palette", palette);
+      if (roomType) formData.append("roomType", roomType);
+      if (prompt) formData.append("prompt", prompt);
       furniturePhotoFiles.forEach((photoFile) => {
         formData.append("referencePhotos", photoFile);
       });
@@ -160,8 +150,7 @@ export const WorkspaceView = (props: TWorkspaceViewProps) => {
     creditBalance >= 1 &&
     visualizationName.trim() !== "" &&
     style !== "" &&
-    roomType !== "" &&
-    (mode === "photo" ? isEditMode || !!roomPhotoFile : !!prompt.trim());
+    roomType !== "";
 
   return (
     <div className="space-y-5">

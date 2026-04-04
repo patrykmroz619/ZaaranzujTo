@@ -49,8 +49,6 @@ export class MapVisualizationDetailsService {
       id: visualizationDocument._id.toString(),
       projectId: visualizationDocument.projectId.toString(),
       name: visualizationDocument.name,
-      mode: visualizationDocument.mode,
-      inputRoomPhotoAssetId: visualizationDocument.inputRoomPhotoAssetId,
       iterations: visualizationDocument.iterations.map((iteration) => mapIteration({ iteration })),
       createdAt: visualizationDocument.createdAt.toISOString(),
       updatedAt: visualizationDocument.updatedAt.toISOString(),

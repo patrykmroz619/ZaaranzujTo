@@ -1,22 +1,29 @@
 import { Injectable, NotFoundException, ForbiddenException } from "@nestjs/common";
 import { FileAssetsRepository } from "../repositories/file-assets.repository";
 import { CloudStorageService } from "./cloud-storage.service";
+import { GetUserService } from "@/modules/users/services/get-user.service";
 
 @Injectable()
 export class FileAssetsService {
   constructor(
     private readonly fileAssetsRepository: FileAssetsRepository,
     private readonly cloudStorageService: CloudStorageService,
+    private readonly getUserService: GetUserService,
   ) {}
 
-  async generateDownloadUrl(assetId: string, userId: string) {
+  async generateDownloadUrl(assetId: string, userId: string, email: string) {
     const asset = await this.fileAssetsRepository.findById(assetId);
+
+    const user = await this.getUserService.getUser({
+      clerkId: userId,
+      email,
+    });
 
     if (!asset) {
       throw new NotFoundException("File asset not found");
     }
 
-    if (asset.userId !== userId) {
+    if (asset.userId !== user.id) {
       throw new ForbiddenException("You do not have permission to access this file");
     }
 
@@ -39,6 +46,10 @@ export class FileAssetsService {
       mimeType,
       sizeBytes,
     });
+  }
+
+  async uploadFileAsset(key: string, body: Buffer | Uint8Array, contentType: string): Promise<void> {
+    await this.cloudStorageService.uploadFile(key, body, contentType);
   }
 
   async getFileAsset(assetId: string, userId: string) {

@@ -1,7 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import type { HydratedDocument, SortOrder, Types } from "mongoose";
 
-export type TVisualizationMode = "fromPhoto" | "fromScratch";
 export type TListProjectVisualizationsSort =
   | "updatedAt:desc"
   | "updatedAt:asc"
@@ -122,12 +121,6 @@ export class Visualization {
 
   @Prop({ required: true, trim: true, maxlength: 120 })
   name: string;
-
-  @Prop({ required: true, enum: ["fromPhoto", "fromScratch"] })
-  mode: TVisualizationMode;
-
-  @Prop({ required: false, default: null, type: String })
-  inputRoomPhotoAssetId: string | null;
 
   @Prop({ type: [IterationSchema], required: true, default: [] })
   iterations: Iteration[];

@@ -1,6 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client, GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 @Injectable()
@@ -21,6 +21,22 @@ export class CloudStorageService {
       },
       forcePathStyle: true,
     });
+  }
+
+  async uploadFile(key: string, body: Buffer | Uint8Array, contentType: string): Promise<void> {
+    try {
+      const command = new PutObjectCommand({
+        Bucket: this.bucketName,
+        Key: key,
+        Body: body,
+        ContentType: contentType,
+      });
+
+      await this.s3Client.send(command);
+    } catch (error) {
+      this.logger.error(`Failed to upload file for key: ${key}`, error);
+      throw new Error("Could not upload file to storage", { cause: error });
+    }
   }
 
   async getSignedDownloadUrl(key: string, expiresInSeconds: number = 3600): Promise<string> {

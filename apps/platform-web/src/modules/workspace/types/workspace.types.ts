@@ -1,5 +1,3 @@
-export type TGenerationMode = "photo" | "scratch";
-
 export type TWorkspaceStyle =
   | "scandinavian"
   | "industrial"
@@ -14,7 +12,6 @@ export type TRoomType = "livingRoom" | "bedroom" | "kitchen" | "bathroom" | "off
 
 export type TWorkspaceFormValues = {
   name: string;
-  mode: TGenerationMode;
   style: string;
   palette: string;
   roomType: string;
