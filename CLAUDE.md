@@ -12,7 +12,6 @@ Bun + Turborepo monorepo with the following workspaces:
 
 - `apps/platform-api` — NestJS REST API (backend)
 - `apps/platform-web` — Next.js 16 frontend
-- `apps/frontend-demo` — Demo/prototype app
 - `packages/contracts` — Shared Zod schemas and TypeScript types used by both API and web
 - `packages/ui` — Shared React components (no business logic)
 - `packages/eslint-config`, `packages/typescript-config` — Shared tooling configs
