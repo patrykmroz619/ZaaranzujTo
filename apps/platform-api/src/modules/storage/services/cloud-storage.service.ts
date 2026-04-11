@@ -39,6 +39,30 @@ export class CloudStorageService {
     }
   }
 
+  async downloadFile(key: string): Promise<{ buffer: Buffer; contentType: string }> {
+    try {
+      const command = new GetObjectCommand({
+        Bucket: this.bucketName,
+        Key: key,
+      });
+
+      const response = await this.s3Client.send(command);
+      const byteArray = await response.Body?.transformToByteArray();
+
+      if (!byteArray) {
+        throw new Error("Empty response body");
+      }
+
+      return {
+        buffer: Buffer.from(byteArray),
+        contentType: response.ContentType || "application/octet-stream",
+      };
+    } catch (error) {
+      this.logger.error(`Failed to download file for key: ${key}`, error);
+      throw new Error("Could not download file from storage", { cause: error });
+    }
+  }
+
   async getSignedDownloadUrl(key: string, expiresInSeconds: number = 3600): Promise<string> {
     try {
       const command = new GetObjectCommand({

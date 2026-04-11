@@ -39,17 +39,22 @@ export class FileAssetsService {
     return { downloadUrl, expiresAt };
   }
 
-  async registerFileAsset(userId: string, key: string, mimeType: string, sizeBytes: number) {
+  async uploadAsset(params: {
+    userId: string;
+    key: string;
+    buffer: Buffer | Uint8Array;
+    mimeType: string;
+  }) {
+    const { userId, key, buffer, mimeType } = params;
+
+    await this.cloudStorageService.uploadFile(key, buffer, mimeType);
+
     return this.fileAssetsRepository.create({
       userId,
       key,
       mimeType,
-      sizeBytes,
+      sizeBytes: Math.max(buffer.byteLength, 1),
     });
-  }
-
-  async uploadFileAsset(key: string, body: Buffer | Uint8Array, contentType: string): Promise<void> {
-    await this.cloudStorageService.uploadFile(key, body, contentType);
   }
 
   async getFileAsset(assetId: string, userId: string) {
@@ -62,27 +67,20 @@ export class FileAssetsService {
     return asset;
   }
 
-  async linkAssetToIteration(params: {
+  async downloadAssetBuffer(params: {
     assetId: string;
     userId: string;
-    visualizationId: string;
-    iterationId: string;
-    assetRole: "input-primary" | "input-reference" | "output-generated";
-  }) {
-    const { assetId, userId, visualizationId, iterationId, assetRole } = params;
+  }): Promise<{ buffer: Buffer; mimeType: string }> {
+    const { assetId, userId } = params;
 
-    const updatedAsset = await this.fileAssetsRepository.linkAssetContext({
-      assetId,
-      userId,
-      visualizationId,
-      iterationId,
-      assetRole,
-    });
+    const asset = await this.fileAssetsRepository.findByIdAndUser(assetId, userId);
 
-    if (!updatedAsset) {
+    if (!asset) {
       throw new NotFoundException("File asset not found");
     }
 
-    return updatedAsset;
+    const { buffer, contentType } = await this.cloudStorageService.downloadFile(asset.key);
+
+    return { buffer, mimeType: contentType || asset.mimeType };
   }
 }

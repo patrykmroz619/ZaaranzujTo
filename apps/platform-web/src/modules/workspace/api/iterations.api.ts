@@ -40,7 +40,7 @@ const createIteration = async (params: {
     const res = await client.post<TCreateIterationResponse>(
       `/api/v1/visualizations/${visualizationId}/iterations`,
       body,
-      { headers },
+      { headers: { ...headers, "Content-Type": undefined }, timeout: 0 },
     );
     return res.data;
   } catch (error) {

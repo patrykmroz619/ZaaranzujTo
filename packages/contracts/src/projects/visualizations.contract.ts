@@ -140,20 +140,19 @@ export const createVisualizationHeadersSchema = z
 
 export type TCreateVisualizationHeaders = z.infer<typeof createVisualizationHeadersSchema>;
 
-export const createVisualizationIterationBodySchema = z
-  .object({
-    stylePreset: z
-      .string()
-      .transform((value) => value.trim())
-      .refine((value) => value.length > 0, {
-        message: "stylePreset cannot be empty.",
-      })
-      .optional(),
-    palette: z.string().transform((v) => v.trim()).optional(),
-    roomType: z.string().transform((v) => v.trim()).optional(),
-    prompt: z.string().transform((v) => v.trim()).optional(),
-  })
-  .strict();
+export const createVisualizationIterationBodySchema = z.object({
+  parentIterationId: objectIdSchema.optional(),
+  stylePreset: z
+    .string()
+    .transform((value) => value.trim())
+    .refine((value) => value.length > 0, {
+      message: "stylePreset cannot be empty.",
+    })
+    .optional(),
+  palette: z.string().transform((v) => v.trim()).optional(),
+  roomType: z.string().transform((v) => v.trim()).optional(),
+  prompt: z.string().transform((v) => v.trim()).optional(),
+});
 
 export type TCreateVisualizationIterationBody = z.infer<
   typeof createVisualizationIterationBodySchema
@@ -166,6 +165,7 @@ export const iterationInputSchema = z
     colors: z.array(z.string()),
     roomType: z.string().nullable().optional(),
     prompt: z.string().nullable().optional(),
+    inputAsset: objectIdSchema.nullable(),
     referenceAssets: z.array(objectIdSchema),
   })
   .strict();

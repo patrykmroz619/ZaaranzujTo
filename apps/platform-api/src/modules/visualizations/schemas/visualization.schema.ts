@@ -46,6 +46,9 @@ export class IterationInput {
   @Prop({ required: false, default: null, type: String })
   prompt: string | null;
 
+  @Prop({ required: false, default: null, type: String })
+  inputAsset: string | null;
+
   @Prop({ type: [String], required: true, default: [] })
   referenceAssets: string[];
 }
@@ -59,23 +62,6 @@ export class IterationResult {
 }
 
 const IterationResultSchema = SchemaFactory.createForClass(IterationResult);
-
-@Schema({ _id: false })
-export class IterationAssetRef {
-  @Prop({ required: true })
-  assetId: string;
-
-  @Prop({ required: true })
-  role: "input-primary" | "input-reference" | "output-generated";
-
-  @Prop({ required: true })
-  mimeType: string;
-
-  @Prop({ required: true })
-  sizeBytes: number;
-}
-
-const IterationAssetRefSchema = SchemaFactory.createForClass(IterationAssetRef);
 
 @Schema({ _id: true })
 export class Iteration {
@@ -96,11 +82,8 @@ export class Iteration {
   @Prop({ required: true, type: IterationInputSchema })
   generationInput: IterationInput;
 
-  @Prop({ required: true, type: [IterationAssetRefSchema], default: [] })
-  inputAssets: IterationAssetRef[];
-
-  @Prop({ required: false, type: IterationAssetRefSchema, default: null })
-  outputAsset: IterationAssetRef | null;
+  @Prop({ required: false, type: String, default: null })
+  outputAsset: string | null;
 
   @Prop({ required: true, type: IterationResultSchema })
   result: IterationResult;

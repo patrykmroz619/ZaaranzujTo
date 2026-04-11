@@ -19,20 +19,7 @@ export class CreateIterationResponseMapper {
         visualizationId: visualizationDocument._id.toString(),
         status: iteration.status,
         sequenceNumber: iteration.iterationNo,
-        inputAssets: iteration.inputAssets.map((asset) => ({
-          assetId: asset.assetId,
-          role: asset.role,
-          mimeType: asset.mimeType,
-          sizeBytes: asset.sizeBytes,
-        })),
-        outputAsset: iteration.outputAsset
-          ? {
-              assetId: iteration.outputAsset.assetId,
-              role: iteration.outputAsset.role,
-              mimeType: iteration.outputAsset.mimeType,
-              sizeBytes: iteration.outputAsset.sizeBytes,
-            }
-          : undefined,
+        outputAsset: iteration.outputAsset ?? undefined,
         failureCode: iteration.failureCode ?? undefined,
         createdAt: iteration.createdAt.toISOString(),
       },

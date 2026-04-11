@@ -147,9 +147,9 @@ describe("Projects module (e2e)", () => {
           visualizationsCount: 0,
         }),
       );
-      expect(typeof body.items[0]!.id).toBe("string");
-      expect(typeof body.items[0]!.createdAt).toBe("string");
-      expect(typeof body.items[0]!.updatedAt).toBe("string");
+      expect(typeof body.items[0].id).toBe("string");
+      expect(typeof body.items[0].createdAt).toBe("string");
+      expect(typeof body.items[0].updatedAt).toBe("string");
     });
 
     it("should paginate results", async () => {
@@ -197,8 +197,8 @@ describe("Projects module (e2e)", () => {
       const body = getListBody(response);
 
       expect(body.items).toHaveLength(2);
-      expect(body.items[0]!.name).toBe("Second");
-      expect(body.items[1]!.name).toBe("First");
+      expect(body.items[0].name).toBe("Second");
+      expect(body.items[1].name).toBe("First");
     });
 
     it("should isolate projects between users", async () => {
@@ -215,7 +215,7 @@ describe("Projects module (e2e)", () => {
       const bodyA = getListBody(responseA);
 
       expect(bodyA.items).toHaveLength(1);
-      expect(bodyA.items[0]!.name).toBe("User A Project");
+      expect(bodyA.items[0].name).toBe("User A Project");
 
       const responseB = await authenticatedGet({
         app,
@@ -225,7 +225,7 @@ describe("Projects module (e2e)", () => {
       const bodyB = getListBody(responseB);
 
       expect(bodyB.items).toHaveLength(1);
-      expect(bodyB.items[0]!.name).toBe("User B Project");
+      expect(bodyB.items[0].name).toBe("User B Project");
     });
 
     it("should return 400 for pageSize exceeding 100", async () => {

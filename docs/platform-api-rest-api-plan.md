@@ -883,16 +883,17 @@ Przykład odpowiedzi dla użytkownika bez konta kredytowego:
 
 ```json
 {
-  "baseIterationId": "65f109f1d27f4f3d31e33d54",
-  "mode": "edit",
+  "parentIterationId": "65f109f1d27f4f3d31e33d54",
   "roomType": "livingRoom",
   "stylePreset": "scandinavian",
-  "colors": ["light", "warm"],
+  "palette": "light",
   "prompt": "Dodaj więcej jasnego drewna i roślin",
-  "inputPhoto": "<binary, opcjonalny>",
-  "referencePhotos": ["<binary>"]
+  "inputPhoto": "<binary — room photo (initial mode) OR output image of parentIterationId (edit mode), opcjonalny>",
+  "referencePhotos": ["<binary, opcjonalny>"]
 }
 ```
+
+> `parentIterationId` (opcjonalny): ID iteracji wybranej przez użytkownika jako punkt startowy. Gdy podany, `inputPhoto` powinien zawierać obraz wyjściowy tej iteracji (frontend pobiera go automatycznie). Gdy pominięty — generacja od podstaw z opcjonalnym zdjęciem pokoju.
 
 - **Success Response**: `201 Created` (`IterationObject`)
 

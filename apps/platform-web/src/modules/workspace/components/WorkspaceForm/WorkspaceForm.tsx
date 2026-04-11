@@ -3,8 +3,9 @@
 import { useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Upload, Loader2, X } from "lucide-react";
-import type { UseFormReturn } from "react-hook-form";
 import { Button } from "@repo/ui/core/button";
 import { Input } from "@repo/ui/core/input";
 import { Label } from "@repo/ui/core/label";
@@ -17,21 +18,30 @@ import {
   COLOR_PALETTES,
   ROOM_TYPES,
 } from "@/modules/workspace/data/mock-workspace";
-import type { TWorkspaceFormValues } from "../../types/workspace.types";
+import {
+  workspaceFormSchema,
+  type TWorkspaceFormValues,
+} from "../../types/workspace.types";
 
 type TWorkspaceFormProps = {
   isEditMode: boolean;
-  form: UseFormReturn<TWorkspaceFormValues>;
   isGenerating: boolean;
-  canGenerate: boolean;
   creditBalance: number;
-  onGenerate: () => void | Promise<void>;
+  defaultValues: TWorkspaceFormValues;
+  onSubmit: (values: TWorkspaceFormValues) => Promise<void>;
 };
 
 export const WorkspaceForm = (props: TWorkspaceFormProps) => {
-  const { isEditMode, form, isGenerating, canGenerate, creditBalance, onGenerate } = props;
+  const { isEditMode, isGenerating, creditBalance, defaultValues, onSubmit } = props;
   const router = useRouter();
   const t = useTranslations();
+
+  const form = useForm<TWorkspaceFormValues>({
+    resolver: zodResolver(workspaceFormSchema),
+    defaultValues,
+    mode: "onChange",
+  });
+
   const roomPhotoFile = form.watch("roomPhotoFile");
   const furniturePhotoFiles = form.watch("furniturePhotoFiles");
 
@@ -68,10 +78,6 @@ export const WorkspaceForm = (props: TWorkspaceFormProps) => {
             <FormField
               control={form.control}
               name="name"
-              rules={{
-                validate: (value) =>
-                  value.trim().length > 0 || t("workspace.visualizationNameRequired"),
-              }}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("workspace.visualizationName")} *</FormLabel>
@@ -110,9 +116,6 @@ export const WorkspaceForm = (props: TWorkspaceFormProps) => {
             <FormField
               control={form.control}
               name="style"
-              rules={{
-                validate: (value) => value.trim().length > 0 || t("workspace.styleRequired"),
-              }}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("workspace.style")} *</FormLabel>
@@ -163,9 +166,6 @@ export const WorkspaceForm = (props: TWorkspaceFormProps) => {
             <FormField
               control={form.control}
               name="roomType"
-              rules={{
-                validate: (value) => value.trim().length > 0 || t("workspace.roomTypeRequired"),
-              }}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("workspace.roomType")} *</FormLabel>
@@ -224,7 +224,7 @@ export const WorkspaceForm = (props: TWorkspaceFormProps) => {
                 <input
                   type="file"
                   className="hidden"
-                  accept=".jpg,.jpeg,.png,.webp,.avif,.heic"
+                  accept=".jpg,.jpeg,.png,.webp,.avif"
                   multiple
                   onChange={(event) => {
                     const uploadedFiles = Array.from(event.target.files ?? []);
@@ -287,8 +287,8 @@ export const WorkspaceForm = (props: TWorkspaceFormProps) => {
             ) : (
               <Button
                 type="button"
-                onClick={onGenerate}
-                disabled={!canGenerate || isGenerating}
+                onClick={form.handleSubmit(onSubmit)}
+                disabled={!form.formState.isValid || isGenerating}
                 className="w-full gradient-warm text-primary-foreground border-0"
               >
                 {isGenerating ? (

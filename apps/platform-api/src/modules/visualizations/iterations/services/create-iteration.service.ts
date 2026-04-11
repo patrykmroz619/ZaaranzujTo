@@ -1,13 +1,8 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import type { Types } from "mongoose";
 
 import { AiGenerationService } from "@/modules/ai/services/ai-generation.service";
-
-import {
-  toIterationOrchestrationHttpException,
-  type TIterationOrchestrationErrorCode,
-} from "../../errors/iteration-orchestration.errors";
+import { toIterationOrchestrationHttpException } from "../../errors/iteration-orchestration.errors";
 import { VisualizationsRepository } from "../../repositories/visualizations.repository";
 import { type TCreateVisualizationIterationBody } from "../../visualizations.dto";
 import { CreateIterationResponseMapper } from "../mappers/create-iteration-response.mapper";
@@ -18,7 +13,7 @@ import {
   type TIterationCreditReservation,
 } from "./internal/iteration-credits.service";
 import { IterationFilesValidatorService } from "./internal/iteration-files-validator.service";
-import type { TRegisteredIterationAssetsBundle, TUploadedFile } from "./internal/iteration.types";
+import type { TUploadedFile } from "./internal/iteration.types";
 import { IterationPromptBuilderService } from "./iteration-prompt-builder.service";
 
 type TCreateIterationParams = {
@@ -41,6 +36,7 @@ type TBaseGenerationInput = {
 @Injectable()
 export class CreateIterationService {
   private readonly visualizationImageModel: string;
+  private readonly logger = new Logger(CreateIterationService.name);
 
   constructor(
     private readonly configService: ConfigService,
@@ -59,31 +55,45 @@ export class CreateIterationService {
   createIteration = async (params: TCreateIterationParams) => {
     const { clerkId, email, visualizationId, body, inputPhoto, referencePhotos } = params;
 
+    this.logger.log(
+      `[createIteration] START visualizationId=${visualizationId} ` +
+        `hasInputPhoto=${!!inputPhoto} referencePhotosCount=${referencePhotos.length} ` +
+        `stylePreset=${body.stylePreset ?? "none"} palette=${body.palette ?? "none"} ` +
+        `roomType=${body.roomType ?? "none"} hasPrompt=${!!body.prompt}`,
+    );
+
     const user = await this.iterationAccessService.resolveAuthorizedUser({
       clerkId,
       email,
       visualizationId,
     });
 
+    this.logger.log(`[createIteration] User resolved userId=${user._id.toString()}`);
+
     this.iterationFilesValidatorService.validateFiles({
       inputPhoto,
       referencePhotos,
     });
+
+    const isEditMode = !!body.parentIterationId;
 
     const prompt = this.iterationPromptBuilderService.buildVisualizationPrompt({
       stylePreset: body.stylePreset,
       palette: body.palette,
       roomType: body.roomType,
       prompt: body.prompt,
+      hasInputPhoto: isEditMode ? false : !!inputPhoto,
+      hasReferencePhotos: referencePhotos.length > 0,
+      hasPreviousOutput: isEditMode ? !!inputPhoto : false,
+      isSubsequentIteration: isEditMode,
     });
 
-    const baseGenerationInput = this.buildBaseGenerationInput({
-      body,
-      prompt,
-    });
+    this.logger.log(`[createIteration] Prompt built isEditMode=${isEditMode}`);
+    this.logger.debug(`[createIteration] Prompt content: ${prompt}`);
+
+    const baseGenerationInput = this.buildBaseGenerationInput({ body });
 
     let creditReservation: TIterationCreditReservation | null = null;
-    let registeredAssetsBundle: TRegisteredIterationAssetsBundle | null = null;
 
     try {
       creditReservation = await this.iterationCreditsService.reserveCreditsForIteration({
@@ -91,23 +101,55 @@ export class CreateIterationService {
         visualizationId,
       });
 
+      this.logger.log(
+        `[createIteration] Credits reserved reservationId=${creditReservation.reservationId}`,
+      );
+
       let generationResult: { mediaType: string; uint8Array: Uint8Array };
-      const referenceImages = referencePhotos.map((file) => ({
-        base64: file.buffer.toString("base64"),
-        mediaType: file.mimetype,
-      }));
+
+      const allReferenceImages: Array<{ base64: string; mediaType: string }> = [];
+
+      if (inputPhoto) {
+        allReferenceImages.push({
+          base64: inputPhoto.buffer.toString("base64"),
+          mediaType: inputPhoto.mimetype,
+        });
+        this.logger.log(
+          `[createIteration] Added inputPhoto to reference images mimeType=${inputPhoto.mimetype} sizeBytes=${inputPhoto.buffer.byteLength}`,
+        );
+      }
+
+      referencePhotos.forEach((file, index) => {
+        allReferenceImages.push({
+          base64: file.buffer.toString("base64"),
+          mediaType: file.mimetype,
+        });
+        this.logger.log(
+          `[createIteration] Added referencePhoto[${index}] to reference images mimeType=${file.mimetype} sizeBytes=${file.buffer.byteLength}`,
+        );
+      });
+
+      this.logger.log(
+        `[createIteration] Calling AI generation totalReferenceImages=${allReferenceImages.length} model=${this.visualizationImageModel}`,
+      );
 
       try {
         generationResult = await this.aiGenerationService.generateImage({
           modelId: this.visualizationImageModel,
           prompt,
-          referenceImages,
+          referenceImages: allReferenceImages,
         });
-      } catch {
+        this.logger.log(
+          `[createIteration] AI generation succeeded mediaType=${generationResult.mediaType} sizeBytes=${generationResult.uint8Array.byteLength}`,
+        );
+      } catch (err) {
+        this.logger.error(
+          `[createIteration] AI generation failed: ${err instanceof Error ? err.message : String(err)}`,
+        );
         throw toIterationOrchestrationHttpException({ code: "UPSTREAM_GENERATION_FAILURE" });
       }
 
-      registeredAssetsBundle = await this.iterationAssetsService.registerAssetsForIteration({
+      const registeredAssetsBundle = await this.iterationAssetsService.uploadAssetsForIteration({
         userId: user._id.toString(),
         inputPhoto,
         referencePhotos,
@@ -115,36 +157,37 @@ export class CreateIterationService {
         outputBytes: generationResult.uint8Array,
       });
 
-      const visualization =
+      this.logger.log(
+        `[createIteration] Assets uploaded outputAssetId=${registeredAssetsBundle.outputAssetId} inputAssetId=${registeredAssetsBundle.inputAssetId} referenceAssetCount=${registeredAssetsBundle.referenceAssetIds.length}`,
+      );
+
+      const updatedVisualization =
         await this.visualizationsRepository.appendIterationForVisualizationForUser({
           userId: user._id,
           visualizationId,
           status: "succeeded",
           failureCode: null,
+          baseIterationId: body.parentIterationId ?? null,
           generationInput: {
             ...baseGenerationInput,
+            inputAsset: registeredAssetsBundle.inputAssetId,
             referenceAssets: registeredAssetsBundle.referenceAssetIds,
           },
-          inputAssets: registeredAssetsBundle.inputAssets,
-          outputAsset: registeredAssetsBundle.outputAsset,
+          outputAsset: registeredAssetsBundle.outputAssetId,
           resultImageAssetId: registeredAssetsBundle.outputAssetId,
         });
 
-      if (!visualization) {
+      if (!updatedVisualization) {
         throw new NotFoundException("Visualization not found.");
       }
 
-      const createdIteration = visualization.iterations[visualization.iterations.length - 1];
+      const createdIteration =
+        updatedVisualization.iterations[updatedVisualization.iterations.length - 1];
       const createdIterationId = createdIteration._id.toString();
 
-      await this.iterationAssetsService.linkAssetsToIteration({
-        userId: user._id.toString(),
-        visualizationId,
-        iterationId: createdIterationId,
-        inputAssetId: registeredAssetsBundle.inputAssetId,
-        referenceAssetIds: registeredAssetsBundle.referenceAssetIds,
-        outputAssetId: registeredAssetsBundle.outputAssetId,
-      });
+      this.logger.log(
+        `[createIteration] Iteration appended iterationId=${createdIterationId} iterationNo=${createdIteration.iterationNo}`,
+      );
 
       await this.iterationCreditsService.consumeReservedCreditsForIteration({
         userId: user._id.toString(),
@@ -153,19 +196,19 @@ export class CreateIterationService {
         mutationKey: creditReservation.mutationKey,
       });
 
+      this.logger.log(
+        `[createIteration] Credits consumed. SUCCESS iterationId=${createdIterationId}`,
+      );
+
       return this.createIterationResponseMapper.map({
-        visualizationDocument: visualization,
+        visualizationDocument: updatedVisualization,
       });
     } catch (error) {
       await this.handleFailure({
         error,
         creditReservation,
         userId: user._id.toString(),
-        userObjectId: user._id,
         visualizationId,
-        baseGenerationInput,
-        inputAssets: registeredAssetsBundle?.inputAssets ?? [],
-        referenceAssetIds: registeredAssetsBundle?.referenceAssetIds ?? [],
       });
     }
   };
@@ -174,47 +217,15 @@ export class CreateIterationService {
     error: unknown;
     creditReservation: TIterationCreditReservation | null;
     userId: string;
-    userObjectId: Types.ObjectId;
     visualizationId: string;
-    baseGenerationInput: TBaseGenerationInput;
-    inputAssets: Array<{
-      assetId: string;
-      role: "input-primary" | "input-reference" | "output-generated";
-      mimeType: string;
-      sizeBytes: number;
-    }>;
-    referenceAssetIds: string[];
   }) => {
-    const {
-      error,
-      creditReservation,
-      userId,
-      userObjectId,
-      visualizationId,
-      baseGenerationInput,
-      inputAssets,
-      referenceAssetIds,
-    } = params;
+    const { error, creditReservation, userId, visualizationId } = params;
 
-    const failureCode = this.resolveFailureCode({ error });
+    this.logger.error(
+      `[createIteration] Generation failed: ${error instanceof Error ? error.message : String(error)}`,
+    );
 
     if (creditReservation) {
-      await this.visualizationsRepository
-        .appendIterationForVisualizationForUser({
-          userId: userObjectId,
-          visualizationId,
-          status: "failed",
-          failureCode,
-          generationInput: {
-            ...baseGenerationInput,
-            referenceAssets: referenceAssetIds,
-          },
-          inputAssets,
-          outputAsset: null,
-          resultImageAssetId: null,
-        })
-        .catch(() => undefined);
-
       await this.iterationCreditsService
         .compensateReservedCreditsForIteration({
           userId,
@@ -224,14 +235,8 @@ export class CreateIterationService {
         .catch(() => undefined);
     }
 
-    if (error instanceof NotFoundException) {
-      throw error;
-    }
-
-    if (error instanceof Error && this.hasHttpStatus({ error })) {
-      throw error;
-    }
-
+    if (error instanceof NotFoundException) throw error;
+    if (error instanceof Error && this.hasHttpStatus({ error })) throw error;
     throw toIterationOrchestrationHttpException({ code: "UPSTREAM_GENERATION_FAILURE" });
   };
 
@@ -241,42 +246,17 @@ export class CreateIterationService {
     return "getStatus" in error;
   };
 
-  private resolveFailureCode = (params: { error: unknown }): TIterationOrchestrationErrorCode => {
-    const { error } = params;
-
-    if (typeof error === "object" && error !== null && "getResponse" in error) {
-      const response = (error as { getResponse: () => unknown }).getResponse();
-
-      if (typeof response === "object" && response !== null && "code" in response) {
-        const code = (response as { code?: unknown }).code;
-
-        if (
-          code === "INSUFFICIENT_CREDITS" ||
-          code === "FILE_TOO_LARGE" ||
-          code === "INVALID_INPUT" ||
-          code === "UPSTREAM_GENERATION_FAILURE" ||
-          code === "ACTIVE_GENERATION_CONFLICT"
-        ) {
-          return code;
-        }
-      }
-    }
-
-    return "UPSTREAM_GENERATION_FAILURE";
-  };
-
   private buildBaseGenerationInput = (params: {
     body: TCreateVisualizationIterationBody;
-    prompt: string;
   }): TBaseGenerationInput => {
-    const { body, prompt } = params;
+    const { body } = params;
 
     return {
       mode: "generation",
       stylePreset: body.stylePreset ?? null,
-      colors: [],
+      colors: body.palette ? [body.palette] : [],
       roomType: body.roomType ?? null,
-      prompt,
+      prompt: body.prompt ?? "",
     };
   };
 }

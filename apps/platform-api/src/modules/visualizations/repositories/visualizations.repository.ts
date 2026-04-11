@@ -12,7 +12,6 @@ import {
   visualizationSortMapping,
 } from "../schemas/visualization.schema";
 
-
 type TCreateVisualizationForUserParams = {
   userId: Types.ObjectId;
   projectId: string;
@@ -51,27 +50,22 @@ type TListIterationsForVisualizationForUserParams = {
   sort: TListVisualizationIterationsSort;
 };
 
-type TIterationAssetInput = {
-  assetId: string;
-  role: "input-primary" | "input-reference" | "output-generated";
-  mimeType: string;
-  sizeBytes: number;
-};
 
 type TAppendIterationForVisualizationForUserParams = {
   userId: Types.ObjectId;
   visualizationId: string;
   status: "succeeded" | "failed";
+  baseIterationId: string | null;
   generationInput: {
     mode: string;
     stylePreset: string | null;
     colors: string[];
     roomType: string | null;
     prompt: string | null;
+    inputAsset: string | null;
     referenceAssets: string[];
   };
-  inputAssets: TIterationAssetInput[];
-  outputAsset: TIterationAssetInput | null;
+  outputAsset: string | null;
   resultImageAssetId: string | null;
   failureCode: string | null;
 };
@@ -206,7 +200,6 @@ export class VisualizationsRepository {
       visualizationId,
       status,
       generationInput,
-      inputAssets,
       outputAsset,
       resultImageAssetId,
       failureCode,
@@ -228,11 +221,10 @@ export class VisualizationsRepository {
     visualization.iterations.push({
       _id: iterationId,
       iterationNo: nextIterationNo,
-      baseIterationId: null,
+      baseIterationId: params.baseIterationId ?? null,
       status,
       failureCode,
       generationInput,
-      inputAssets,
       outputAsset,
       result: {
         imageAssetId: resultImageAssetId,

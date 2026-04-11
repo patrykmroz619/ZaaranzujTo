@@ -22,27 +22,4 @@ export class FileAssetsRepository {
     return this.fileAssetModel.findById(id).exec();
   }
 
-  async linkAssetContext(params: {
-    assetId: string;
-    userId: string;
-    visualizationId: string;
-    iterationId: string;
-    assetRole: "input-primary" | "input-reference" | "output-generated";
-  }): Promise<FileAssetDocument | null> {
-    const { assetId, userId, visualizationId, iterationId, assetRole } = params;
-
-    return this.fileAssetModel
-      .findOneAndUpdate(
-        { _id: assetId, userId },
-        {
-          $set: {
-            visualizationId,
-            iterationId,
-            assetRole,
-          },
-        },
-        { new: true },
-      )
-      .exec();
-  }
 }

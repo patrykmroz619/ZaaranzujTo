@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export type TWorkspaceStyle =
   | "scandinavian"
   | "industrial"
@@ -10,12 +12,14 @@ export type TColorPalette = "light" | "dark" | "warm" | "cool" | "pastel";
 
 export type TRoomType = "livingRoom" | "bedroom" | "kitchen" | "bathroom" | "office";
 
-export type TWorkspaceFormValues = {
-  name: string;
-  style: string;
-  palette: string;
-  roomType: string;
-  prompt: string;
-  roomPhotoFile: File | null;
-  furniturePhotoFiles: File[];
-};
+export const workspaceFormSchema = z.object({
+  name: z.string().min(1),
+  style: z.string().min(1),
+  palette: z.string(),
+  roomType: z.string().min(1),
+  prompt: z.string(),
+  roomPhotoFile: z.instanceof(File).nullable(),
+  furniturePhotoFiles: z.array(z.instanceof(File)),
+});
+
+export type TWorkspaceFormValues = z.infer<typeof workspaceFormSchema>;

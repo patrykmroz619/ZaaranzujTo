@@ -5,24 +5,8 @@ export type TUploadedFile = {
   buffer: Buffer;
 };
 
-export type TInputIterationAsset = {
-  assetId: string;
-  role: "input-primary" | "input-reference";
-  mimeType: string;
-  sizeBytes: number;
-};
-
-export type TOutputIterationAsset = {
-  assetId: string;
-  role: "output-generated";
-  mimeType: string;
-  sizeBytes: number;
-};
-
-export type TRegisteredIterationAssetsBundle = {
+export type TUploadedIterationAssetsBundle = {
   inputAssetId: string | null;
   referenceAssetIds: string[];
   outputAssetId: string;
-  inputAssets: TInputIterationAsset[];
-  outputAsset: TOutputIterationAsset;
 };

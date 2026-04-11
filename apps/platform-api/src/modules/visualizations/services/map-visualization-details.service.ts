@@ -17,22 +17,10 @@ const mapIteration = (params: { iteration: Iteration }) => {
       colors: iteration.generationInput.colors,
       roomType: iteration.generationInput.roomType,
       prompt: iteration.generationInput.prompt,
+      inputAsset: iteration.generationInput.inputAsset,
       referenceAssets: iteration.generationInput.referenceAssets,
     },
-    inputAssets: iteration.inputAssets.map((asset) => ({
-      assetId: asset.assetId,
-      role: asset.role,
-      mimeType: asset.mimeType,
-      sizeBytes: asset.sizeBytes,
-    })),
-    outputAsset: iteration.outputAsset
-      ? {
-          assetId: iteration.outputAsset.assetId,
-          role: iteration.outputAsset.role,
-          mimeType: iteration.outputAsset.mimeType,
-          sizeBytes: iteration.outputAsset.sizeBytes,
-        }
-      : null,
+    outputAsset: iteration.outputAsset,
     result: {
       imageAssetId: iteration.result.imageAssetId,
     },
