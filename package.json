@@ -13,12 +13,14 @@
     "format:check": "prettier --check .",
     "check-types": "turbo run check-types",
     "deps:update:all": "bun run --filter \"*\" deps:update",
-    "deps:update:latest:all": "bun run --filter \"*\" deps:update:latest"
+    "deps:update:latest:all": "bun run --filter \"*\" deps:update:latest",
+    "deps:update": "bun update",
+    "deps:update:latest": "bun update --latest"
   },
   "devDependencies": {
-    "prettier": "3.7.4",
-    "turbo": "2.8.14",
-    "typescript": "5.9.2"
+    "prettier": "3.8.2",
+    "turbo": "2.9.6",
+    "typescript": "6.0.2"
   },
   "engines": {
     "node": ">=18"
