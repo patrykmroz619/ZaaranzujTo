@@ -116,7 +116,8 @@
     "noCredits": "Brak kredytów. Kup pakiet, aby generować wizualizacje.",
     "buyCredits": "Kup kredyty",
     "requiresCredit": "Wymaga co najmniej 1 kredytu",
-    "generatedVisualization": "Wygenerowana wizualizacja"
+    "generatedVisualization": "Wygenerowana wizualizacja",
+    "downloadVisualization": "Pobierz wizualizację"
   },
   "credits": {
     "title": "Pakiety kredytów",

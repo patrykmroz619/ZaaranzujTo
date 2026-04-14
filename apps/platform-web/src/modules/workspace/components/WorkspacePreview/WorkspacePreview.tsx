@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { Image as ImageIcon, Loader2 } from "lucide-react";
 import type { TIterationObject } from "@repo/contracts";
 import { IterationStrip } from "@/modules/workspace/components/IterationStrip";
+import { VisualizationDownloadButton } from "@/modules/workspace/components/VisualizationDownloadButton";
 import { useAssetUrl } from "@/modules/storage/hooks/use-asset-url";
 
 type TWorkspacePreviewProps = {
@@ -30,13 +31,19 @@ export const WorkspacePreview = (props: TWorkspacePreviewProps) => {
             <p className="text-sm text-muted-foreground">{t("generatingMessage")}</p>
           </div>
         ) : hasResult ? (
-          <div className="aspect-video bg-muted flex items-center justify-center overflow-hidden">
-            {activeImageUrl ? (
-              <img
-                src={activeImageUrl}
-                alt={t("generatedVisualization")}
-                className="h-full w-full object-cover"
-              />
+          <div className="relative aspect-video bg-muted flex items-center justify-center overflow-hidden">
+            {activeImageUrl && activeIteration ? (
+              <>
+                <img
+                  src={activeImageUrl}
+                  alt={t("generatedVisualization")}
+                  className="h-full w-full object-cover"
+                />
+                <VisualizationDownloadButton
+                  assetId={activeIteration.result.imageAssetId}
+                  iterationId={activeIterationId}
+                />
+              </>
             ) : (
               <div className="text-center">
                 <ImageIcon className="mx-auto mb-2 h-16 w-16 text-muted-foreground/20" />

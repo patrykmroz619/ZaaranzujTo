@@ -83,4 +83,34 @@ export class FileAssetsService {
 
     return { buffer, mimeType: contentType || asset.mimeType };
   }
+
+  async getAssetForDownload(params: {
+    assetId: string;
+    userId: string;
+    email: string;
+  }): Promise<{ buffer: Buffer; mimeType: string; sizeBytes: number; filename: string }> {
+    const { assetId, userId, email } = params;
+
+    const user = await this.getUserService.getUser({
+      clerkId: userId,
+      email,
+    });
+
+    const asset = await this.fileAssetsRepository.findByIdAndUser(assetId, user.id);
+
+    if (!asset) {
+      throw new NotFoundException("File asset not found");
+    }
+
+    const { buffer, contentType } = await this.cloudStorageService.downloadFile(asset.key);
+
+    const filename = asset.key.split("/").pop() || asset._id.toString();
+
+    return {
+      buffer,
+      mimeType: contentType || asset.mimeType,
+      sizeBytes: asset.sizeBytes,
+      filename,
+    };
+  }
 }

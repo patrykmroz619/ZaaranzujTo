@@ -21,6 +21,19 @@ const getDownloadUrl = async (params: {
   }
 };
 
+const downloadAsset = async (params: { assetId: string }) => {
+  const { assetId } = params;
+  try {
+    const res = await httpClient.get<Blob>(`/api/v1/storage/assets/${assetId}/download`, {
+      responseType: "blob",
+    });
+    return res.data;
+  } catch (error) {
+    handleHttpError(error);
+  }
+};
+
 export const storageApi = {
   getDownloadUrl,
+  downloadAsset,
 };

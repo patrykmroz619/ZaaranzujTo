@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseGuards } from "@nestjs/common";
+import { Controller, Get, Param, StreamableFile, UseGuards } from "@nestjs/common";
 
 import { TSignedUrlResponse, TFileAssetResponse } from "@repo/contracts/storage";
 import { AuthGuard, CurrentUser, type TAuthData } from "@/shared/auth";
@@ -9,6 +9,25 @@ import { FileAssetsService } from "../services/file-assets.service";
 @Controller("storage")
 export class StorageController {
   constructor(private readonly fileAssetsService: FileAssetsService) {}
+
+  @Get("assets/:id/download")
+  async downloadAsset(
+    @Param("id") assetId: string,
+    @CurrentUser() user: TAuthData,
+  ): Promise<StreamableFile> {
+    const { buffer, mimeType, sizeBytes, filename } =
+      await this.fileAssetsService.getAssetForDownload({
+        assetId,
+        userId: user.userId,
+        email: user.email,
+      });
+
+    return new StreamableFile(buffer, {
+      type: mimeType,
+      disposition: `attachment; filename="${filename}"`,
+      length: sizeBytes,
+    });
+  }
 
   @Get("assets/:id/download-url")
   async getDownloadUrl(
