@@ -16,6 +16,14 @@ type TCreateVisualizationForUserParams = {
   userId: Types.ObjectId;
   projectId: string;
   name: string;
+  stylePreset: string;
+  palette: string;
+  roomType: string;
+};
+
+type TDeleteVisualizationByIdForUserParams = {
+  userId: Types.ObjectId;
+  visualizationId: string;
 };
 
 type TFindVisualizationByIdForUserParams = {
@@ -50,7 +58,6 @@ type TListIterationsForVisualizationForUserParams = {
   sort: TListVisualizationIterationsSort;
 };
 
-
 type TAppendIterationForVisualizationForUserParams = {
   userId: Types.ObjectId;
   visualizationId: string;
@@ -58,9 +65,6 @@ type TAppendIterationForVisualizationForUserParams = {
   baseIterationId: string | null;
   generationInput: {
     mode: string;
-    stylePreset: string | null;
-    colors: string[];
-    roomType: string | null;
     prompt: string | null;
     inputAsset: string | null;
     referenceAssets: string[];
@@ -80,15 +84,29 @@ export class VisualizationsRepository {
   createVisualizationForUser = async (
     params: TCreateVisualizationForUserParams,
   ): Promise<TVisualizationDocument> => {
-    const { userId, projectId, name } = params;
+    const { userId, projectId, name, stylePreset, palette, roomType } = params;
 
     return await this.visualizationModel.create({
       userId,
       projectId,
       name,
+      stylePreset,
+      palette,
+      roomType,
       iterations: [],
       iterationsCount: 0,
       latestIteration: null,
+    });
+  };
+
+  deleteVisualizationByIdForUser = async (
+    params: TDeleteVisualizationByIdForUserParams,
+  ): Promise<void> => {
+    const { userId, visualizationId } = params;
+
+    await this.visualizationModel.deleteOne({
+      _id: visualizationId,
+      userId,
     });
   };
 

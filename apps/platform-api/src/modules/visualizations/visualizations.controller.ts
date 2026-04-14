@@ -24,6 +24,7 @@ import {
   visualizationProjectIdParamsSchema,
 } from "./visualizations.dto";
 import { toIterationOrchestrationHttpException } from "./errors/iteration-orchestration.errors";
+import { IterationAccessService } from "./iterations/services/internal/iteration-access.service";
 import { ListProjectVisualizationsService } from "./services/list-project-visualizations.service";
 import { CreateVisualizationService } from "./services/create-visualization.service";
 import { GetVisualizationDetailsService } from "./services/get-visualization-details.service";
@@ -48,6 +49,7 @@ export class VisualizationsController {
     private readonly getVisualizationDetailsService: GetVisualizationDetailsService,
     private readonly listVisualizationIterationsService: ListVisualizationIterationsService,
     private readonly createIterationService: CreateIterationService,
+    private readonly iterationAccessService: IterationAccessService,
   ) {}
 
   @Get("projects/:projectId/visualizations")
@@ -68,19 +70,45 @@ export class VisualizationsController {
   }
 
   @Post("projects/:projectId/visualizations")
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: "inputPhoto", maxCount: 1 },
+      { name: "referencePhotos", maxCount: 8 },
+    ]),
+  )
   createVisualization(
     @CurrentUser() currentUser: TAuthData,
     @Param() params: unknown,
     @Body() body: unknown,
+    @UploadedFiles()
+    files: {
+      inputPhoto?: TUploadedIterationFile[];
+      referencePhotos?: TUploadedIterationFile[];
+    } = {},
   ) {
     const parsedParams = visualizationProjectIdParamsSchema.parse(params);
-    const parsedBody = createVisualizationRequestSchema.parse(body);
+    const bodyResult = createVisualizationRequestSchema.safeParse(body);
+
+    if (!bodyResult.success) {
+      throw toIterationOrchestrationHttpException({
+        code: "INVALID_INPUT",
+        details: bodyResult.error.issues,
+      });
+    }
+
+    const inputPhoto = files.inputPhoto?.[0];
+
+    if (!inputPhoto) {
+      throw toIterationOrchestrationHttpException({ code: "INVALID_INPUT" });
+    }
 
     return this.createVisualizationService.createVisualization({
       clerkId: currentUser.userId,
       email: currentUser.email,
       projectId: parsedParams.projectId,
-      body: parsedBody,
+      body: bodyResult.data,
+      inputPhoto,
+      referencePhotos: files.referencePhotos ?? [],
     });
   }
 
@@ -130,19 +158,13 @@ export class VisualizationsController {
   }
 
   @Post("visualizations/:visualizationId/iterations")
-  @UseInterceptors(
-    FileFieldsInterceptor([
-      { name: "inputPhoto", maxCount: 1 },
-      { name: "referencePhotos", maxCount: 8 },
-    ]),
-  )
-  createIteration(
+  @UseInterceptors(FileFieldsInterceptor([{ name: "referencePhotos", maxCount: 8 }]))
+  async createIteration(
     @CurrentUser() currentUser: TAuthData,
     @Param() params: unknown,
     @Body() body: unknown,
     @UploadedFiles()
     files: {
-      inputPhoto?: TUploadedIterationFile[];
       referencePhotos?: TUploadedIterationFile[];
     } = {},
   ) {
@@ -156,13 +178,22 @@ export class VisualizationsController {
       });
     }
 
-    return this.createIterationService.createIteration({
-      clerkId: currentUser.userId,
-      email: currentUser.email,
-      visualizationId: parsedParams.visualizationId,
-      body: bodyResult.data,
-      inputPhoto: files.inputPhoto?.[0],
+    const { user, visualization } =
+      await this.iterationAccessService.resolveAuthorizedUserAndVisualization({
+        clerkId: currentUser.userId,
+        email: currentUser.email,
+        visualizationId: parsedParams.visualizationId,
+      });
+
+    const { response } = await this.createIterationService.createIteration({
+      visualization,
+      userId: user._id,
+      prompt: bodyResult.data.prompt,
+      inputPhoto: undefined,
+      parentIterationId: bodyResult.data.parentIterationId,
       referencePhotos: files.referencePhotos ?? [],
     });
+
+    return response;
   }
 }

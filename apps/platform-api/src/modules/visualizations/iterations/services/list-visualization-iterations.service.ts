@@ -59,9 +59,6 @@ export class ListVisualizationIterationsService {
         failureCode: iteration.failureCode,
         generationInput: {
           mode: iteration.generationInput.mode,
-          stylePreset: iteration.generationInput.stylePreset,
-          colors: iteration.generationInput.colors,
-          roomType: iteration.generationInput.roomType,
           prompt: iteration.generationInput.prompt,
           inputAsset: iteration.generationInput.inputAsset,
           referenceAssets: iteration.generationInput.referenceAssets,

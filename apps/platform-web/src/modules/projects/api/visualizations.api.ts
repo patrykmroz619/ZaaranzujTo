@@ -2,13 +2,11 @@ import type { AxiosInstance } from "axios";
 
 import type {
   TCreateVisualizationHeaders,
-  TCreateVisualizationRequest,
   TListProjectVisualizationsQuery,
   TListProjectVisualizationsResponse,
   TUpdateVisualizationRequest,
   TUpdateVisualizationResponse,
   TVisualizationDetails,
-  TVisualizationSummary,
 } from "@repo/contracts";
 
 import { httpClient } from "@/core/packages/http";
@@ -34,17 +32,17 @@ const listVisualizations = async (params: {
 
 const createVisualization = async (params: {
   projectId: string;
-  body: TCreateVisualizationRequest;
+  body: FormData;
   headers: TCreateVisualizationHeaders;
   serverClient?: AxiosInstance;
 }) => {
   const { projectId, body, headers, serverClient } = params;
   const client = serverClient ?? httpClient;
   try {
-    const res = await client.post<TVisualizationSummary>(
+    const res = await client.post<TVisualizationDetails>(
       `/api/v1/projects/${projectId}/visualizations`,
       body,
-      { headers },
+      { headers: { ...headers, "Content-Type": undefined }, timeout: 0 },
     );
     return res.data;
   } catch (error) {

@@ -11,6 +11,9 @@ export class MapVisualizationSummaryService {
       id: visualizationDocument._id.toString(),
       projectId: visualizationDocument.projectId.toString(),
       name: visualizationDocument.name,
+      stylePreset: visualizationDocument.stylePreset,
+      palette: visualizationDocument.palette,
+      roomType: visualizationDocument.roomType,
       iterationsCount: visualizationDocument.iterationsCount,
       latestIteration: visualizationDocument.latestIteration
         ? {

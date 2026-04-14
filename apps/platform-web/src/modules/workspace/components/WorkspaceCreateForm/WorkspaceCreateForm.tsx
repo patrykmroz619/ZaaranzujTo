@@ -5,40 +5,52 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Upload, Loader2, X } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { Button } from "@repo/ui/core/button";
 import { Input } from "@repo/ui/core/input";
-import { Label } from "@repo/ui/core/label";
 import { Textarea } from "@repo/ui/core/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@repo/ui/core/form";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui/core/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@repo/ui/core/select";
 import { PhotoUpload } from "@/modules/workspace/components/PhotoUpload";
+import { FurniturePhotosField } from "@/modules/workspace/components/FurniturePhotosField";
 import {
   WORKSPACE_STYLES,
   COLOR_PALETTES,
   ROOM_TYPES,
 } from "@/modules/workspace/data/mock-workspace";
 import {
-  workspaceFormSchema,
-  type TWorkspaceFormValues,
+  workspaceCreateSchema,
+  type TWorkspaceCreateValues,
 } from "../../types/workspace.types";
 
-type TWorkspaceFormProps = {
-  isEditMode: boolean;
+type TWorkspaceCreateFormProps = {
   isGenerating: boolean;
   creditBalance: number;
-  defaultValues: TWorkspaceFormValues;
-  onSubmit: (values: TWorkspaceFormValues) => Promise<void>;
+  onSubmit: (values: TWorkspaceCreateValues) => Promise<void>;
 };
 
-export const WorkspaceForm = (props: TWorkspaceFormProps) => {
-  const { isEditMode, isGenerating, creditBalance, defaultValues, onSubmit } = props;
+export const WorkspaceCreateForm = (props: TWorkspaceCreateFormProps) => {
+  const { isGenerating, creditBalance, onSubmit } = props;
   const router = useRouter();
   const t = useTranslations();
 
-  const form = useForm<TWorkspaceFormValues>({
-    resolver: zodResolver(workspaceFormSchema),
-    defaultValues,
+  const form = useForm<TWorkspaceCreateValues>({
+    resolver: zodResolver(workspaceCreateSchema),
+    defaultValues: {
+      name: "",
+      stylePreset: "",
+      palette: "",
+      roomType: "",
+      prompt: "",
+      roomPhotoFile: undefined as unknown as File,
+      furniturePhotoFiles: [],
+    },
     mode: "onChange",
   });
 
@@ -50,28 +62,14 @@ export const WorkspaceForm = (props: TWorkspaceFormProps) => {
     return URL.createObjectURL(roomPhotoFile);
   }, [roomPhotoFile]);
 
-  const furniturePhotoPreviews = useMemo(() => {
-    return furniturePhotoFiles.map((file) => URL.createObjectURL(file));
-  }, [furniturePhotoFiles]);
-
   useEffect(() => {
     return () => {
-      if (roomPhotoPreview) {
-        URL.revokeObjectURL(roomPhotoPreview);
-      }
+      if (roomPhotoPreview) URL.revokeObjectURL(roomPhotoPreview);
     };
   }, [roomPhotoPreview]);
 
-  useEffect(() => {
-    return () => {
-      furniturePhotoPreviews.forEach((previewUrl) => {
-        URL.revokeObjectURL(previewUrl);
-      });
-    };
-  }, [furniturePhotoPreviews]);
-
   return (
-    <div className="w-full space-y-5 lg:w-[400px] lg:shrink-0">
+    <div className="mx-auto w-full max-w-2xl">
       <div className="rounded-xl border bg-card p-5 shadow-card">
         <Form {...form}>
           <div className="space-y-4">
@@ -94,28 +92,28 @@ export const WorkspaceForm = (props: TWorkspaceFormProps) => {
               )}
             />
 
-            {!isEditMode && (
-              <PhotoUpload
-                preview={roomPhotoPreview}
-                onUpload={(event) => {
-                  const nextFile = event.target.files?.[0] ?? null;
-                  form.setValue("roomPhotoFile", nextFile, {
-                    shouldDirty: true,
-                    shouldValidate: true,
-                  });
-                }}
-                onRemove={() => {
-                  form.setValue("roomPhotoFile", null, {
-                    shouldDirty: true,
-                    shouldValidate: true,
-                  });
-                }}
-              />
-            )}
+            <PhotoUpload
+              preview={roomPhotoPreview}
+              onUpload={(event) => {
+                const nextFile = event.target.files?.[0];
+                if (!nextFile) return;
+                form.setValue("roomPhotoFile", nextFile, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
+              }}
+              onRemove={() => {
+                form.setValue(
+                  "roomPhotoFile",
+                  undefined as unknown as File,
+                  { shouldDirty: true, shouldValidate: true },
+                );
+              }}
+            />
 
             <FormField
               control={form.control}
-              name="style"
+              name="stylePreset"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("workspace.style")} *</FormLabel>
@@ -143,7 +141,7 @@ export const WorkspaceForm = (props: TWorkspaceFormProps) => {
               name="palette"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("workspace.colorPalette")}</FormLabel>
+                  <FormLabel>{t("workspace.colorPalette")} *</FormLabel>
                   <FormControl>
                     <Select value={field.value} onValueChange={field.onChange}>
                       <SelectTrigger>
@@ -193,16 +191,10 @@ export const WorkspaceForm = (props: TWorkspaceFormProps) => {
               name="prompt"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    {isEditMode ? t("workspace.editPrompt") : t("workspace.prompt")}
-                  </FormLabel>
+                  <FormLabel>{t("workspace.prompt")}</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder={
-                        isEditMode
-                          ? t("workspace.editPromptPlaceholder")
-                          : t("workspace.promptPlaceholder")
-                      }
+                      placeholder={t("workspace.promptPlaceholder")}
                       value={field.value}
                       onChange={field.onChange}
                       maxLength={1000}
@@ -214,63 +206,15 @@ export const WorkspaceForm = (props: TWorkspaceFormProps) => {
               )}
             />
 
-            <div className="space-y-2">
-              <Label>{t("workspace.furniturePhotos")}</Label>
-              <label className="flex h-20 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-border transition-colors hover:border-primary hover:bg-accent/50">
-                <Upload className="mb-1 h-5 w-5 text-muted-foreground" />
-                <span className="text-xs text-muted-foreground">
-                  {t("workspace.furniturePhotosHint")}
-                </span>
-                <input
-                  type="file"
-                  className="hidden"
-                  accept=".jpg,.jpeg,.png,.webp,.avif"
-                  multiple
-                  onChange={(event) => {
-                    const uploadedFiles = Array.from(event.target.files ?? []);
-                    if (uploadedFiles.length === 0) return;
-
-                    const currentFiles = form.getValues("furniturePhotoFiles");
-                    form.setValue("furniturePhotoFiles", [...currentFiles, ...uploadedFiles], {
-                      shouldDirty: true,
-                      shouldValidate: true,
-                    });
-                    event.target.value = "";
-                  }}
-                />
-              </label>
-
-              {furniturePhotoPreviews.length > 0 && (
-                <div className="grid grid-cols-4 gap-2">
-                  {furniturePhotoPreviews.map((previewUrl, index) => (
-                    <div key={`${previewUrl}-${index}`} className="relative">
-                      <img
-                        src={previewUrl}
-                        alt={`${t("workspace.furniturePhotoAlt")} ${index + 1}`}
-                        className="h-16 w-full rounded-md object-cover"
-                      />
-                      <Button
-                        type="button"
-                        variant="secondary"
-                        size="icon"
-                        className="absolute right-1 top-1 h-5 w-5"
-                        onClick={() => {
-                          const nextFiles = form
-                            .getValues("furniturePhotoFiles")
-                            .filter((_, fileIndex) => fileIndex !== index);
-                          form.setValue("furniturePhotoFiles", nextFiles, {
-                            shouldDirty: true,
-                            shouldValidate: true,
-                          });
-                        }}
-                      >
-                        <X className="h-3 w-3" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            <FurniturePhotosField
+              value={furniturePhotoFiles}
+              onChange={(files) =>
+                form.setValue("furniturePhotoFiles", files, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                })
+              }
+            />
 
             {creditBalance < 1 ? (
               <div className="rounded-lg bg-accent p-3 text-center text-sm">

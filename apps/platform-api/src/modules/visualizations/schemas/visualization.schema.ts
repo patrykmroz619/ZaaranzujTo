@@ -35,15 +35,6 @@ export class IterationInput {
   mode: string;
 
   @Prop({ required: false, default: null, type: String })
-  stylePreset: string | null;
-
-  @Prop({ type: [String], required: true, default: [] })
-  colors: string[];
-
-  @Prop({ required: false, default: null, type: String })
-  roomType: string | null;
-
-  @Prop({ required: false, default: null, type: String })
   prompt: string | null;
 
   @Prop({ required: false, default: null, type: String })
@@ -104,6 +95,15 @@ export class Visualization {
 
   @Prop({ required: true, trim: true, maxlength: 120 })
   name: string;
+
+  @Prop({ required: true })
+  stylePreset: string;
+
+  @Prop({ required: true })
+  palette: string;
+
+  @Prop({ required: true })
+  roomType: string;
 
   @Prop({ type: [IterationSchema], required: true, default: [] })
   iterations: Iteration[];

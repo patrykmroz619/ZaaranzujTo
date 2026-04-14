@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { PageHeader } from "@repo/ui/components/page-header";
-import { WorkspaceForm } from "@/modules/workspace/components/WorkspaceForm";
+import { WorkspaceIterationForm } from "@/modules/workspace/components/WorkspaceIterationForm";
 import { WorkspacePreview } from "@/modules/workspace/components/WorkspacePreview";
 import { useWorkspace } from "@/modules/workspace/hooks/use-workspace";
 
@@ -16,38 +16,37 @@ export const WorkspaceView = (props: TWorkspaceViewProps) => {
   const t = useTranslations();
 
   const {
-    isEditMode,
-    hasResult,
     isGenerating,
     creditBalance,
     activeIterationId,
     iterations,
-    formDefaultValues,
-    onSubmit,
+    lockedAttributes,
+    visualizationName,
+    onIterate,
     onSelectIteration,
-  } = useWorkspace({ projectId, visualizationId });
+  } = useWorkspace({ visualizationId });
 
   return (
     <div className="space-y-5">
       <PageHeader
-        title={isEditMode ? t("workspace.editTitle") : t("workspace.newVisualization")}
+        title={visualizationName || t("workspace.editTitle")}
         backHref={`/projects/${projectId}`}
         backLabel={t("common.back")}
       />
 
       <div className="flex flex-col gap-6 lg:flex-row">
-        <WorkspaceForm
-          key={activeIterationId || "new"}
-          isEditMode={isEditMode}
-          isGenerating={isGenerating}
-          creditBalance={creditBalance}
-          defaultValues={formDefaultValues}
-          onSubmit={onSubmit}
-        />
+        {lockedAttributes && (
+          <WorkspaceIterationForm
+            lockedAttributes={lockedAttributes}
+            isGenerating={isGenerating}
+            creditBalance={creditBalance}
+            onSubmit={onIterate}
+          />
+        )}
 
         <WorkspacePreview
           isGenerating={isGenerating}
-          hasResult={hasResult}
+          hasResult={iterations.length > 0}
           iterations={iterations}
           activeIterationId={activeIterationId}
           onSelectIteration={onSelectIteration}
