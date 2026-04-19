@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { toast } from "@repo/ui/core/sonner";
 import { PageHeader } from "@repo/ui/components/page-header";
 import { useProfile } from "@/core/packages/profile/use-profile";
+import { ApiError } from "@/core/packages/http";
 import { useCreateVisualization } from "@/modules/workspace/hooks/use-create-visualization";
 import { WorkspaceCreateForm } from "@/modules/workspace/components/WorkspaceCreateForm";
 import type { TWorkspaceCreateValues } from "@/modules/workspace/types/workspace.types";
@@ -38,8 +39,24 @@ export const VisualizationCreateView = (props: TVisualizationCreateViewProps) =>
       if (result) {
         router.push(`/projects/${projectId}/workspace/${result.id}`);
       }
-    } catch {
-      toast.error(t("errors.500"));
+    } catch (err) {
+      if (err instanceof ApiError) {
+        switch (err.code) {
+          case "CONTENT_POLICY_VIOLATION":
+            toast.error(t("errors.contentPolicyViolation"));
+            break;
+          case "INSUFFICIENT_CREDITS":
+            toast.error(t("errors.402"));
+            break;
+          case "FILE_TOO_LARGE":
+            toast.error(t("errors.fileTooLarge"));
+            break;
+          default:
+            toast.error(err.statusCode === 0 ? t("errors.network") : t("errors.500"));
+        }
+      } else {
+        toast.error(t("errors.500"));
+      }
     }
   };
 

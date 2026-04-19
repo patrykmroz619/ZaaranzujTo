@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { toast } from "@repo/ui/core/sonner";
 import { useProfile } from "@/core/packages/profile/use-profile";
 import { useVisualization } from "@/modules/workspace/hooks/use-visualization";
+import { ApiError } from "@/core/packages/http";
 import { useCreateIteration } from "@/modules/workspace/hooks/use-create-iteration";
 import type { TWorkspaceIterationValues } from "@/modules/workspace/types/workspace.types";
 
@@ -58,8 +59,27 @@ export const useWorkspace = (params: TUseWorkspaceParams) => {
       if (result) {
         setActiveIterationId(result.iteration.iterationId);
       }
-    } catch {
-      toast.error(t("errors.500"));
+    } catch (err) {
+      if (err instanceof ApiError) {
+        switch (err.code) {
+          case "CONTENT_POLICY_VIOLATION":
+            toast.error(t("errors.contentPolicyViolation"));
+            break;
+          case "INSUFFICIENT_CREDITS":
+            toast.error(t("errors.402"));
+            break;
+          case "FILE_TOO_LARGE":
+            toast.error(t("errors.fileTooLarge"));
+            break;
+          case "ACTIVE_GENERATION_CONFLICT":
+            toast.error(t("errors.409"));
+            break;
+          default:
+            toast.error(err.statusCode === 0 ? t("errors.network") : t("errors.500"));
+        }
+      } else {
+        toast.error(t("errors.500"));
+      }
     }
   };
 
