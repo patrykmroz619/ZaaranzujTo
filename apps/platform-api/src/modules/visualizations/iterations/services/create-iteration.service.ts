@@ -4,6 +4,7 @@ import type { Types } from "mongoose";
 
 import { AiGenerationService } from "@/modules/ai/services/ai-generation.service";
 import { AiModerationService } from "@/modules/ai/services/ai-moderation.service";
+import { ImageOptimizationService } from "@/modules/images/services/image-optimization.service";
 import { FileAssetsService } from "@/modules/storage/services/file-assets.service";
 
 import { toIterationOrchestrationHttpException } from "../../errors/iteration-orchestration.errors";
@@ -42,6 +43,7 @@ export class CreateIterationService {
     private readonly iterationCreditsService: IterationCreditsService,
     private readonly aiModerationService: AiModerationService,
     private readonly aiGenerationService: AiGenerationService,
+    private readonly imageOptimizationService: ImageOptimizationService,
     private readonly fileAssetsService: FileAssetsService,
     private readonly createIterationResponseMapper: CreateIterationResponseMapper,
   ) {
@@ -72,10 +74,18 @@ export class CreateIterationService {
       referencePhotos,
     });
 
+    const optimizedInputPhoto = inputPhoto
+      ? await this.imageOptimizationService.optimize(inputPhoto, { maxDimensionPx: 1024, quality: 72 })
+      : undefined;
+    const optimizedReferencePhotos = await this.imageOptimizationService.optimizeAll(
+      referencePhotos,
+      { maxDimensionPx: 1024, quality: 72 },
+    );
+
     await this.moderateIterationContent({
       prompt,
-      inputPhoto,
-      referencePhotos,
+      inputPhoto: optimizedInputPhoto,
+      referencePhotos: optimizedReferencePhotos,
     });
 
     const isEditMode = !!parentIterationId;
@@ -125,10 +135,10 @@ export class CreateIterationService {
 
       const allReferenceImages: Array<{ base64: string; mediaType: string }> = [];
 
-      if (inputPhoto) {
+      if (optimizedInputPhoto) {
         allReferenceImages.push({
-          base64: inputPhoto.buffer.toString("base64"),
-          mediaType: inputPhoto.mimetype,
+          base64: optimizedInputPhoto.buffer.toString("base64"),
+          mediaType: optimizedInputPhoto.mimetype,
         });
       }
 
@@ -136,7 +146,7 @@ export class CreateIterationService {
         allReferenceImages.push(previousOutputImage);
       }
 
-      referencePhotos.forEach((file) => {
+      optimizedReferencePhotos.forEach((file) => {
         allReferenceImages.push({
           base64: file.buffer.toString("base64"),
           mediaType: file.mimetype,
@@ -158,12 +168,19 @@ export class CreateIterationService {
         throw toIterationOrchestrationHttpException({ code: "UPSTREAM_GENERATION_FAILURE" });
       }
 
+      const optimizedOutput = await this.imageOptimizationService.optimize({
+        originalname: "output",
+        mimetype: generationResult.mediaType,
+        size: generationResult.uint8Array.byteLength,
+        buffer: Buffer.from(generationResult.uint8Array),
+      });
+
       const registeredAssetsBundle = await this.iterationAssetsService.uploadAssetsForIteration({
         userId: userIdStr,
-        inputPhoto,
-        referencePhotos,
-        outputMediaType: generationResult.mediaType,
-        outputBytes: generationResult.uint8Array,
+        inputPhoto: optimizedInputPhoto,
+        referencePhotos: optimizedReferencePhotos,
+        outputMediaType: optimizedOutput.mimetype,
+        outputBytes: optimizedOutput.buffer,
       });
 
       const updatedVisualization =

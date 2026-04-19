@@ -3,6 +3,7 @@ import { MongooseModule } from "@nestjs/mongoose";
 
 import { AiModule } from "../ai/ai.module";
 import { CreditsModule } from "../credits/credits.module";
+import { ImagesModule } from "../images/images.module";
 import { ProjectsModule } from "../projects/projects.module";
 import { StorageModule } from "../storage/storage.module";
 import { UsersModule } from "../users/users.module";
@@ -32,6 +33,7 @@ import { VisualizationsController } from "./visualizations.controller";
     AiModule,
     StorageModule,
     CreditsModule,
+    ImagesModule,
     MongooseModule.forFeature([
       {
         name: Visualization.name,
