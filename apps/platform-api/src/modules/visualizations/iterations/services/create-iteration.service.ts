@@ -3,6 +3,7 @@ import { ConfigService } from "@nestjs/config";
 import type { Types } from "mongoose";
 
 import { AiGenerationService } from "@/modules/ai/services/ai-generation.service";
+import { AiModerationService } from "@/modules/ai/services/ai-moderation.service";
 import { FileAssetsService } from "@/modules/storage/services/file-assets.service";
 
 import { toIterationOrchestrationHttpException } from "../../errors/iteration-orchestration.errors";
@@ -39,6 +40,7 @@ export class CreateIterationService {
     private readonly iterationPromptBuilderService: IterationPromptBuilderService,
     private readonly iterationAssetsService: IterationAssetsService,
     private readonly iterationCreditsService: IterationCreditsService,
+    private readonly aiModerationService: AiModerationService,
     private readonly aiGenerationService: AiGenerationService,
     private readonly fileAssetsService: FileAssetsService,
     private readonly createIterationResponseMapper: CreateIterationResponseMapper,
@@ -66,6 +68,12 @@ export class CreateIterationService {
     }
 
     this.iterationFilesValidatorService.validateFiles({
+      inputPhoto,
+      referencePhotos,
+    });
+
+    await this.moderateIterationContent({
+      prompt,
       inputPhoto,
       referencePhotos,
     });
@@ -228,6 +236,39 @@ export class CreateIterationService {
     if (error instanceof NotFoundException) throw error;
     if (error instanceof Error && this.hasHttpStatus({ error })) throw error;
     throw toIterationOrchestrationHttpException({ code: "UPSTREAM_GENERATION_FAILURE" });
+  };
+
+  private moderateIterationContent = async (params: {
+    prompt: string;
+    inputPhoto: TUploadedFile | undefined;
+    referencePhotos: TUploadedFile[];
+  }) => {
+    const { prompt, inputPhoto, referencePhotos } = params;
+
+    await this.aiModerationService.moderateContent({
+      text: prompt.length > 0 ? prompt : undefined,
+      images: this.buildModerationImages({
+        inputPhoto,
+        referencePhotos,
+      }),
+    });
+  };
+
+  private buildModerationImages = (params: {
+    inputPhoto: TUploadedFile | undefined;
+    referencePhotos: TUploadedFile[];
+  }): Array<{ base64: string; mediaType: string }> => {
+    const { inputPhoto, referencePhotos } = params;
+
+    return [
+      inputPhoto
+        ? { base64: inputPhoto.buffer.toString("base64"), mediaType: inputPhoto.mimetype }
+        : undefined,
+      ...referencePhotos.map((file) => ({
+        base64: file.buffer.toString("base64"),
+        mediaType: file.mimetype,
+      })),
+    ].filter((image): image is { base64: string; mediaType: string } => image !== undefined);
   };
 
   private hasHttpStatus = (params: { error: Error }): boolean => {

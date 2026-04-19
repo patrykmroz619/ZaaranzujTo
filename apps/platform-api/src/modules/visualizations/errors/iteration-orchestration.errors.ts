@@ -5,7 +5,8 @@ export type TIterationOrchestrationErrorCode =
   | "FILE_TOO_LARGE"
   | "INVALID_INPUT"
   | "UPSTREAM_GENERATION_FAILURE"
-  | "ACTIVE_GENERATION_CONFLICT";
+  | "ACTIVE_GENERATION_CONFLICT"
+  | "CONTENT_POLICY_VIOLATION";
 
 type TIterationOrchestrationErrorDefinition = {
   statusCode: HttpStatus;
@@ -35,6 +36,10 @@ const iterationOrchestrationErrorsMap: Record<
   ACTIVE_GENERATION_CONFLICT: {
     statusCode: HttpStatus.CONFLICT,
     message: "Another generation is currently active for this visualization.",
+  },
+  CONTENT_POLICY_VIOLATION: {
+    statusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+    message: "Content policy violation.",
   },
 };
 
