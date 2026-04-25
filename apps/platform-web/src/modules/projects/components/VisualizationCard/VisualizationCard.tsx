@@ -25,11 +25,7 @@ export const VisualizationCard = (props: TVisualizationCardProps) => {
     >
       <div className="aspect-video bg-muted flex items-center justify-center">
         {thumbnailUrl ? (
-          <img
-            src={thumbnailUrl}
-            alt={visualization.name}
-            className="h-full w-full object-cover"
-          />
+          <img src={thumbnailUrl} alt={visualization.name} className="h-full w-full object-cover" />
         ) : (
           <ImageIcon className="h-12 w-12 text-muted-foreground/30" />
         )}

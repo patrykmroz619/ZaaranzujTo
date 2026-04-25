@@ -16,7 +16,9 @@ export const DashboardView = () => {
   const router = useRouter();
   const t = useTranslations("dashboard");
 
-  const { projects, isLoading } = useProjects({ query: { page: 1, sort: "updatedAt:desc", pageSize: 5 } });
+  const { projects, isLoading } = useProjects({
+    query: { page: 1, sort: "updatedAt:desc", pageSize: 5 },
+  });
   const { profile } = useProfile();
 
   const projectItems = projects?.items ?? [];

@@ -5,10 +5,7 @@ import type { TSignedUrlResponse } from "@repo/contracts";
 import { httpClient } from "@/core/packages/http";
 import { handleHttpError } from "@/core/packages/http/http-client.error";
 
-const getDownloadUrl = async (params: {
-  assetId: string;
-  serverClient?: AxiosInstance;
-}) => {
+const getDownloadUrl = async (params: { assetId: string; serverClient?: AxiosInstance }) => {
   const { assetId, serverClient } = params;
   const client = serverClient ?? httpClient;
   try {

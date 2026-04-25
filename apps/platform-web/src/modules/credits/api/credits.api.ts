@@ -15,14 +15,10 @@ const getCreditBalance = async (params?: { serverClient?: AxiosInstance }) => {
   }
 };
 
-const getCreditPackages = async (params?: {
-  serverClient?: AxiosInstance;
-}) => {
+const getCreditPackages = async (params?: { serverClient?: AxiosInstance }) => {
   const client = params?.serverClient ?? httpClient;
   try {
-    const res = await client.get<TGetCreditPackagesResponse>(
-      "/api/v1/credits/packages",
-    );
+    const res = await client.get<TGetCreditPackagesResponse>("/api/v1/credits/packages");
     return res.data;
   } catch (error) {
     handleHttpError(error);

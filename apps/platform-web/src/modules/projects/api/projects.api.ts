@@ -37,26 +37,18 @@ const createProject = async (params: {
   const { body, serverClient } = params;
   const client = serverClient ?? httpClient;
   try {
-    const res = await client.post<TCreateProjectResponse>(
-      "/api/v1/projects",
-      body,
-    );
+    const res = await client.post<TCreateProjectResponse>("/api/v1/projects", body);
     return res.data;
   } catch (error) {
     handleHttpError(error);
   }
 };
 
-const getProject = async (params: {
-  projectId: string;
-  serverClient?: AxiosInstance;
-}) => {
+const getProject = async (params: { projectId: string; serverClient?: AxiosInstance }) => {
   const { projectId, serverClient } = params;
   const client = serverClient ?? httpClient;
   try {
-    const res = await client.get<TGetProjectResponse>(
-      `/api/v1/projects/${projectId}`,
-    );
+    const res = await client.get<TGetProjectResponse>(`/api/v1/projects/${projectId}`);
     return res.data;
   } catch (error) {
     handleHttpError(error);
@@ -71,26 +63,18 @@ const updateProject = async (params: {
   const { projectId, body, serverClient } = params;
   const client = serverClient ?? httpClient;
   try {
-    const res = await client.patch<TUpdateProjectResponse>(
-      `/api/v1/projects/${projectId}`,
-      body,
-    );
+    const res = await client.patch<TUpdateProjectResponse>(`/api/v1/projects/${projectId}`, body);
     return res.data;
   } catch (error) {
     handleHttpError(error);
   }
 };
 
-const deleteProject = async (params: {
-  projectId: string;
-  serverClient?: AxiosInstance;
-}) => {
+const deleteProject = async (params: { projectId: string; serverClient?: AxiosInstance }) => {
   const { projectId, serverClient } = params;
   const client = serverClient ?? httpClient;
   try {
-    const res = await client.delete<TDeleteProjectResponse>(
-      `/api/v1/projects/${projectId}`,
-    );
+    const res = await client.delete<TDeleteProjectResponse>(`/api/v1/projects/${projectId}`);
     return res.data;
   } catch (error) {
     handleHttpError(error);

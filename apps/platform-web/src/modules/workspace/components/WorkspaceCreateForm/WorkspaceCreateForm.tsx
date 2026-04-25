@@ -10,20 +10,16 @@ import { Button } from "@repo/ui/core/button";
 import { Input } from "@repo/ui/core/input";
 import { Textarea } from "@repo/ui/core/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@repo/ui/core/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui/core/select";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@repo/ui/core/select";
-import { OTHER_PRESET, STYLE_PRESETS, COLOR_PALETTE_PRESETS, ROOM_TYPE_PRESETS } from "@repo/contracts";
+  OTHER_PRESET,
+  STYLE_PRESETS,
+  COLOR_PALETTE_PRESETS,
+  ROOM_TYPE_PRESETS,
+} from "@repo/contracts";
 import { PhotoUpload } from "@/modules/workspace/components/PhotoUpload";
 import { FurniturePhotosField } from "@/modules/workspace/components/FurniturePhotosField";
-import {
-  workspaceCreateSchema,
-  type TWorkspaceCreateValues,
-} from "../../types/workspace.types";
+import { workspaceCreateSchema, type TWorkspaceCreateValues } from "../../types/workspace.types";
 
 type TPresetSelectWithOtherProps = {
   control: Control<TWorkspaceCreateValues>;
@@ -38,7 +34,17 @@ type TPresetSelectWithOtherProps = {
 };
 
 const PresetSelectWithOther = (props: TPresetSelectWithOtherProps) => {
-  const { control, name, customName, label, placeholder, customPlaceholder, options, optionLabel, setValue } = props;
+  const {
+    control,
+    name,
+    customName,
+    label,
+    placeholder,
+    customPlaceholder,
+    options,
+    optionLabel,
+    setValue,
+  } = props;
 
   const selectedValue = useWatch({ control, name });
   const showCustomInput = selectedValue === OTHER_PRESET;
@@ -176,11 +182,10 @@ export const WorkspaceCreateForm = (props: TWorkspaceCreateFormProps) => {
                 });
               }}
               onRemove={() => {
-                form.setValue(
-                  "roomPhotoFile",
-                  undefined as unknown as File,
-                  { shouldDirty: true, shouldValidate: true },
-                );
+                form.setValue("roomPhotoFile", undefined as unknown as File, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
               }}
             />
 

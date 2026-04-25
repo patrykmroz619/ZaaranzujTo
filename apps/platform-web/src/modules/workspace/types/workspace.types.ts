@@ -1,6 +1,10 @@
 import { z } from "zod";
-import { STYLE_PRESETS, COLOR_PALETTE_PRESETS, ROOM_TYPE_PRESETS, OTHER_PRESET } from "@repo/contracts";
-
+import {
+  STYLE_PRESETS,
+  COLOR_PALETTE_PRESETS,
+  ROOM_TYPE_PRESETS,
+  OTHER_PRESET,
+} from "@repo/contracts";
 
 export const workspaceCreateSchema = z
   .object({
@@ -17,13 +21,25 @@ export const workspaceCreateSchema = z
   })
   .superRefine((data, ctx) => {
     if (data.stylePreset === OTHER_PRESET && !data.stylePresetCustom?.trim()) {
-      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["stylePresetCustom"], message: "To pole jest wymagane." });
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["stylePresetCustom"],
+        message: "To pole jest wymagane.",
+      });
     }
     if (data.palette === OTHER_PRESET && !data.paletteCustom?.trim()) {
-      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["paletteCustom"], message: "To pole jest wymagane." });
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["paletteCustom"],
+        message: "To pole jest wymagane.",
+      });
     }
     if (data.roomType === OTHER_PRESET && !data.roomTypeCustom?.trim()) {
-      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["roomTypeCustom"], message: "To pole jest wymagane." });
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["roomTypeCustom"],
+        message: "To pole jest wymagane.",
+      });
     }
   });
 

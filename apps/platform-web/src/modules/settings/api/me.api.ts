@@ -15,10 +15,7 @@ const getMe = async (params?: { serverClient?: AxiosInstance }) => {
   }
 };
 
-const updateMeProfile = async (params: {
-  body: TUpdateMeRequest;
-  serverClient?: AxiosInstance;
-}) => {
+const updateMeProfile = async (params: { body: TUpdateMeRequest; serverClient?: AxiosInstance }) => {
   const { body, serverClient } = params;
   const client = serverClient ?? httpClient;
   try {

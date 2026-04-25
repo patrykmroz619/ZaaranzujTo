@@ -16,17 +16,17 @@ The platform-web frontend is now connected to all 18 existing platform-api endpo
 
 ## Feature Status Table
 
-| # | User Story | Status | Missing |
-|---|-----------|--------|---------|
-| US-1 | Browse and manage projects via live backend | ✅ Complete | — |
-| US-2 | View visualizations and iteration history | ✅ Complete | — |
-| US-3 | Generate visualizations via live AI backend | ✅ Complete | — |
-| US-4 | Iterate on existing visualizations | ✅ Complete | — |
-| US-5 | View credit balance and packages | ✅ Complete | — |
-| US-6 | Manage profile and settings (theme) | ✅ Complete | — |
-| US-7 | MVP gap analysis document | ✅ Complete | — |
-| US-8 | Purchase credits via BLIK | ❌ Not started | `POST /payments`, `POST /payments/webhook`, frontend purchase flow |
-| US-9 | Delete account | ⚠️ Partial | Full cascade deletion in `DELETE /me` not implemented |
+| #    | User Story                                  | Status         | Missing                                                            |
+| ---- | ------------------------------------------- | -------------- | ------------------------------------------------------------------ |
+| US-1 | Browse and manage projects via live backend | ✅ Complete    | —                                                                  |
+| US-2 | View visualizations and iteration history   | ✅ Complete    | —                                                                  |
+| US-3 | Generate visualizations via live AI backend | ✅ Complete    | —                                                                  |
+| US-4 | Iterate on existing visualizations          | ✅ Complete    | —                                                                  |
+| US-5 | View credit balance and packages            | ✅ Complete    | —                                                                  |
+| US-6 | Manage profile and settings (theme)         | ✅ Complete    | —                                                                  |
+| US-7 | MVP gap analysis document                   | ✅ Complete    | —                                                                  |
+| US-8 | Purchase credits via BLIK                   | ❌ Not started | `POST /payments`, `POST /payments/webhook`, frontend purchase flow |
+| US-9 | Delete account                              | ⚠️ Partial     | Full cascade deletion in `DELETE /me` not implemented              |
 
 **PRD User Stories Coverage**: 7 of 9 scoped MVP stories complete (78%).
 
@@ -39,22 +39,24 @@ The platform-web frontend is now connected to all 18 existing platform-api endpo
 **Priority**: P1 (blocks monetization)
 
 **Required contract**:
+
 ```typescript
 // Request
 {
-  packageCode: string;     // credit package to purchase
-  returnUrl: string;       // redirect after payment
+  packageCode: string; // credit package to purchase
+  returnUrl: string; // redirect after payment
 }
 
 // Response
 {
   paymentId: string;
-  redirectUrl: string;     // BLIK gateway URL
-  expiresAt: string;       // ISO timestamp
+  redirectUrl: string; // BLIK gateway URL
+  expiresAt: string; // ISO timestamp
 }
 ```
 
 **Implementation scope**:
+
 - `payments` NestJS module (schema, repository, controller, service)
 - BLIK payment gateway integration
 - Payment record creation with `pending` status
@@ -67,6 +69,7 @@ The platform-web frontend is now connected to all 18 existing platform-api endpo
 **Priority**: P1 (blocks credit top-up)
 
 **Required contract**:
+
 ```typescript
 // Request (gateway-specific, likely signed)
 {
@@ -82,6 +85,7 @@ The platform-web frontend is now connected to all 18 existing platform-api endpo
 ```
 
 **Implementation scope**:
+
 - Webhook signature verification (HMAC or similar)
 - Payment status update
 - Credit top-up on `completed` status via credits module
@@ -96,6 +100,7 @@ The platform-web frontend is now connected to all 18 existing platform-api endpo
 **Current state**: Endpoint exists but is a placeholder — no cascade deletion.
 
 **Required cascade**:
+
 1. Delete all iterations (storage files from R2)
 2. Delete all visualizations
 3. Delete all projects
@@ -112,6 +117,7 @@ The platform-web frontend is now connected to all 18 existing platform-api endpo
 **Blocked by**: `POST /payments`, `POST /payments/webhook`
 
 **Scope when backend is ready**:
+
 - `CreditsView`: wire Buy button to `POST /payments`, redirect to gateway
 - New `/payments/success` and `/payments/cancel` pages
 - Credit balance refresh after successful payment
@@ -121,6 +127,7 @@ The platform-web frontend is now connected to all 18 existing platform-api endpo
 **Blocked by**: Full `DELETE /me` cascade
 
 **Scope when backend is ready**:
+
 - `AccountActions` component: call `DELETE /me` with `{ confirm: true }`
 - Clear session and redirect to landing page
 
@@ -128,25 +135,25 @@ The platform-web frontend is now connected to all 18 existing platform-api endpo
 
 ## Implemented Backend Endpoints (Inventory)
 
-| Method | Path | Description |
-|--------|------|-------------|
-| GET | `/api/v1/me` | Get current user profile |
-| PATCH | `/api/v1/me` | Update profile (theme) |
-| DELETE | `/api/v1/me` | Delete account (placeholder) |
-| GET | `/api/v1/projects` | List projects (paginated) |
-| POST | `/api/v1/projects` | Create project |
-| GET | `/api/v1/projects/:id` | Get project details |
-| PATCH | `/api/v1/projects/:id` | Update project |
-| DELETE | `/api/v1/projects/:id` | Delete project |
-| GET | `/api/v1/projects/:id/visualizations` | List project visualizations |
-| POST | `/api/v1/projects/:id/visualizations` | Create visualization |
-| GET | `/api/v1/visualizations/:id` | Get visualization details |
-| GET | `/api/v1/visualizations/:id/iterations` | List iterations |
-| POST | `/api/v1/visualizations/:id/iterations` | Create iteration (AI generation) |
-| GET | `/api/v1/credits/balance` | Get credit balance |
-| GET | `/api/v1/credits/packages` | List credit packages |
-| POST | `/api/v1/credits/topup` | Manual credit top-up (x-api-key) |
-| GET | `/api/v1/storage/assets/:id/download-url` | Get signed download URL |
+| Method | Path                                      | Description                      |
+| ------ | ----------------------------------------- | -------------------------------- |
+| GET    | `/api/v1/me`                              | Get current user profile         |
+| PATCH  | `/api/v1/me`                              | Update profile (theme)           |
+| DELETE | `/api/v1/me`                              | Delete account (placeholder)     |
+| GET    | `/api/v1/projects`                        | List projects (paginated)        |
+| POST   | `/api/v1/projects`                        | Create project                   |
+| GET    | `/api/v1/projects/:id`                    | Get project details              |
+| PATCH  | `/api/v1/projects/:id`                    | Update project                   |
+| DELETE | `/api/v1/projects/:id`                    | Delete project                   |
+| GET    | `/api/v1/projects/:id/visualizations`     | List project visualizations      |
+| POST   | `/api/v1/projects/:id/visualizations`     | Create visualization             |
+| GET    | `/api/v1/visualizations/:id`              | Get visualization details        |
+| GET    | `/api/v1/visualizations/:id/iterations`   | List iterations                  |
+| POST   | `/api/v1/visualizations/:id/iterations`   | Create iteration (AI generation) |
+| GET    | `/api/v1/credits/balance`                 | Get credit balance               |
+| GET    | `/api/v1/credits/packages`                | List credit packages             |
+| POST   | `/api/v1/credits/topup`                   | Manual credit top-up (x-api-key) |
+| GET    | `/api/v1/storage/assets/:id/download-url` | Get signed download URL          |
 
 **Total**: 17 endpoints implemented (payments: 0 of 2, me cascade: partial)
 

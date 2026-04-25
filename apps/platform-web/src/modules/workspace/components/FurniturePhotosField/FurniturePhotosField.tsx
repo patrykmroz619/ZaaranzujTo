@@ -28,9 +28,7 @@ export const FurniturePhotosField = (props: TFurniturePhotosFieldProps) => {
       <Label>{t("workspace.furniturePhotos")}</Label>
       <label className="flex h-20 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-border transition-colors hover:border-primary hover:bg-accent/50">
         <Upload className="mb-1 h-5 w-5 text-muted-foreground" />
-        <span className="text-xs text-muted-foreground">
-          {t("workspace.furniturePhotosHint")}
-        </span>
+        <span className="text-xs text-muted-foreground">{t("workspace.furniturePhotosHint")}</span>
         <input
           type="file"
           className="hidden"

@@ -180,13 +180,25 @@ export const createVisualizationRequestSchema = z
   .strict()
   .superRefine((data, ctx) => {
     if (data.stylePreset === OTHER_PRESET && !data.stylePresetCustom) {
-      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["stylePresetCustom"], message: "Custom style is required when 'other' is selected." });
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["stylePresetCustom"],
+        message: "Custom style is required when 'other' is selected.",
+      });
     }
     if (data.palette === OTHER_PRESET && !data.paletteCustom) {
-      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["paletteCustom"], message: "Custom palette is required when 'other' is selected." });
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["paletteCustom"],
+        message: "Custom palette is required when 'other' is selected.",
+      });
     }
     if (data.roomType === OTHER_PRESET && !data.roomTypeCustom) {
-      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["roomTypeCustom"], message: "Custom room type is required when 'other' is selected." });
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["roomTypeCustom"],
+        message: "Custom room type is required when 'other' is selected.",
+      });
     }
   });
 

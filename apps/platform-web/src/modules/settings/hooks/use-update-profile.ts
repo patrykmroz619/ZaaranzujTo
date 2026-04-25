@@ -14,8 +14,7 @@ export const useUpdateProfile = () => {
   const t = useTranslations("settings");
 
   return useMutation({
-    mutationFn: (params: { body: TUpdateMeRequest }) =>
-      meApi.updateProfile({ body: params.body }),
+    mutationFn: (params: { body: TUpdateMeRequest }) => meApi.updateProfile({ body: params.body }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.profile });
       toast.success(t("title"));
