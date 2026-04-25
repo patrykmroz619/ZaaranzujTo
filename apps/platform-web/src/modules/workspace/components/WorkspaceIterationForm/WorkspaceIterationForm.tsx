@@ -9,26 +9,28 @@ import { Button } from "@repo/ui/core/button";
 import { Textarea } from "@repo/ui/core/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@repo/ui/core/form";
 import { FurniturePhotosField } from "@/modules/workspace/components/FurniturePhotosField";
+import { WorkspaceVisualizationAttributes } from "@/modules/workspace/components/WorkspaceLockedAttributes";
 import {
   workspaceIterationSchema,
   type TWorkspaceIterationValues,
 } from "../../types/workspace.types";
 
-type TLockedAttributes = {
+type TVisualizationAttributes = {
   stylePreset: string;
   palette: string;
   roomType: string;
+  originalPhotoAssetId?: string | null;
 };
 
 type TWorkspaceIterationFormProps = {
-  lockedAttributes: TLockedAttributes;
+  visualizationAttributes: TVisualizationAttributes;
   isGenerating: boolean;
   creditBalance: number;
   onSubmit: (values: TWorkspaceIterationValues) => Promise<void>;
 };
 
 export const WorkspaceIterationForm = (props: TWorkspaceIterationFormProps) => {
-  const { lockedAttributes, isGenerating, creditBalance, onSubmit } = props;
+  const { visualizationAttributes, isGenerating, creditBalance, onSubmit } = props;
   const router = useRouter();
   const t = useTranslations();
 
@@ -48,20 +50,12 @@ export const WorkspaceIterationForm = (props: TWorkspaceIterationFormProps) => {
       <div className="rounded-xl border bg-card p-5 shadow-card">
         <Form {...form}>
           <div className="space-y-4">
-            <div className="space-y-2 rounded-lg bg-muted/50 p-3 text-sm">
-              <p className="text-xs text-muted-foreground">{t("workspace.lockedAttributesHint")}</p>
-              <div className="flex flex-wrap gap-2">
-                <span className="rounded-full bg-background px-2.5 py-1 text-xs">
-                  {t(`styles.${lockedAttributes.stylePreset}` as never)}
-                </span>
-                <span className="rounded-full bg-background px-2.5 py-1 text-xs">
-                  {t(`palettes.${lockedAttributes.palette}` as never)}
-                </span>
-                <span className="rounded-full bg-background px-2.5 py-1 text-xs">
-                  {t(`roomTypes.${lockedAttributes.roomType}` as never)}
-                </span>
-              </div>
-            </div>
+            <WorkspaceVisualizationAttributes
+              stylePreset={visualizationAttributes.stylePreset}
+              palette={visualizationAttributes.palette}
+              roomType={visualizationAttributes.roomType}
+              originalPhotoAssetId={visualizationAttributes.originalPhotoAssetId}
+            />
 
             <FormField
               control={form.control}

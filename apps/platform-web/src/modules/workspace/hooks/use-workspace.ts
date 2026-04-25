@@ -29,11 +29,12 @@ export const useWorkspace = (params: TUseWorkspaceParams) => {
 
   const iterations = visualization?.iterations ?? [];
 
-  const lockedAttributes = visualization
+  const visualizationAttributes = visualization
     ? {
         stylePreset: visualization.stylePreset,
         palette: visualization.palette,
         roomType: visualization.roomType,
+        originalPhotoAssetId: visualization.iterations[0]?.generationInput?.inputAsset ?? null,
       }
     : null;
 
@@ -92,7 +93,7 @@ export const useWorkspace = (params: TUseWorkspaceParams) => {
     creditBalance,
     activeIterationId,
     iterations,
-    lockedAttributes,
+    visualizationAttributes,
     visualizationName: visualization?.name ?? "",
     onIterate,
     onSelectIteration,

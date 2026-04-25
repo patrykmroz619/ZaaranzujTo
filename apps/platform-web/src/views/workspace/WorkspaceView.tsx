@@ -20,7 +20,7 @@ export const WorkspaceView = (props: TWorkspaceViewProps) => {
     creditBalance,
     activeIterationId,
     iterations,
-    lockedAttributes,
+    visualizationAttributes,
     visualizationName,
     onIterate,
     onSelectIteration,
@@ -35,9 +35,9 @@ export const WorkspaceView = (props: TWorkspaceViewProps) => {
       />
 
       <div className="flex flex-col gap-6 lg:flex-row">
-        {lockedAttributes && (
+        {visualizationAttributes && (
           <WorkspaceIterationForm
-            lockedAttributes={lockedAttributes}
+            visualizationAttributes={visualizationAttributes}
             isGenerating={isGenerating}
             creditBalance={creditBalance}
             onSubmit={onIterate}

@@ -111,6 +111,7 @@
     "editPrompt": "Opisz zmiany",
     "editPromptPlaceholder": "Opisz jakie zmiany chcesz wprowadzić...",
     "lockedAttributesHint": "Styl, paleta i typ pomieszczenia są ustalone dla tej wizualizacji.",
+    "chosenAttributes": "Wybrane atrybuty wizualizacji",
     "styleRequired": "To pole jest wymagane.",
     "roomTypeRequired": "To pole jest wymagane.",
     "noCredits": "Brak kredytów. Kup pakiet, aby generować wizualizacje.",
