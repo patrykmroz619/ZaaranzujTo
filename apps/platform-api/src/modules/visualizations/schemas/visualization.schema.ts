@@ -99,11 +99,20 @@ export class Visualization {
   @Prop({ required: true })
   stylePreset: string;
 
+  @Prop({ required: false, type: String, default: null })
+  stylePresetCustom: string | null;
+
   @Prop({ required: true })
   palette: string;
 
+  @Prop({ required: false, type: String, default: null })
+  paletteCustom: string | null;
+
   @Prop({ required: true })
   roomType: string;
+
+  @Prop({ required: false, type: String, default: null })
+  roomTypeCustom: string | null;
 
   @Prop({ type: [IterationSchema], required: true, default: [] })
   iterations: Iteration[];

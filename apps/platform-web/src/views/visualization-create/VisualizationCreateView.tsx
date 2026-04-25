@@ -28,8 +28,11 @@ export const VisualizationCreateView = (props: TVisualizationCreateViewProps) =>
     const formData = new FormData();
     formData.append("name", values.name.trim());
     formData.append("stylePreset", values.stylePreset);
+    if (values.stylePresetCustom) formData.append("stylePresetCustom", values.stylePresetCustom);
     formData.append("palette", values.palette);
+    if (values.paletteCustom) formData.append("paletteCustom", values.paletteCustom);
     formData.append("roomType", values.roomType);
+    if (values.roomTypeCustom) formData.append("roomTypeCustom", values.roomTypeCustom);
     if (values.prompt) formData.append("prompt", values.prompt);
     formData.append("inputPhoto", values.roomPhotoFile);
     values.furniturePhotoFiles.forEach((file) => formData.append("referencePhotos", file));

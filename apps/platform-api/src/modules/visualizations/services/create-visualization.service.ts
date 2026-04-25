@@ -41,8 +41,11 @@ export class CreateVisualizationService {
       projectId,
       name: body.name,
       stylePreset: body.stylePreset,
+      stylePresetCustom: body.stylePresetCustom,
       palette: body.palette,
+      paletteCustom: body.paletteCustom,
       roomType: body.roomType,
+      roomTypeCustom: body.roomTypeCustom,
     });
 
     try {

@@ -3,7 +3,7 @@
 import { useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch, type Control, type Path } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { Button } from "@repo/ui/core/button";
@@ -17,17 +17,87 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/core/select";
+import { OTHER_PRESET, STYLE_PRESETS, COLOR_PALETTE_PRESETS, ROOM_TYPE_PRESETS } from "@repo/contracts";
 import { PhotoUpload } from "@/modules/workspace/components/PhotoUpload";
 import { FurniturePhotosField } from "@/modules/workspace/components/FurniturePhotosField";
-import {
-  WORKSPACE_STYLES,
-  COLOR_PALETTES,
-  ROOM_TYPES,
-} from "@/modules/workspace/data/mock-workspace";
 import {
   workspaceCreateSchema,
   type TWorkspaceCreateValues,
 } from "../../types/workspace.types";
+
+type TPresetSelectWithOtherProps = {
+  control: Control<TWorkspaceCreateValues>;
+  name: Path<TWorkspaceCreateValues>;
+  customName: Path<TWorkspaceCreateValues>;
+  label: string;
+  placeholder: string;
+  customPlaceholder: string;
+  options: readonly string[];
+  optionLabel: (key: string) => string;
+  setValue: (name: Path<TWorkspaceCreateValues>, value: string, opts: object) => void;
+};
+
+const PresetSelectWithOther = (props: TPresetSelectWithOtherProps) => {
+  const { control, name, customName, label, placeholder, customPlaceholder, options, optionLabel, setValue } = props;
+
+  const selectedValue = useWatch({ control, name });
+  const showCustomInput = selectedValue === OTHER_PRESET;
+
+  return (
+    <FormField
+      control={control}
+      name={name}
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>{label} *</FormLabel>
+          <FormControl>
+            <Select
+              value={field.value as string}
+              onValueChange={(value) => {
+                field.onChange(value);
+                if (value !== OTHER_PRESET) {
+                  setValue(customName, "", { shouldValidate: true });
+                }
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder={placeholder} />
+              </SelectTrigger>
+              <SelectContent>
+                {options.map((optionValue) => (
+                  <SelectItem key={optionValue} value={optionValue}>
+                    {optionLabel(optionValue)}
+                  </SelectItem>
+                ))}
+                <SelectItem value={OTHER_PRESET}>{optionLabel(OTHER_PRESET)}</SelectItem>
+              </SelectContent>
+            </Select>
+          </FormControl>
+          <FormMessage />
+          {showCustomInput && (
+            <FormField
+              control={control}
+              name={customName}
+              render={({ field: customField }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      placeholder={customPlaceholder}
+                      value={(customField.value as string) ?? ""}
+                      onChange={customField.onChange}
+                      maxLength={120}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+        </FormItem>
+      )}
+    />
+  );
+};
 
 type TWorkspaceCreateFormProps = {
   isGenerating: boolean;
@@ -44,9 +114,12 @@ export const WorkspaceCreateForm = (props: TWorkspaceCreateFormProps) => {
     resolver: zodResolver(workspaceCreateSchema),
     defaultValues: {
       name: "",
-      stylePreset: "",
-      palette: "",
-      roomType: "",
+      stylePreset: "" as TWorkspaceCreateValues["stylePreset"],
+      stylePresetCustom: "",
+      palette: "" as TWorkspaceCreateValues["palette"],
+      paletteCustom: "",
+      roomType: "" as TWorkspaceCreateValues["roomType"],
+      roomTypeCustom: "",
       prompt: "",
       roomPhotoFile: undefined as unknown as File,
       furniturePhotoFiles: [],
@@ -111,79 +184,40 @@ export const WorkspaceCreateForm = (props: TWorkspaceCreateFormProps) => {
               }}
             />
 
-            <FormField
+            <PresetSelectWithOther
               control={form.control}
               name="stylePreset"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("workspace.style")} *</FormLabel>
-                  <FormControl>
-                    <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger>
-                        <SelectValue placeholder={t("workspace.stylePlaceholder")} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {WORKSPACE_STYLES.map((styleValue) => (
-                          <SelectItem key={styleValue} value={styleValue}>
-                            {t(`styles.${styleValue}`)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              customName="stylePresetCustom"
+              label={t("workspace.style")}
+              placeholder={t("workspace.stylePlaceholder")}
+              customPlaceholder={t("workspace.customStylePlaceholder")}
+              options={STYLE_PRESETS}
+              optionLabel={(key) => t(`styles.${key}` as Parameters<typeof t>[0])}
+              setValue={form.setValue}
             />
 
-            <FormField
+            <PresetSelectWithOther
               control={form.control}
               name="palette"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("workspace.colorPalette")} *</FormLabel>
-                  <FormControl>
-                    <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger>
-                        <SelectValue placeholder={t("workspace.colorPalettePlaceholder")} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {COLOR_PALETTES.map((paletteValue) => (
-                          <SelectItem key={paletteValue} value={paletteValue}>
-                            {t(`palettes.${paletteValue}`)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              customName="paletteCustom"
+              label={t("workspace.colorPalette")}
+              placeholder={t("workspace.colorPalettePlaceholder")}
+              customPlaceholder={t("workspace.customPalettePlaceholder")}
+              options={COLOR_PALETTE_PRESETS}
+              optionLabel={(key) => t(`palettes.${key}` as Parameters<typeof t>[0])}
+              setValue={form.setValue}
             />
 
-            <FormField
+            <PresetSelectWithOther
               control={form.control}
               name="roomType"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("workspace.roomType")} *</FormLabel>
-                  <FormControl>
-                    <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger>
-                        <SelectValue placeholder={t("workspace.roomTypePlaceholder")} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {ROOM_TYPES.map((roomTypeValue) => (
-                          <SelectItem key={roomTypeValue} value={roomTypeValue}>
-                            {t(`roomTypes.${roomTypeValue}`)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              customName="roomTypeCustom"
+              label={t("workspace.roomType")}
+              placeholder={t("workspace.roomTypePlaceholder")}
+              customPlaceholder={t("workspace.customRoomTypePlaceholder")}
+              options={ROOM_TYPE_PRESETS}
+              optionLabel={(key) => t(`roomTypes.${key}` as Parameters<typeof t>[0])}
+              setValue={form.setValue}
             />
 
             <FormField

@@ -99,6 +99,9 @@
     "furniturePhotos": "Zdjęcia mebli / elementów",
     "furniturePhotosHint": "Opcjonalnie dodaj zdjęcia mebli",
     "furniturePhotoAlt": "Zdjęcie referencyjne",
+    "customStylePlaceholder": "Opisz swój własny styl...",
+    "customPalettePlaceholder": "Opisz własną paletę kolorów...",
+    "customRoomTypePlaceholder": "Podaj typ pomieszczenia...",
     "generate": "Generuj wizualizację",
     "generating": "Generowanie...",
     "generatingMessage": "Twoja wizualizacja jest generowana. Może to potrwać do kilku minut.",
@@ -147,21 +150,30 @@
     "minimalist": "Minimalistyczny",
     "classic": "Klasyczny",
     "boho": "Boho",
-    "modern": "Nowoczesny"
+    "modern": "Nowoczesny",
+    "japandi": "Japandi",
+    "contemporary": "Współczesny",
+    "other": "Inne"
   },
   "palettes": {
     "light": "Jasna",
     "dark": "Ciemna",
     "warm": "Ciepła",
     "cool": "Chłodna",
-    "pastel": "Pastelowa"
+    "pastel": "Pastelowa",
+    "earthy": "Ziemista",
+    "neutral": "Neutralna",
+    "other": "Inne"
   },
   "roomTypes": {
     "livingRoom": "Salon",
     "bedroom": "Sypialnia",
     "kitchen": "Kuchnia",
     "bathroom": "Łazienka",
-    "office": "Biuro"
+    "office": "Biuro domowe",
+    "diningRoom": "Jadalnia",
+    "kidsRoom": "Pokój dziecięcy",
+    "other": "Inne"
   },
   "notFound": {
     "title": "404",

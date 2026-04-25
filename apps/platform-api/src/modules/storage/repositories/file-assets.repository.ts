@@ -21,5 +21,4 @@ export class FileAssetsRepository {
   async findById(id: string): Promise<FileAssetDocument | null> {
     return this.fileAssetModel.findById(id).exec();
   }
-
 }

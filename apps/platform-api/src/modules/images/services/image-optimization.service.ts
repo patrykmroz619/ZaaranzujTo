@@ -31,7 +31,8 @@ export class ImageOptimizationService {
       });
     }
 
-    const avifOptions = config?.quality !== undefined ? { quality: config.quality } : { lossless: true };
+    const avifOptions =
+      config?.quality !== undefined ? { quality: config.quality } : { lossless: true };
     const optimizedBuffer = await pipeline.avif(avifOptions).toBuffer();
 
     this.logger.debug(

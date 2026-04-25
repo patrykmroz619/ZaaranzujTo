@@ -27,6 +27,48 @@ const trimmedNonEmpty = z
   .transform((value) => value.trim())
   .pipe(z.string().min(1));
 
+const trimmedNonEmptyMax120 = z
+  .string()
+  .transform((value) => value.trim())
+  .pipe(z.string().min(1).max(120));
+
+export const OTHER_PRESET = "other" as const;
+
+export const STYLE_PRESETS = [
+  "scandinavian",
+  "industrial",
+  "minimalist",
+  "classic",
+  "boho",
+  "modern",
+  "japandi",
+  "contemporary",
+] as const;
+
+export const COLOR_PALETTE_PRESETS = [
+  "light",
+  "dark",
+  "warm",
+  "cool",
+  "pastel",
+  "earthy",
+  "neutral",
+] as const;
+
+export const ROOM_TYPE_PRESETS = [
+  "livingRoom",
+  "bedroom",
+  "kitchen",
+  "bathroom",
+  "office",
+  "diningRoom",
+  "kidsRoom",
+] as const;
+
+export type TStylePreset = (typeof STYLE_PRESETS)[number];
+export type TColorPalettePreset = (typeof COLOR_PALETTE_PRESETS)[number];
+export type TRoomTypePreset = (typeof ROOM_TYPE_PRESETS)[number];
+
 const visualizationNameSchema = z
   .string()
   .transform((value) => value.trim())
@@ -124,15 +166,29 @@ export type TListProjectVisualizationsResponse = z.infer<
 export const createVisualizationRequestSchema = z
   .object({
     name: visualizationNameSchema,
-    stylePreset: trimmedNonEmpty,
-    palette: trimmedNonEmpty,
-    roomType: trimmedNonEmpty,
+    stylePreset: z.enum([...STYLE_PRESETS, OTHER_PRESET]),
+    stylePresetCustom: trimmedNonEmptyMax120.optional(),
+    palette: z.enum([...COLOR_PALETTE_PRESETS, OTHER_PRESET]),
+    paletteCustom: trimmedNonEmptyMax120.optional(),
+    roomType: z.enum([...ROOM_TYPE_PRESETS, OTHER_PRESET]),
+    roomTypeCustom: trimmedNonEmptyMax120.optional(),
     prompt: z
       .string()
       .transform((value) => value.trim())
       .optional(),
   })
-  .strict();
+  .strict()
+  .superRefine((data, ctx) => {
+    if (data.stylePreset === OTHER_PRESET && !data.stylePresetCustom) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["stylePresetCustom"], message: "Custom style is required when 'other' is selected." });
+    }
+    if (data.palette === OTHER_PRESET && !data.paletteCustom) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["paletteCustom"], message: "Custom palette is required when 'other' is selected." });
+    }
+    if (data.roomType === OTHER_PRESET && !data.roomTypeCustom) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["roomTypeCustom"], message: "Custom room type is required when 'other' is selected." });
+    }
+  });
 
 export type TCreateVisualizationRequest = z.infer<typeof createVisualizationRequestSchema>;
 

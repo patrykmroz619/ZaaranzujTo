@@ -15,38 +15,8 @@ type TSubsequentIterationPromptParams = {
   hasReferencePhotos: boolean;
 };
 
-const PALETTE_COLORS: Record<string, { primary: string[]; accents: string[] }> = {
-  light: {
-    primary: ["white", "light grey", "cream"],
-    accents: ["soft blue", "pale wood", "silver"],
-  },
-  dark: {
-    primary: ["charcoal", "deep navy", "espresso brown"],
-    accents: ["brushed gold", "emerald green", "burgundy"],
-  },
-  warm: {
-    primary: ["warm beige", "soft terracotta", "honey"],
-    accents: ["matte black", "natural wood", "burnt sienna"],
-  },
-  cool: {
-    primary: ["ice blue", "slate grey", "lavender"],
-    accents: ["chrome", "frosted glass", "mint green"],
-  },
-  pastel: {
-    primary: ["blush pink", "powder blue", "mint green"],
-    accents: ["soft lilac", "pale yellow", "warm white"],
-  },
-};
-
-const resolvePaletteColors = (palette?: string) => {
-  const key = palette?.trim();
-  if (!key) return undefined;
-  return PALETTE_COLORS[key] ?? { primary: [key], accents: [] };
-};
-
 export const generateFirstIterationPrompt = (params: TFirstIterationPromptParams): string => {
   const { stylePreset, palette, roomType, prompt, hasInputPhoto, hasReferencePhotos } = params;
-  const paletteColors = resolvePaletteColors(palette);
 
   // ── images ────────────────────────────────────────────────────────────────
   const images: Record<string, string> = {};
@@ -83,7 +53,7 @@ export const generateFirstIterationPrompt = (params: TFirstIterationPromptParams
   const style: Record<string, unknown> = {};
   if (roomType?.trim()) style.room_type = roomType.trim();
   if (stylePreset?.trim()) style.design_style = stylePreset.trim();
-  if (paletteColors) style.color_palette = { name: palette!.trim(), ...paletteColors };
+  if (palette?.trim()) style.color_palette = palette.trim();
 
   // ── prompt JSON ───────────────────────────────────────────────────────────
   return JSON.stringify({
@@ -117,7 +87,6 @@ export const generateSubsequentIterationPrompt = (
   params: TSubsequentIterationPromptParams,
 ): string => {
   const { stylePreset, palette, roomType, prompt, hasReferencePhotos } = params;
-  const paletteColors = resolvePaletteColors(palette);
 
   // ── images ────────────────────────────────────────────────────────────────
   const images: Record<string, string> = {
@@ -150,7 +119,7 @@ export const generateSubsequentIterationPrompt = (
   const style: Record<string, unknown> = {};
   if (roomType?.trim()) style.room_type = roomType.trim();
   if (stylePreset?.trim()) style.design_style = stylePreset.trim();
-  if (paletteColors) style.color_palette = { name: palette!.trim(), ...paletteColors };
+  if (palette?.trim()) style.color_palette = palette.trim();
 
   // ── prompt JSON ───────────────────────────────────────────────────────────
   return JSON.stringify({

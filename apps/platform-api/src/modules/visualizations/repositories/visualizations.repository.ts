@@ -17,8 +17,11 @@ type TCreateVisualizationForUserParams = {
   projectId: string;
   name: string;
   stylePreset: string;
+  stylePresetCustom?: string | null;
   palette: string;
+  paletteCustom?: string | null;
   roomType: string;
+  roomTypeCustom?: string | null;
 };
 
 type TDeleteVisualizationByIdForUserParams = {
@@ -84,15 +87,28 @@ export class VisualizationsRepository {
   createVisualizationForUser = async (
     params: TCreateVisualizationForUserParams,
   ): Promise<TVisualizationDocument> => {
-    const { userId, projectId, name, stylePreset, palette, roomType } = params;
+    const {
+      userId,
+      projectId,
+      name,
+      stylePreset,
+      stylePresetCustom,
+      palette,
+      paletteCustom,
+      roomType,
+      roomTypeCustom,
+    } = params;
 
     return await this.visualizationModel.create({
       userId,
       projectId,
       name,
       stylePreset,
+      stylePresetCustom: stylePresetCustom ?? null,
       palette,
+      paletteCustom: paletteCustom ?? null,
       roomType,
+      roomTypeCustom: roomTypeCustom ?? null,
       iterations: [],
       iterationsCount: 0,
       latestIteration: null,

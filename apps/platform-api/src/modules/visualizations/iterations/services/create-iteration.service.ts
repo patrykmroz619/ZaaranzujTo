@@ -78,7 +78,10 @@ export class CreateIterationService {
     });
 
     const optimizedInputPhoto = inputPhoto
-      ? await this.imageOptimizationService.optimize(inputPhoto, { maxDimensionPx: 1024, quality: 72 })
+      ? await this.imageOptimizationService.optimize(inputPhoto, {
+          maxDimensionPx: 1024,
+          quality: 72,
+        })
       : undefined;
     const optimizedReferencePhotos = await this.imageOptimizationService.optimizeAll(
       referencePhotos,
@@ -89,6 +92,9 @@ export class CreateIterationService {
       prompt,
       inputPhoto: optimizedInputPhoto,
       referencePhotos: optimizedReferencePhotos,
+      stylePresetCustom: visualization.stylePresetCustom,
+      paletteCustom: visualization.paletteCustom,
+      roomTypeCustom: visualization.roomTypeCustom,
     });
 
     const isEditMode = !!parentIterationId;
@@ -115,18 +121,31 @@ export class CreateIterationService {
       };
     }
 
+    const effectiveStylePreset =
+      visualization.stylePreset === "other"
+        ? (visualization.stylePresetCustom ?? undefined)
+        : visualization.stylePreset;
+    const effectivePalette =
+      visualization.palette === "other"
+        ? (visualization.paletteCustom ?? undefined)
+        : visualization.palette;
+    const effectiveRoomType =
+      visualization.roomType === "other"
+        ? (visualization.roomTypeCustom ?? undefined)
+        : visualization.roomType;
+
     const builtPrompt = isEditMode
       ? generateSubsequentIterationPrompt({
-          stylePreset: visualization.stylePreset,
-          palette: visualization.palette,
-          roomType: visualization.roomType,
+          stylePreset: effectiveStylePreset,
+          palette: effectivePalette,
+          roomType: effectiveRoomType,
           prompt,
           hasReferencePhotos: referencePhotos.length > 0,
         })
       : generateFirstIterationPrompt({
-          stylePreset: visualization.stylePreset,
-          palette: visualization.palette,
-          roomType: visualization.roomType,
+          stylePreset: effectiveStylePreset,
+          palette: effectivePalette,
+          roomType: effectiveRoomType,
           prompt,
           hasInputPhoto: !!inputPhoto,
           hasReferencePhotos: referencePhotos.length > 0,
@@ -268,11 +287,22 @@ export class CreateIterationService {
     prompt: string;
     inputPhoto: TUploadedFile | undefined;
     referencePhotos: TUploadedFile[];
+    stylePresetCustom?: string | null;
+    paletteCustom?: string | null;
+    roomTypeCustom?: string | null;
   }) => {
-    const { prompt, inputPhoto, referencePhotos } = params;
+    const { prompt, inputPhoto, referencePhotos, stylePresetCustom, paletteCustom, roomTypeCustom } =
+      params;
+
+    const textParts = [
+      prompt.length > 0 ? prompt : undefined,
+      stylePresetCustom ?? undefined,
+      paletteCustom ?? undefined,
+      roomTypeCustom ?? undefined,
+    ].filter((part): part is string => part !== undefined);
 
     await this.aiModerationService.moderateContent({
-      text: prompt.length > 0 ? prompt : undefined,
+      text: textParts.length > 0 ? textParts.join("\n") : undefined,
       images: this.buildModerationImages({
         inputPhoto,
         referencePhotos,
