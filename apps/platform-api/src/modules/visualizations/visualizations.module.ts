@@ -14,7 +14,6 @@ import { IterationCreditsService } from "./iterations/services/internal/iteratio
 import { IterationFilesValidatorService } from "./iterations/services/internal/iteration-files-validator.service";
 import { ListVisualizationIterationsService } from "./iterations/services/list-visualization-iterations.service";
 import { CreateIterationService } from "./iterations/services/create-iteration.service";
-import { IterationPromptBuilderService } from "./iterations/services/iteration-prompt-builder.service";
 import { VisualizationsRepository } from "./repositories/visualizations.repository";
 import { Visualization, VisualizationSchema } from "./schemas/visualization.schema";
 import { CreateVisualizationService } from "./services/create-visualization.service";
@@ -57,7 +56,6 @@ import { VisualizationsController } from "./visualizations.controller";
     IterationFilesValidatorService,
     IterationAssetsService,
     IterationCreditsService,
-    IterationPromptBuilderService,
     CreateIterationService,
   ],
 })

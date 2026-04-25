@@ -18,7 +18,10 @@ import {
 } from "./internal/iteration-credits.service";
 import { IterationFilesValidatorService } from "./internal/iteration-files-validator.service";
 import type { TUploadedFile } from "./internal/iteration.types";
-import { IterationPromptBuilderService } from "./iteration-prompt-builder.service";
+import {
+  generateFirstIterationPrompt,
+  generateSubsequentIterationPrompt,
+} from "../prompts/generate-vizualization-prompt";
 
 type TCreateIterationParams = {
   visualization: TVisualizationDocument;
@@ -38,7 +41,7 @@ export class CreateIterationService {
     private readonly configService: ConfigService,
     private readonly iterationFilesValidatorService: IterationFilesValidatorService,
     private readonly visualizationsRepository: VisualizationsRepository,
-    private readonly iterationPromptBuilderService: IterationPromptBuilderService,
+
     private readonly iterationAssetsService: IterationAssetsService,
     private readonly iterationCreditsService: IterationCreditsService,
     private readonly aiModerationService: AiModerationService,
@@ -112,16 +115,22 @@ export class CreateIterationService {
       };
     }
 
-    const builtPrompt = this.iterationPromptBuilderService.buildVisualizationPrompt({
-      stylePreset: visualization.stylePreset,
-      palette: visualization.palette,
-      roomType: visualization.roomType,
-      prompt,
-      hasInputPhoto: isEditMode ? false : !!inputPhoto,
-      hasReferencePhotos: referencePhotos.length > 0,
-      hasPreviousOutput: isEditMode,
-      isSubsequentIteration: isEditMode,
-    });
+    const builtPrompt = isEditMode
+      ? generateSubsequentIterationPrompt({
+          stylePreset: visualization.stylePreset,
+          palette: visualization.palette,
+          roomType: visualization.roomType,
+          prompt,
+          hasReferencePhotos: referencePhotos.length > 0,
+        })
+      : generateFirstIterationPrompt({
+          stylePreset: visualization.stylePreset,
+          palette: visualization.palette,
+          roomType: visualization.roomType,
+          prompt,
+          hasInputPhoto: !!inputPhoto,
+          hasReferencePhotos: referencePhotos.length > 0,
+        });
 
     this.logger.log(`[createIteration] Prompt built isEditMode=${isEditMode}`);
 
