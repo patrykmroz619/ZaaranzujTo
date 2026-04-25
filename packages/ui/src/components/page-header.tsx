@@ -25,12 +25,12 @@ const PageHeader = (props: TPageHeaderProps) => {
           {backLabel || "Wstecz"}
         </a>
       )}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="min-w-0">
           <h1 className="font-display text-2xl text-foreground">{title}</h1>
           {subtitle && <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>}
         </div>
-        {children && <div className="flex w-full sm:w-auto">{children}</div>}
+        {children && <div className="flex w-full sm:ml-auto sm:w-auto sm:justify-end">{children}</div>}
       </div>
     </div>
   );

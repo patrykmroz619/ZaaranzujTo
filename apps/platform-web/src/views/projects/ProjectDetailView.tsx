@@ -23,13 +23,15 @@ export const ProjectDetailView = (props: TProjectDetailViewProps) => {
   return (
     <div className="space-y-5">
       <PageHeader title={t("project.title")} backHref="/projects" backLabel={t("common.back")}>
-        <Button
-          onClick={() => router.push(`/projects/${projectId}/workspace/new`)}
-          className="gradient-warm text-primary-foreground border-0 gap-2 w-full sm:w-auto"
-        >
-          <Plus className="h-4 w-4" />
-          {t("project.newVisualization")}
-        </Button>
+        <div className="w-full sm:ml-auto sm:w-auto">
+          <Button
+            onClick={() => router.push(`/projects/${projectId}/workspace/new`)}
+            className="gradient-warm text-primary-foreground border-0 gap-2 w-full sm:w-auto"
+          >
+            <Plus className="h-4 w-4" />
+            {t("project.newVisualization")}
+          </Button>
+        </div>
       </PageHeader>
 
       {isLoading ? (

@@ -54,12 +54,14 @@ export const ProjectsView = () => {
   return (
     <div className="space-y-5">
       <PageHeader title={t("dashboard.title")} subtitle={t("dashboard.manageSubtitle")}>
-        <CreateProjectDialog
-          open={createDialogOpen}
-          onOpenChange={setCreateDialogOpen}
-          onCreate={handleCreateProject}
-          isPending={isCreating}
-        />
+        <div className="w-full sm:ml-auto sm:w-auto">
+          <CreateProjectDialog
+            open={createDialogOpen}
+            onOpenChange={setCreateDialogOpen}
+            onCreate={handleCreateProject}
+            isPending={isCreating}
+          />
+        </div>
       </PageHeader>
 
       {isLoading ? (
