@@ -68,6 +68,12 @@
   "project": {
     "title": "Projekt",
     "newVisualization": "Nowa wizualizacja",
+    "deleteVisualization": "Usuń wizualizację",
+    "deleteVisualizationConfirmTitle": "Czy na pewno chcesz usunąć wizualizację?",
+    "deleteVisualizationConfirmMessage": "Ta wizualizacja i wszystkie jej iteracje zostaną trwale usunięte.",
+    "deleteVisualizationSuccess": "Wizualizacja została usunięta.",
+    "deleteAction": "Usuń",
+    "cancelAction": "Anuluj",
     "emptyTitle": "Brak wizualizacji",
     "emptyDescription": "Dodaj pierwszą wizualizację, aby rozpocząć projektowanie tego wnętrza.",
     "emptyCta": "Dodaj pierwszą wizualizację",

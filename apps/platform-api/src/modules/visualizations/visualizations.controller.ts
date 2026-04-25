@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -30,6 +31,7 @@ import { CreateVisualizationService } from "./services/create-visualization.serv
 import { GetVisualizationDetailsService } from "./services/get-visualization-details.service";
 import { ListVisualizationIterationsService } from "./iterations/services/list-visualization-iterations.service";
 import { CreateIterationService } from "./iterations/services/create-iteration.service";
+import { DeleteVisualizationService } from "./services/delete-visualization.service";
 import { UpdateVisualizationService } from "./services/update-visualization.service";
 
 type TUploadedIterationFile = {
@@ -46,6 +48,7 @@ export class VisualizationsController {
     private readonly listProjectVisualizationsService: ListProjectVisualizationsService,
     private readonly createVisualizationService: CreateVisualizationService,
     private readonly updateVisualizationService: UpdateVisualizationService,
+    private readonly deleteVisualizationService: DeleteVisualizationService,
     private readonly getVisualizationDetailsService: GetVisualizationDetailsService,
     private readonly listVisualizationIterationsService: ListVisualizationIterationsService,
     private readonly createIterationService: CreateIterationService,
@@ -137,6 +140,17 @@ export class VisualizationsController {
       email: currentUser.email,
       visualizationId: parsedParams.visualizationId,
       body: parsedBody,
+    });
+  }
+
+  @Delete("visualizations/:visualizationId")
+  deleteVisualization(@CurrentUser() currentUser: TAuthData, @Param() params: unknown) {
+    const parsedParams = visualizationIdParamsSchema.parse(params);
+
+    return this.deleteVisualizationService.deleteVisualization({
+      clerkId: currentUser.userId,
+      email: currentUser.email,
+      visualizationId: parsedParams.visualizationId,
     });
   }
 

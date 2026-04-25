@@ -17,6 +17,7 @@ import { CreateIterationService } from "./iterations/services/create-iteration.s
 import { VisualizationsRepository } from "./repositories/visualizations.repository";
 import { Visualization, VisualizationSchema } from "./schemas/visualization.schema";
 import { CreateVisualizationService } from "./services/create-visualization.service";
+import { DeleteVisualizationService } from "./services/delete-visualization.service";
 import { GetVisualizationDetailsService } from "./services/get-visualization-details.service";
 import { ListProjectVisualizationsService } from "./services/list-project-visualizations.service";
 import { MapVisualizationDetailsService } from "./services/map-visualization-details.service";
@@ -48,6 +49,7 @@ import { VisualizationsController } from "./visualizations.controller";
     MapVisualizationDetailsService,
     ListProjectVisualizationsService,
     CreateVisualizationService,
+    DeleteVisualizationService,
     UpdateVisualizationService,
     GetVisualizationDetailsService,
     ListVisualizationIterationsService,

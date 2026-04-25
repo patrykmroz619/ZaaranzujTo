@@ -5,8 +5,10 @@ import { useTranslations } from "next-intl";
 import { Plus } from "lucide-react";
 import { Button } from "@repo/ui/core/button";
 import { PageHeader } from "@repo/ui/components/page-header";
+import { DeleteVisualizationDialog } from "@/modules/projects/components/DeleteVisualizationDialog";
 import { VisualizationCard } from "@/modules/projects/components/VisualizationCard";
 import { useProjectVisualizations } from "@/modules/projects/hooks/use-project-visualizations";
+import { useVisualizationDeleteFlow } from "@/modules/projects/hooks/use-visualization-delete-flow";
 
 type TProjectDetailViewProps = {
   projectId: string;
@@ -18,6 +20,13 @@ export const ProjectDetailView = (props: TProjectDetailViewProps) => {
   const t = useTranslations();
 
   const { visualizations, isLoading, error } = useProjectVisualizations({ projectId });
+  const {
+    isDeleteDialogOpen,
+    isDeleting,
+    openDeleteDialog,
+    closeDeleteDialog,
+    handleDeleteVisualization,
+  } = useVisualizationDeleteFlow({ projectId });
   const visualizationItems = visualizations?.items ?? [];
 
   return (
@@ -60,10 +69,26 @@ export const ProjectDetailView = (props: TProjectDetailViewProps) => {
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {visualizationItems.map((vis) => (
-            <VisualizationCard key={vis.id} visualization={vis} projectId={projectId} />
+            <VisualizationCard
+              key={vis.id}
+              visualization={vis}
+              projectId={projectId}
+              onDelete={openDeleteDialog}
+            />
           ))}
         </div>
       )}
+
+      <DeleteVisualizationDialog
+        open={isDeleteDialogOpen}
+        isPending={isDeleting}
+        onOpenChange={(open) => {
+          if (!open) {
+            closeDeleteDialog();
+          }
+        }}
+        onConfirm={handleDeleteVisualization}
+      />
     </div>
   );
 };

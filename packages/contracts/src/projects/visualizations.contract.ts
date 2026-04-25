@@ -290,6 +290,15 @@ export const updateVisualizationResponseSchema = visualizationDetailsSchema;
 
 export type TUpdateVisualizationResponse = z.infer<typeof updateVisualizationResponseSchema>;
 
+export const deleteVisualizationResponseSchema = z
+  .object({
+    deleted: z.literal(true),
+    visualizationId: objectIdSchema,
+  })
+  .strict();
+
+export type TDeleteVisualizationResponse = z.infer<typeof deleteVisualizationResponseSchema>;
+
 export const listVisualizationIterationsSortSchema = z.enum(["iterationNo:asc", "iterationNo:desc"]);
 
 export type TListVisualizationIterationsSort = z.infer<typeof listVisualizationIterationsSortSchema>;

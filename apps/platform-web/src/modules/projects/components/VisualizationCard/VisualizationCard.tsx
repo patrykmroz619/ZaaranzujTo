@@ -2,18 +2,26 @@
 
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Image as ImageIcon } from "lucide-react";
+import { Image as ImageIcon, MoreVertical, Trash2 } from "lucide-react";
+import { Button } from "@repo/ui/core/button";
 import { Card, CardContent } from "@repo/ui/core/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@repo/ui/core/dropdown-menu";
 import type { TVisualizationSummary } from "@repo/contracts";
 import { useAssetUrl } from "@/modules/storage/hooks/use-asset-url";
 
 type TVisualizationCardProps = {
   visualization: TVisualizationSummary;
   projectId: string;
+  onDelete: (visualizationId: string) => void;
 };
 
 export const VisualizationCard = (props: TVisualizationCardProps) => {
-  const { visualization, projectId } = props;
+  const { visualization, projectId, onDelete } = props;
   const router = useRouter();
   const t = useTranslations("project");
   const { url: thumbnailUrl } = useAssetUrl(visualization.latestIteration?.imageAssetId);
@@ -31,7 +39,28 @@ export const VisualizationCard = (props: TVisualizationCardProps) => {
         )}
       </div>
       <CardContent className="p-4">
-        <h3 className="font-medium text-card-foreground">{visualization.name}</h3>
+        <div className="flex items-start justify-between gap-2">
+          <h3 className="font-medium text-card-foreground">{visualization.name}</h3>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild onClick={(event) => event.stopPropagation()}>
+              <Button variant="ghost" size="icon" className="h-8 w-8">
+                <MoreVertical className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" onClick={(event) => event.stopPropagation()}>
+              <DropdownMenuItem
+                className="text-destructive"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onDelete(visualization.id);
+                }}
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                {t("deleteVisualization")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
         <div className="mt-1 flex justify-between text-xs text-muted-foreground">
           <span>
             {visualization.iterationsCount} {t("iterations")}

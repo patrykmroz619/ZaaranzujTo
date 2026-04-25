@@ -2,6 +2,7 @@ import type { AxiosInstance } from "axios";
 
 import type {
   TCreateVisualizationHeaders,
+  TDeleteVisualizationResponse,
   TListProjectVisualizationsQuery,
   TListProjectVisualizationsResponse,
   TUpdateVisualizationRequest,
@@ -82,9 +83,26 @@ const updateVisualization = async (params: {
   }
 };
 
+const deleteVisualization = async (params: {
+  visualizationId: string;
+  serverClient?: AxiosInstance;
+}) => {
+  const { visualizationId, serverClient } = params;
+  const client = serverClient ?? httpClient;
+  try {
+    const res = await client.delete<TDeleteVisualizationResponse>(
+      `/api/v1/visualizations/${visualizationId}`,
+    );
+    return res.data;
+  } catch (error) {
+    handleHttpError(error);
+  }
+};
+
 export const visualizationsApi = {
   list: listVisualizations,
   create: createVisualization,
   get: getVisualization,
   update: updateVisualization,
+  delete: deleteVisualization,
 };
