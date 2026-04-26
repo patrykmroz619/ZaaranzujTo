@@ -15,8 +15,8 @@ import type { TProjectObject } from "@repo/contracts";
 
 type TProjectCardProps = {
   project: TProjectObject;
-  onEdit: (id: string) => void;
-  onDelete: (id: string) => void;
+  onEdit?: (id: string) => void;
+  onDelete?: (id: string) => void;
 };
 
 export const ProjectCard = (props: TProjectCardProps) => {
@@ -39,38 +39,44 @@ export const ProjectCard = (props: TProjectCardProps) => {
               <h3 className="font-medium text-card-foreground">{project.name}</h3>
             </div>
           </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
-              >
-                <MoreVertical className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" onClick={(e) => e.stopPropagation()}>
-              <DropdownMenuItem
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onEdit(project.id);
-                }}
-              >
-                <Pencil className="mr-2 h-4 w-4" />
-                {t("editName")}
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className="text-destructive"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDelete(project.id);
-                }}
-              >
-                <Trash2 className="mr-2 h-4 w-4" />
-                {t("deleteProject")}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {(onEdit || onDelete) && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  <MoreVertical className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" onClick={(e) => e.stopPropagation()}>
+                {onEdit && (
+                  <DropdownMenuItem
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onEdit(project.id);
+                    }}
+                  >
+                    <Pencil className="mr-2 h-4 w-4" />
+                    {t("editName")}
+                  </DropdownMenuItem>
+                )}
+                {onDelete && (
+                  <DropdownMenuItem
+                    className="text-destructive"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDelete(project.id);
+                    }}
+                  >
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    {t("deleteProject")}
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
         <div className="mt-4 flex justify-between text-xs text-muted-foreground">
           <span>

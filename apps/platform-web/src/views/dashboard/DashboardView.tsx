@@ -25,12 +25,6 @@ export const DashboardView = () => {
   const projectCount = projects?.pagination.totalItems ?? 0;
   const creditBalance = profile?.creditBalance ?? 0;
 
-  const recentProjects = projectItems.map((p) => ({
-    id: p.id,
-    name: p.name,
-    thumbnail: null,
-  }));
-
   return (
     <div className="space-y-5">
       <PageHeader title={t("welcome")} subtitle={t("welcomeSubtitle")} />
@@ -68,7 +62,7 @@ export const DashboardView = () => {
       </div>
 
       {/* Recent projects / empty state */}
-      <RecentProjects projects={isLoading ? [] : recentProjects} />
+      <RecentProjects projects={isLoading ? [] : projectItems.slice(0, 3)} />
 
       {/* Stats row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
