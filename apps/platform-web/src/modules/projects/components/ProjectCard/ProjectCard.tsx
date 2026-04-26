@@ -37,9 +37,6 @@ export const ProjectCard = (props: TProjectCardProps) => {
             </div>
             <div>
               <h3 className="font-medium text-card-foreground">{project.name}</h3>
-              <p className="text-sm text-muted-foreground">
-                {project.visualizationsCount} {t("visualizations")}
-              </p>
             </div>
           </div>
           <DropdownMenu>

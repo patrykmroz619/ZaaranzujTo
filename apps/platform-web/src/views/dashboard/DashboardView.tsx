@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Plus, Layers, Image as ImageIcon, Coins } from "lucide-react";
+import { Plus, Layers, Coins } from "lucide-react";
 import { Button } from "@repo/ui/core/button";
 import { Card, CardContent } from "@repo/ui/core/card";
 import { PageHeader } from "@repo/ui/components/page-header";
@@ -23,13 +23,11 @@ export const DashboardView = () => {
 
   const projectItems = projects?.items ?? [];
   const projectCount = projects?.pagination.totalItems ?? 0;
-  const visualizationCount = projectItems.reduce((sum, p) => sum + p.visualizationsCount, 0);
   const creditBalance = profile?.creditBalance ?? 0;
 
   const recentProjects = projectItems.map((p) => ({
     id: p.id,
     name: p.name,
-    visualizations: p.visualizationsCount,
     thumbnail: null,
   }));
 
@@ -75,7 +73,6 @@ export const DashboardView = () => {
       {/* Stats row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
         <StatsCard label={t("statsProjects")} value={projectCount} icon={Layers} />
-        <StatsCard label={t("statsVisualizations")} value={visualizationCount} icon={ImageIcon} />
         <StatsCard label={t("statsCredits")} value={creditBalance} icon={Coins} />
       </div>
     </div>

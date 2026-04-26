@@ -51,7 +51,6 @@
     "emptyTitle": "Nie masz jeszcze żadnych projektów",
     "emptyDescription": "Stwórz swój pierwszy projekt i zacznij projektować wymarzone wnętrza.",
     "emptyCta": "Stwórz pierwszy projekt",
-    "visualizations": "wizualizacji",
     "created": "Utworzono",
     "modified": "Zmodyfikowano",
     "deleteProject": "Usuń projekt",
@@ -61,7 +60,6 @@
     "cancel": "Anuluj",
     "delete": "Usuń",
     "statsProjects": "Projekty",
-    "statsVisualizations": "Wizualizacje",
     "statsCredits": "Kredyty",
     "manageSubtitle": "Zarządzaj swoimi projektami i wizualizacjami."
   },

@@ -30,7 +30,9 @@ const PageHeader = (props: TPageHeaderProps) => {
           <h1 className="font-display text-2xl text-foreground">{title}</h1>
           {subtitle && <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>}
         </div>
-        {children && <div className="flex w-full sm:ml-auto sm:w-auto sm:justify-end">{children}</div>}
+        {children && (
+          <div className="flex w-full sm:ml-auto sm:w-auto sm:justify-end">{children}</div>
+        )}
       </div>
     </div>
   );

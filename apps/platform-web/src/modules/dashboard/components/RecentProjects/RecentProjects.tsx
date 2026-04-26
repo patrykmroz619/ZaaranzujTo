@@ -69,9 +69,6 @@ export const RecentProjects = (props: TRecentProjectsProps) => {
               )}
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-foreground truncate">{project.name}</p>
-                <p className="text-xs text-muted-foreground">
-                  {project.visualizations} {t("visualizations")}
-                </p>
               </div>
               <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
             </button>

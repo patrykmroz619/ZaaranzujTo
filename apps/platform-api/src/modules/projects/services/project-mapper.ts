@@ -10,7 +10,6 @@ export const mapProjectDocumentToProjectObject = ({
   return projectObjectSchema.parse({
     id: projectDocument._id.toString(),
     name: projectDocument.name,
-    visualizationsCount: 0,
     createdAt: projectDocument.createdAt.toISOString(),
     updatedAt: projectDocument.updatedAt.toISOString(),
   });
