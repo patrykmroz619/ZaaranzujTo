@@ -29,7 +29,7 @@ export const QuickActions = (props: TQuickActionsProps) => {
 
         <button
           onClick={() => router.push("/projects")}
-          className="flex items-center gap-3 rounded-lg border p-3 text-left transition-colors hover:bg-muted/50 group"
+          className="flex items-center gap-3 rounded-lg border p-3 text-left transition-colors hover:bg-muted/50 group cursor-pointer"
         >
           <div className="flex h-8 w-8 items-center justify-center rounded-md bg-accent">
             <FolderOpen className="h-4 w-4 text-accent-foreground" />
@@ -48,7 +48,7 @@ export const QuickActions = (props: TQuickActionsProps) => {
                 `/projects/${lastVisualization.projectId}/workspace/${lastVisualization.id}`,
               )
             }
-            className="flex items-center gap-3 rounded-lg border p-3 text-left transition-colors hover:bg-muted/50 group"
+            className="flex items-center gap-3 rounded-lg border p-3 text-left transition-colors hover:bg-muted/50 group cursor-pointer"
           >
             <div className="flex h-8 w-8 items-center justify-center rounded-md bg-accent">
               <Sparkles className="h-4 w-4 text-accent-foreground" />
@@ -62,7 +62,7 @@ export const QuickActions = (props: TQuickActionsProps) => {
         ) : (
           <button
             onClick={() => router.push("/credits")}
-            className="flex items-center gap-3 rounded-lg border p-3 text-left transition-colors hover:bg-muted/50 group"
+            className="flex items-center gap-3 rounded-lg border p-3 text-left transition-colors hover:bg-muted/50 group cursor-pointer "
           >
             <div className="flex h-8 w-8 items-center justify-center rounded-md bg-accent">
               <Coins className="h-4 w-4 text-accent-foreground" />
