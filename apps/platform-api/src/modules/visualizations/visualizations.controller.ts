@@ -101,7 +101,7 @@ export class VisualizationsController {
 
     const inputPhoto = files.inputPhoto?.[0];
 
-    if (!inputPhoto) {
+    if (!inputPhoto && !bodyResult.data.prompt) {
       throw toIterationOrchestrationHttpException({ code: "INVALID_INPUT" });
     }
 

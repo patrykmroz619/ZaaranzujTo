@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { FolderOpen, Sparkles, Coins, ArrowRight } from "lucide-react";
+import { Sparkles, Coins, ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@repo/ui/core/card";
 
 type TLastVisualization = {
@@ -26,20 +26,6 @@ export const QuickActions = (props: TQuickActionsProps) => {
         <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
           {t("quickActions")}
         </p>
-
-        <button
-          onClick={() => router.push("/projects")}
-          className="flex items-center gap-3 rounded-lg border p-3 text-left transition-colors hover:bg-muted/50 group cursor-pointer"
-        >
-          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-accent">
-            <FolderOpen className="h-4 w-4 text-accent-foreground" />
-          </div>
-          <div className="flex-1">
-            <p className="text-sm font-medium text-foreground">{t("myProjects")}</p>
-            <p className="text-xs text-muted-foreground">{t("manageProjects")}</p>
-          </div>
-          <ArrowRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-        </button>
 
         {lastVisualization ? (
           <button

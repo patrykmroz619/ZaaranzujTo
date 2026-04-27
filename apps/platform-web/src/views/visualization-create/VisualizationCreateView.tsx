@@ -34,7 +34,7 @@ export const VisualizationCreateView = (props: TVisualizationCreateViewProps) =>
     formData.append("roomType", values.roomType);
     if (values.roomTypeCustom) formData.append("roomTypeCustom", values.roomTypeCustom);
     if (values.prompt) formData.append("prompt", values.prompt);
-    formData.append("inputPhoto", values.roomPhotoFile);
+    if (values.roomPhotoFile) formData.append("inputPhoto", values.roomPhotoFile);
     values.furniturePhotoFiles.forEach((file) => formData.append("referencePhotos", file));
 
     try {

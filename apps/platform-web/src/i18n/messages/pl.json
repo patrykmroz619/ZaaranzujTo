@@ -42,6 +42,7 @@
     "newProject": "Nowy projekt",
     "quickActions": "Szybkie akcje",
     "myProjects": "Moje projekty",
+    "allProjects": "Wszystkie projekty",
     "manageProjects": "Zarządzaj swoimi projektami",
     "lastVisualization": "Ostatnia wizualizacja",
     "topUpCredits": "Doładuj kredyty",
@@ -57,6 +58,7 @@
     "editName": "Edytuj nazwę",
     "deleteConfirmTitle": "Czy na pewno chcesz usunąć projekt?",
     "deleteConfirmMessage": "Wszystkie wizualizacje i ich iteracje w tym projekcie zostaną trwale usunięte.",
+    "deleteConfirmMessageWithCount": "Projekt „{name}” zawiera {count, plural, =0 {brak wizualizacji} one {# wizualizację} few {# wizualizacje} many {# wizualizacji} other {# wizualizacji}}. Tej operacji nie można cofnąć.",
     "cancel": "Anuluj",
     "delete": "Usuń",
     "statsProjects": "Projekty",
@@ -82,6 +84,16 @@
     "nameRequired": "Nazwa projektu jest wymagana.",
     "create": "Utwórz projekt"
   },
+  "projects": {
+    "sort": {
+      "updatedAt:desc": "Najnowsze",
+      "updatedAt:asc": "Najstarsze",
+      "createdAt:desc": "Najnowsze (utworzone)",
+      "createdAt:asc": "Najstarsze (utworzone)",
+      "name:asc": "Nazwa A–Z",
+      "name:desc": "Nazwa Z–A"
+    }
+  },
   "workspace": {
     "modeFromPhoto": "Ze zdjęcia",
     "modeFromScratch": "Od podstaw",
@@ -90,6 +102,8 @@
     "visualizationNameRequired": "Nazwa wizualizacji jest wymagana.",
     "roomPhoto": "Zdjęcie pokoju",
     "roomPhotoHint": "Przeciągnij zdjęcie lub kliknij, aby wybrać",
+    "roomPhotoOptional": "Opcjonalnie — bez zdjęcia AI utworzy wizualizację wyłącznie z opisu.",
+    "roomPhotoSizeHint": "Maks. 10 MB · JPG, PNG, WEBP",
     "roomPhotoRequired": "Zdjęcie pokoju jest wymagane w trybie \"Ze zdjęcia\".",
     "style": "Styl wnętrza",
     "stylePlaceholder": "Wybierz styl",
@@ -131,6 +145,9 @@
     "title": "Pakiety kredytów",
     "subtitle": "Wybierz pakiet, który najlepiej odpowiada Twoim potrzebom",
     "balance": "kredytów",
+    "yourBalance": "Twoje saldo",
+    "creditsPerGeneration": "1 kredyt = 1 wizualizacja. Każde wygenerowanie nowej wizualizacji lub wersji kosztuje 1 kredyt.",
+    "approxVisualizations": "≈ {count, plural, one {# wizualizacja} few {# wizualizacje} many {# wizualizacji} other {# wizualizacji}}",
     "buy": "Kup",
     "packageCredits": "kredytów",
     "popular": "Popularny",
@@ -145,8 +162,13 @@
     "themeDark": "Ciemny",
     "themeSystem": "Systemowy",
     "account": "Konto",
+    "cancel": "Anuluj",
     "deleteAccount": "Usuń konto",
-    "deleteAccountConfirm": "Czy na pewno chcesz usunąć konto? Wszystkie Twoje dane zostaną trwale usunięte."
+    "deleteAccountConfirm": "Czy na pewno chcesz usunąć konto? Wszystkie Twoje dane zostaną trwale usunięte.",
+    "deleteAccountTitle": "Usunąć konto?",
+    "deleteAccountConsequences": "Stracisz dostęp do wszystkich projektów, wizualizacji i pozostałego salda kredytów. Tej operacji nie można cofnąć.",
+    "deleteAccountTypePrompt": "Aby potwierdzić, wpisz „{phrase}”:",
+    "deleteAccountConfirmPhrase": "USUŃ KONTO"
   },
   "styles": {
     "scandinavian": "Skandynawski",
@@ -192,7 +214,9 @@
     "500": "Wystąpił błąd serwera. Spróbuj ponownie.",
     "network": "Błąd połączenia. Sprawdź swoje połączenie z internetem.",
     "retry": "Spróbuj ponownie",
+    "goBack": "Wróć",
     "contentPolicyViolation": "Treść narusza zasady użytkowania. Zmień opis lub zdjęcia.",
-    "fileTooLarge": "Plik jest za duży. Wybierz mniejszy plik."
+    "fileTooLarge": "Plik jest za duży. Wybierz mniejszy plik.",
+    "invalidFileType": "Nieprawidłowy typ pliku. Wybierz obraz."
   }
 }

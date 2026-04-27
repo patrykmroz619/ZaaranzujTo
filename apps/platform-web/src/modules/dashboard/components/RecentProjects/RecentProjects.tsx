@@ -48,7 +48,7 @@ export const RecentProjects = (props: TRecentProjectsProps) => {
             onClick={() => router.push("/projects")}
             className="gap-1 text-muted-foreground"
           >
-            {t("myProjects")}
+            {t("allProjects")}
             <ArrowRight className="h-3.5 w-3.5" />
           </Button>
         </div>

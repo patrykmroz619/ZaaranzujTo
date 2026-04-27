@@ -16,7 +16,7 @@ export const workspaceCreateSchema = z
     roomType: z.enum([...ROOM_TYPE_PRESETS, OTHER_PRESET]),
     roomTypeCustom: z.string().trim().max(120).optional(),
     prompt: z.string(),
-    roomPhotoFile: z.instanceof(File),
+    roomPhotoFile: z.instanceof(File).optional(),
     furniturePhotoFiles: z.array(z.instanceof(File)),
   })
   .superRefine((data, ctx) => {
@@ -39,6 +39,13 @@ export const workspaceCreateSchema = z
         code: z.ZodIssueCode.custom,
         path: ["roomTypeCustom"],
         message: "To pole jest wymagane.",
+      });
+    }
+    if (!data.roomPhotoFile && !data.prompt.trim()) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["prompt"],
+        message: "Dodaj zdjęcie pokoju lub opisz wnętrze.",
       });
     }
   });

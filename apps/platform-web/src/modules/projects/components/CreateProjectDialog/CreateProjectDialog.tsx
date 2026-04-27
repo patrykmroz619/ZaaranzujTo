@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Plus } from "lucide-react";
 import { Button } from "@repo/ui/core/button";
-import { Input } from "@repo/ui/core/input";
+import { InputWithCounter } from "@repo/ui/core/input-with-counter";
 import {
   Dialog,
   DialogContent,
@@ -44,15 +44,15 @@ export const CreateProjectDialog = (props: TCreateProjectDialogProps) => {
         <DialogHeader>
           <DialogTitle className="font-display">{t("dashboard.newProject")}</DialogTitle>
         </DialogHeader>
-        <div className="space-y-2">
-          <Input
-            placeholder={t("project.namePlaceholder")}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            maxLength={100}
-            onKeyDown={(e) => e.key === "Enter" && handleCreate()}
-          />
-        </div>
+        <InputWithCounter
+          placeholder={t("project.namePlaceholder")}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          maxLength={100}
+          onKeyDown={(e) => e.key === "Enter" && handleCreate()}
+          aria-required
+          aria-label={t("project.nameLabel")}
+        />
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             {t("dashboard.cancel")}

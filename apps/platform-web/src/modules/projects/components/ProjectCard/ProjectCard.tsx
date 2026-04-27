@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/core/dropdown-menu";
 import type { TProjectObject } from "@repo/contracts";
+import { formatRelativeDate } from "@/core/lib/format-date";
 
 type TProjectCardProps = {
   project: TProjectObject;
@@ -45,7 +46,7 @@ export const ProjectCard = (props: TProjectCardProps) => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="h-8 w-8 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100"
                 >
                   <MoreVertical className="h-4 w-4" />
                 </Button>
@@ -80,10 +81,10 @@ export const ProjectCard = (props: TProjectCardProps) => {
         </div>
         <div className="mt-4 flex justify-between text-xs text-muted-foreground">
           <span>
-            {t("created")}: {project.createdAt.split("T")[0]}
+            {t("created")}: {formatRelativeDate(project.createdAt)}
           </span>
           <span>
-            {t("modified")}: {project.updatedAt.split("T")[0]}
+            {t("modified")}: {formatRelativeDate(project.updatedAt)}
           </span>
         </div>
       </CardContent>

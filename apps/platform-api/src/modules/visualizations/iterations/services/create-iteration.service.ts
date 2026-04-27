@@ -65,10 +65,11 @@ export class CreateIterationService {
         `referencePhotosCount=${referencePhotos.length} hasPrompt=${!!prompt}`,
     );
 
-    if (!inputPhoto && !parentIterationId) {
+    const isInitialIteration = !parentIterationId;
+    if (isInitialIteration && !inputPhoto && !prompt) {
       throw toIterationOrchestrationHttpException({ code: "INVALID_INPUT" });
     }
-    if (inputPhoto && parentIterationId) {
+    if (!isInitialIteration && inputPhoto) {
       throw toIterationOrchestrationHttpException({ code: "INVALID_INPUT" });
     }
 

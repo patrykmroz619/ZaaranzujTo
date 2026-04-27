@@ -4,6 +4,7 @@ import type { Model, SortOrder, Types } from "mongoose";
 
 import { type TProjectSort } from "@repo/contracts/projects";
 
+import { Visualization } from "../../visualizations/schemas/visualization.schema";
 import { Project, type TProjectDocument } from "../schemas/project.schema";
 
 type TCreateProjectForUserParams = {
@@ -48,7 +49,27 @@ export class ProjectsRepository {
   constructor(
     @InjectModel(Project.name)
     private readonly projectModel: Model<Project>,
+    @InjectModel(Visualization.name)
+    private readonly visualizationModel: Model<Visualization>,
   ) {}
+
+  countVisualizationsForProjects = async (params: {
+    userId: Types.ObjectId | string;
+    projectIds: (Types.ObjectId | string)[];
+  }): Promise<Map<string, number>> => {
+    const { userId, projectIds } = params;
+    if (projectIds.length === 0) return new Map();
+
+    const aggregated = await this.visualizationModel.aggregate<{
+      _id: Types.ObjectId;
+      count: number;
+    }>([
+      { $match: { userId, projectId: { $in: projectIds } } },
+      { $group: { _id: "$projectId", count: { $sum: 1 } } },
+    ]);
+
+    return new Map(aggregated.map((entry) => [entry._id.toString(), entry.count]));
+  };
 
   createProjectForUser = async (params: TCreateProjectForUserParams): Promise<TProjectDocument> => {
     const { userId, name } = params;

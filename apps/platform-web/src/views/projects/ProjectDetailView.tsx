@@ -7,8 +7,10 @@ import { Button } from "@repo/ui/core/button";
 import { PageHeader } from "@repo/ui/components/page-header";
 import { DeleteVisualizationDialog } from "@/modules/projects/components/DeleteVisualizationDialog";
 import { VisualizationCard } from "@/modules/projects/components/VisualizationCard";
+import { useProject } from "@/modules/projects/hooks/use-project";
 import { useProjectVisualizations } from "@/modules/projects/hooks/use-project-visualizations";
 import { useVisualizationDeleteFlow } from "@/modules/projects/hooks/use-visualization-delete-flow";
+import { formatRelativeDate } from "@/core/lib/format-date";
 
 type TProjectDetailViewProps = {
   projectId: string;
@@ -19,6 +21,7 @@ export const ProjectDetailView = (props: TProjectDetailViewProps) => {
   const router = useRouter();
   const t = useTranslations();
 
+  const { project } = useProject({ projectId });
   const { visualizations, isLoading, error } = useProjectVisualizations({ projectId });
   const {
     isDeleteDialogOpen,
@@ -31,7 +34,16 @@ export const ProjectDetailView = (props: TProjectDetailViewProps) => {
 
   return (
     <div className="space-y-5">
-      <PageHeader title={t("project.title")} backHref="/projects" backLabel={t("common.back")}>
+      <PageHeader
+        title={project?.name ?? t("project.title")}
+        subtitle={
+          project
+            ? `${t("dashboard.modified")}: ${formatRelativeDate(project.updatedAt)}`
+            : undefined
+        }
+        backHref="/projects"
+        backLabel={t("common.back")}
+      >
         <div className="w-full sm:ml-auto sm:w-auto">
           <Button
             onClick={() => router.push(`/projects/${projectId}/workspace/new`)}

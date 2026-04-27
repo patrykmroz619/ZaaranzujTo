@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,6 +8,7 @@ import { Button } from "@repo/ui/core/button";
 import { Textarea } from "@repo/ui/core/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@repo/ui/core/form";
 import { FurniturePhotosField } from "@/modules/workspace/components/FurniturePhotosField";
+import { NoCreditsBanner } from "@/modules/workspace/components/NoCreditsBanner";
 import { WorkspaceVisualizationAttributes } from "@/modules/workspace/components/WorkspaceLockedAttributes";
 import {
   workspaceIterationSchema,
@@ -31,7 +31,6 @@ type TWorkspaceIterationFormProps = {
 
 export const WorkspaceIterationForm = (props: TWorkspaceIterationFormProps) => {
   const { visualizationAttributes, isGenerating, creditBalance, onSubmit } = props;
-  const router = useRouter();
   const t = useTranslations();
 
   const form = useForm<TWorkspaceIterationValues>({
@@ -88,17 +87,7 @@ export const WorkspaceIterationForm = (props: TWorkspaceIterationFormProps) => {
             />
 
             {creditBalance < 1 ? (
-              <div className="rounded-lg bg-accent p-3 text-center text-sm">
-                <p className="mb-2 text-accent-foreground">{t("workspace.noCredits")}</p>
-                <Button
-                  type="button"
-                  size="sm"
-                  onClick={() => router.push("/credits")}
-                  className="gradient-warm text-primary-foreground border-0"
-                >
-                  {t("workspace.buyCredits")}
-                </Button>
-              </div>
+              <NoCreditsBanner />
             ) : (
               <Button
                 type="button"

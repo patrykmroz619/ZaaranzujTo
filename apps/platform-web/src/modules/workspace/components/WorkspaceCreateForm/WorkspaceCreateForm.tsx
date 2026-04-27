@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useMemo } from "react";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useForm, useWatch, type Control, type Path } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { Button } from "@repo/ui/core/button";
 import { Input } from "@repo/ui/core/input";
+import { CharCounter } from "@repo/ui/core/input-with-counter";
 import { Textarea } from "@repo/ui/core/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@repo/ui/core/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui/core/select";
@@ -19,6 +19,7 @@ import {
 } from "@repo/contracts";
 import { PhotoUpload } from "@/modules/workspace/components/PhotoUpload";
 import { FurniturePhotosField } from "@/modules/workspace/components/FurniturePhotosField";
+import { NoCreditsBanner } from "@/modules/workspace/components/NoCreditsBanner";
 import { workspaceCreateSchema, type TWorkspaceCreateValues } from "../../types/workspace.types";
 
 type TPresetSelectWithOtherProps = {
@@ -113,7 +114,6 @@ type TWorkspaceCreateFormProps = {
 
 export const WorkspaceCreateForm = (props: TWorkspaceCreateFormProps) => {
   const { isGenerating, creditBalance, onSubmit } = props;
-  const router = useRouter();
   const t = useTranslations();
 
   const form = useForm<TWorkspaceCreateValues>({
@@ -127,7 +127,7 @@ export const WorkspaceCreateForm = (props: TWorkspaceCreateFormProps) => {
       roomType: "" as TWorkspaceCreateValues["roomType"],
       roomTypeCustom: "",
       prompt: "",
-      roomPhotoFile: undefined as unknown as File,
+      roomPhotoFile: undefined,
       furniturePhotoFiles: [],
     },
     mode: "onChange",
@@ -164,25 +164,27 @@ export const WorkspaceCreateForm = (props: TWorkspaceCreateFormProps) => {
                       value={field.value}
                       onChange={field.onChange}
                       maxLength={120}
+                      aria-required
                     />
                   </FormControl>
-                  <FormMessage />
+                  <div className="flex items-center justify-between gap-2">
+                    <FormMessage />
+                    <CharCounter current={field.value.length} max={120} />
+                  </div>
                 </FormItem>
               )}
             />
 
             <PhotoUpload
               preview={roomPhotoPreview}
-              onUpload={(event) => {
-                const nextFile = event.target.files?.[0];
-                if (!nextFile) return;
-                form.setValue("roomPhotoFile", nextFile, {
+              onUpload={(file) => {
+                form.setValue("roomPhotoFile", file, {
                   shouldDirty: true,
                   shouldValidate: true,
                 });
               }}
               onRemove={() => {
-                form.setValue("roomPhotoFile", undefined as unknown as File, {
+                form.setValue("roomPhotoFile", undefined, {
                   shouldDirty: true,
                   shouldValidate: true,
                 });
@@ -256,17 +258,7 @@ export const WorkspaceCreateForm = (props: TWorkspaceCreateFormProps) => {
             />
 
             {creditBalance < 1 ? (
-              <div className="rounded-lg bg-accent p-3 text-center text-sm">
-                <p className="mb-2 text-accent-foreground">{t("workspace.noCredits")}</p>
-                <Button
-                  type="button"
-                  size="sm"
-                  onClick={() => router.push("/credits")}
-                  className="gradient-warm text-primary-foreground border-0"
-                >
-                  {t("workspace.buyCredits")}
-                </Button>
-              </div>
+              <NoCreditsBanner />
             ) : (
               <Button
                 type="button"

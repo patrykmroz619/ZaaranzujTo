@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@repo/ui/core/dialog";
-import { Input } from "@repo/ui/core/input";
+import { InputWithCounter } from "@repo/ui/core/input-with-counter";
 
 type TEditProjectNameDialogProps = {
   open: boolean;
@@ -48,18 +48,20 @@ export const EditProjectNameDialog = (props: TEditProjectNameDialogProps) => {
         <DialogHeader>
           <DialogTitle className="font-display">{t("dashboard.editName")}</DialogTitle>
         </DialogHeader>
-        <div className="space-y-2">
-          <Input
-            placeholder={t("project.namePlaceholder")}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            maxLength={100}
-            onKeyDown={(e) => e.key === "Enter" && handleSave()}
-          />
-          {!trimmedName ? (
-            <p className="text-sm text-destructive">{t("project.nameRequired")}</p>
-          ) : null}
-        </div>
+        <InputWithCounter
+          placeholder={t("project.namePlaceholder")}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          maxLength={100}
+          onKeyDown={(e) => e.key === "Enter" && handleSave()}
+          aria-required
+          aria-label={t("project.nameLabel")}
+          footerLeft={
+            !trimmedName ? (
+              <p className="text-sm text-destructive">{t("project.nameRequired")}</p>
+            ) : null
+          }
+        />
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isPending}>
             {t("common.cancel")}

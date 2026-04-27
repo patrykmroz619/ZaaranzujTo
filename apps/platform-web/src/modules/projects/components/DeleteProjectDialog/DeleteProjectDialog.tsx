@@ -16,18 +16,25 @@ type TDeleteProjectDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onConfirm: () => void;
+  projectName?: string;
+  visualizationCount?: number;
 };
 
 export const DeleteProjectDialog = (props: TDeleteProjectDialogProps) => {
-  const { open, onOpenChange, onConfirm } = props;
+  const { open, onOpenChange, onConfirm, projectName, visualizationCount } = props;
   const t = useTranslations("dashboard");
+
+  const message =
+    projectName && typeof visualizationCount === "number"
+      ? t("deleteConfirmMessageWithCount", { name: projectName, count: visualizationCount })
+      : t("deleteConfirmMessage");
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle className="font-display">{t("deleteConfirmTitle")}</AlertDialogTitle>
-          <AlertDialogDescription>{t("deleteConfirmMessage")}</AlertDialogDescription>
+          <AlertDialogDescription>{message}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>

@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 
 import { UsersModule } from "../users/users.module";
+import { Visualization, VisualizationSchema } from "../visualizations/schemas/visualization.schema";
 import { ProjectsController } from "./controllers/projects.controller";
 import { ProjectsRepository } from "./repositories/projects.repository";
 import { Project, ProjectSchema } from "./schemas/project.schema";
@@ -19,6 +20,10 @@ import { ValidateProjectOwnershipService } from "./services/validate-project-own
       {
         name: Project.name,
         schema: ProjectSchema,
+      },
+      {
+        name: Visualization.name,
+        schema: VisualizationSchema,
       },
     ]),
   ],

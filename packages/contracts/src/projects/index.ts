@@ -50,6 +50,7 @@ export const projectObjectSchema = z
   .object({
     id: objectIdSchema,
     name: z.string().min(1),
+    visualizationCount: z.number().int().nonnegative().optional(),
     createdAt: z.string().datetime(),
     updatedAt: z.string().datetime(),
   })

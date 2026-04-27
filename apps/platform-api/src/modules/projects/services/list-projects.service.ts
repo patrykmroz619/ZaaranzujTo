@@ -47,12 +47,18 @@ export class ListProjectsService {
       }),
     ]);
 
+    const visualizationCounts = await this.projectsRepository.countVisualizationsForProjects({
+      userId: user._id,
+      projectIds: projects.map((projectDocument) => projectDocument._id),
+    });
+
     const totalPages = totalItems === 0 ? 0 : Math.ceil(totalItems / parsedQuery.pageSize);
 
     return listProjectsResponseSchema.parse({
       items: projects.map((projectDocument) =>
         mapProjectDocumentToProjectObject({
           projectDocument,
+          visualizationCount: visualizationCounts.get(projectDocument._id.toString()) ?? 0,
         }),
       ),
       pagination: {
