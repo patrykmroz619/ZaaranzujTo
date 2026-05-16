@@ -8,6 +8,7 @@ import { PageHeader } from "@repo/ui/components/page-header";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui/core/select";
 import type { TProjectSort } from "@repo/contracts";
 import { ProjectCard } from "@/modules/projects/components/ProjectCard";
+import { ProjectCardSkeleton } from "@/modules/projects/components/ProjectCardSkeleton";
 import { CreateProjectDialog } from "@/modules/projects/components/CreateProjectDialog";
 import { DeleteProjectDialog } from "@/modules/projects/components/DeleteProjectDialog";
 import { EditProjectNameDialog } from "@/modules/projects/components/EditProjectNameDialog";
@@ -76,8 +77,10 @@ export const ProjectsView = () => {
       </PageHeader>
 
       {isLoading ? (
-        <div className="flex justify-center py-20">
-          <p className="text-muted-foreground">{t("common.loading")}</p>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <ProjectCardSkeleton key={i} />
+          ))}
         </div>
       ) : error ? (
         <div className="flex flex-col items-center justify-center py-20 text-center gap-3">

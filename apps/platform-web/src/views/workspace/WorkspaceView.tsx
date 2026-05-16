@@ -14,7 +14,9 @@ import {
 import { DeleteVisualizationDialog } from "@/modules/projects/components/DeleteVisualizationDialog";
 import { useVisualizationDeleteFlow } from "@/modules/projects/hooks/use-visualization-delete-flow";
 import { WorkspaceIterationForm } from "@/modules/workspace/components/WorkspaceIterationForm";
+import { WorkspaceIterationFormSkeleton } from "@/modules/workspace/components/WorkspaceIterationFormSkeleton";
 import { WorkspacePreview } from "@/modules/workspace/components/WorkspacePreview";
+import { WorkspacePreviewSkeleton } from "@/modules/workspace/components/WorkspacePreviewSkeleton";
 import { useWorkspace } from "@/modules/workspace/hooks/use-workspace";
 
 type TWorkspaceViewProps = {
@@ -40,6 +42,7 @@ export const WorkspaceView = (props: TWorkspaceViewProps) => {
   });
 
   const {
+    isLoading,
     isGenerating,
     creditBalance,
     activeIterationId,
@@ -77,22 +80,28 @@ export const WorkspaceView = (props: TWorkspaceViewProps) => {
       </PageHeader>
 
       <div className="flex flex-col gap-6 lg:flex-row">
-        {visualizationAttributes && (
+        {isLoading ? (
+          <WorkspaceIterationFormSkeleton />
+        ) : visualizationAttributes ? (
           <WorkspaceIterationForm
             visualizationAttributes={visualizationAttributes}
             isGenerating={isGenerating}
             creditBalance={creditBalance}
             onSubmit={onIterate}
           />
-        )}
+        ) : null}
 
-        <WorkspacePreview
-          isGenerating={isGenerating}
-          hasResult={iterations.length > 0}
-          iterations={iterations}
-          activeIterationId={activeIterationId}
-          onSelectIteration={onSelectIteration}
-        />
+        {isLoading ? (
+          <WorkspacePreviewSkeleton />
+        ) : (
+          <WorkspacePreview
+            isGenerating={isGenerating}
+            hasResult={iterations.length > 0}
+            iterations={iterations}
+            activeIterationId={activeIterationId}
+            onSelectIteration={onSelectIteration}
+          />
+        )}
       </div>
 
       <DeleteVisualizationDialog

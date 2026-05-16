@@ -1,14 +1,16 @@
 import type { LucideIcon } from "lucide-react";
 import { Card, CardContent } from "@repo/ui/core/card";
+import { Skeleton } from "@repo/ui/core/skeleton";
 
 type TStatsCardProps = {
   label: string;
   value: number;
   icon: LucideIcon;
+  isLoading?: boolean;
 };
 
 export const StatsCard = (props: TStatsCardProps) => {
-  const { label, value, icon: Icon } = props;
+  const { label, value, icon: Icon, isLoading } = props;
 
   return (
     <Card className="shadow-card">
@@ -17,7 +19,11 @@ export const StatsCard = (props: TStatsCardProps) => {
           <Icon className="h-4 w-4 text-accent-foreground" />
         </div>
         <div>
-          <span className="font-display text-xl text-foreground">{value}</span>
+          {isLoading ? (
+            <Skeleton className="mb-1 h-7 w-12" />
+          ) : (
+            <span className="font-display text-xl text-foreground">{value}</span>
+          )}
           <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
             {label}
           </p>

@@ -3,8 +3,10 @@
 import { useTranslations } from "next-intl";
 import { Wallet } from "lucide-react";
 import { Card, CardContent } from "@repo/ui/core/card";
+import { Skeleton } from "@repo/ui/core/skeleton";
 import { PageHeader } from "@repo/ui/components/page-header";
 import { CreditPackageCard } from "@/modules/credits/components/CreditPackageCard";
+import { CreditPackageCardSkeleton } from "@/modules/credits/components/CreditPackageCardSkeleton";
 import { useCreditPackages } from "@/modules/credits/hooks/use-credit-packages";
 import { useProfile } from "@/core/packages/profile/use-profile";
 
@@ -34,7 +36,7 @@ export const CreditsView = () => {
               {t("yourBalance")}
             </p>
             {isLoadingProfile ? (
-              <div className="mt-1 h-7 w-24 animate-pulse rounded bg-muted" />
+              <Skeleton className="mt-1 h-7 w-24" />
             ) : (
               <p className="font-display text-2xl text-foreground">
                 {balance} {t("balance")}
@@ -47,8 +49,10 @@ export const CreditsView = () => {
       <p className="mx-auto max-w-3xl text-sm text-muted-foreground">{t("creditsPerGeneration")}</p>
 
       {isLoading ? (
-        <div className="flex justify-center py-20">
-          <p className="text-muted-foreground">{t("balance")}</p>
+        <div className="mx-auto grid max-w-3xl gap-6 md:grid-cols-3">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <CreditPackageCardSkeleton key={i} />
+          ))}
         </div>
       ) : error ? (
         <div className="flex justify-center py-20">

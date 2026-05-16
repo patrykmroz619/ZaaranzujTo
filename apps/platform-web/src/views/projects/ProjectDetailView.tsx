@@ -7,6 +7,7 @@ import { Button } from "@repo/ui/core/button";
 import { PageHeader } from "@repo/ui/components/page-header";
 import { DeleteVisualizationDialog } from "@/modules/projects/components/DeleteVisualizationDialog";
 import { VisualizationCard } from "@/modules/projects/components/VisualizationCard";
+import { VisualizationCardSkeleton } from "@/modules/projects/components/VisualizationCardSkeleton";
 import { useProject } from "@/modules/projects/hooks/use-project";
 import { useProjectVisualizations } from "@/modules/projects/hooks/use-project-visualizations";
 import { useVisualizationDeleteFlow } from "@/modules/projects/hooks/use-visualization-delete-flow";
@@ -56,8 +57,10 @@ export const ProjectDetailView = (props: TProjectDetailViewProps) => {
       </PageHeader>
 
       {isLoading ? (
-        <div className="flex justify-center py-20">
-          <p className="text-muted-foreground">{t("common.loading")}</p>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <VisualizationCardSkeleton key={i} />
+          ))}
         </div>
       ) : error ? (
         <div className="flex flex-col items-center justify-center py-20 text-center gap-3">

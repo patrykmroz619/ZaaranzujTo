@@ -20,7 +20,7 @@ export const useWorkspace = (params: TUseWorkspaceParams) => {
   const [activeIterationId, setActiveIterationId] = useState("");
 
   const { profile } = useProfile();
-  const { visualization } = useVisualization(visualizationId);
+  const { visualization, isLoading } = useVisualization(visualizationId);
 
   const createIteration = useCreateIteration();
 
@@ -89,6 +89,7 @@ export const useWorkspace = (params: TUseWorkspaceParams) => {
   };
 
   return {
+    isLoading,
     isGenerating,
     creditBalance,
     activeIterationId,

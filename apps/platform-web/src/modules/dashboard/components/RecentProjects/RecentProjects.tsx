@@ -7,15 +7,39 @@ import { Button } from "@repo/ui/core/button";
 import { Card, CardContent } from "@repo/ui/core/card";
 import type { TProjectObject } from "@repo/contracts";
 import { ProjectCard } from "@/modules/projects/components/ProjectCard";
+import { ProjectCardSkeleton } from "@/modules/projects/components/ProjectCardSkeleton";
 
 type TRecentProjectsProps = {
   projects: TProjectObject[];
+  isLoading?: boolean;
 };
 
 export const RecentProjects = (props: TRecentProjectsProps) => {
-  const { projects } = props;
+  const { projects, isLoading } = props;
   const router = useRouter();
   const t = useTranslations("dashboard");
+
+  if (isLoading) {
+    return (
+      <Card className="shadow-card">
+        <CardContent className="p-5">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+                {t("recentProjects")}
+              </p>
+              <h3 className="font-display text-lg text-foreground mt-0.5">{t("continueWork")}</h3>
+            </div>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <ProjectCardSkeleton key={i} />
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   if (projects.length === 0) {
     return (

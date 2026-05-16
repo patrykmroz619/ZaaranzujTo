@@ -16,7 +16,7 @@ export const DashboardView = () => {
   const { projects, isLoading } = useProjects({
     query: { page: 1, sort: "updatedAt:desc", pageSize: 5 },
   });
-  const { profile } = useProfile();
+  const { profile, isLoading: isLoadingProfile } = useProfile();
 
   const projectItems = projects?.items ?? [];
   const projectCount = projects?.pagination.totalItems ?? 0;
@@ -33,12 +33,12 @@ export const DashboardView = () => {
       </div>
 
       {/* Recent projects / empty state */}
-      <RecentProjects projects={isLoading ? [] : projectItems.slice(0, 3)} />
+      <RecentProjects projects={projectItems.slice(0, 3)} isLoading={isLoading} />
 
       {/* Stats row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-        <StatsCard label={t("statsProjects")} value={projectCount} icon={Layers} />
-        <StatsCard label={t("statsCredits")} value={creditBalance} icon={Coins} />
+        <StatsCard label={t("statsProjects")} value={projectCount} icon={Layers} isLoading={isLoading} />
+        <StatsCard label={t("statsCredits")} value={creditBalance} icon={Coins} isLoading={isLoadingProfile} />
       </div>
     </div>
   );

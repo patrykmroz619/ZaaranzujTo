@@ -13,6 +13,7 @@ import {
 } from "@repo/ui/core/dropdown-menu";
 import { Avatar, AvatarFallback } from "@repo/ui/core/avatar";
 import { Button } from "@repo/ui/core/button";
+import { Skeleton } from "@repo/ui/core/skeleton";
 import { useIsMobile } from "@repo/ui/hooks/use-mobile";
 import { useCurrentUser, useSignOut } from "@/core/packages/auth/client";
 
@@ -29,7 +30,14 @@ export const UserMenu = () => {
   const signOut = useSignOut();
   const isMobile = useIsMobile();
 
-  if (!isLoaded) return null;
+  if (!isLoaded) {
+    return (
+      <div className="flex items-center gap-2 px-2 py-1.5">
+        <Skeleton className="h-8 w-8 rounded-full" />
+        <Skeleton className="hidden md:block h-7 w-36 rounded-md" />
+      </div>
+    );
+  }
 
   if (!isSignedIn) {
     return (
