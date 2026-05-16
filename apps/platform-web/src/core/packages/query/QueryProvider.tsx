@@ -3,6 +3,8 @@
 import { useState, type ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+import { ApiError } from "../http/http-client.error";
+
 type TQueryProviderProps = {
   children: ReactNode;
 };
@@ -17,7 +19,10 @@ export const QueryProvider = (props: TQueryProviderProps) => {
           queries: {
             refetchOnWindowFocus: false,
             refetchOnMount: false,
-            retry: 1,
+            retry: (failureCount, error) => {
+              if (error instanceof ApiError && error.statusCode === 401) return false;
+              return failureCount < 1;
+            },
           },
         },
       }),
