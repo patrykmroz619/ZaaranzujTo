@@ -3,7 +3,7 @@
 ## API Overview
 
 - **Base URL (prod):** `https://api.zaaranzujto.pl/api/v1`
-- **Base URL (local):** `http://localhost:3001/api/v1`
+- **Base URL (local):** `http://localhost:3002/api/v1`
 - **API versioning:** prefiks ścieżki (`/v1`).
 - **Data format:** `application/json` (wyjątek: upload plików przez `multipart/form-data`).
 - **Character encoding:** UTF-8.

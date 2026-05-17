@@ -1,12 +1,33 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-import Hello from "../components/Hello.astro";
-import { HelloReact } from "../islands/HelloReact";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { Nav } from "@/modules/nav";
+import { HeroSection } from "@/modules/hero";
+import { GallerySection, GalleryIsland } from "@/modules/gallery";
+import { HowItWorksSection } from "@/modules/how-it-works";
+import { ComparisonSection } from "@/modules/comparison";
+import { PricingSection } from "@/modules/pricing";
+import { FaqSection } from "@/modules/faq";
+import { FinalCtaSection } from "@/modules/final-cta";
+import { Footer } from "@/modules/footer";
+
+import { GALLERY_DATA } from "@/modules/gallery/data";
+import { PRICING_DATA } from "@/modules/pricing/data";
+import { FAQ_DATA } from "@/modules/faq/data";
+import { COMPARISON_DATA } from "@/modules/comparison/data";
 ---
 
 <BaseLayout>
-  <Hello />
-  <section class="px-6 pb-16">
-    <HelloReact client:load />
-  </section>
+  <Nav client:load />
+  <main>
+    <HeroSection />
+    <GallerySection>
+      <GalleryIsland data={GALLERY_DATA} client:visible />
+    </GallerySection>
+    <HowItWorksSection />
+    <ComparisonSection data={COMPARISON_DATA} />
+    <PricingSection data={PRICING_DATA} />
+    <FaqSection data={FAQ_DATA} client:visible />
+    <FinalCtaSection />
+  </main>
+  <Footer />
 </BaseLayout>

@@ -1,0 +1,60 @@
+export type TComparisonRow = {
+  id: string;
+  feature: string;
+  designer: string;
+  pinterest: string;
+  zaaranzujto: string;
+  designerMuted?: boolean;
+  pinterestMuted?: boolean;
+  zaaranzujtoPositive?: boolean;
+};
+
+export const COMPARISON_DATA: TComparisonRow[] = [
+  {
+    id: "koszt",
+    feature: "Koszt",
+    designer: "3 000 – 8 000 PLN",
+    pinterest: "pozornie za darmo (czas + pomyłki)",
+    zaaranzujto: "od 29 PLN",
+    designerMuted: true,
+    pinterestMuted: true,
+  },
+  {
+    id: "czas",
+    feature: "Czas do rezultatu",
+    designer: "Tygodnie / miesiące",
+    pinterest: "Godziny scrollowania",
+    zaaranzujto: "Minuty",
+    designerMuted: true,
+    pinterestMuted: true,
+  },
+  {
+    id: "personalizacja",
+    feature: "Personalizacja pod Twoje pomieszczenie",
+    designer: "✓ Tak",
+    pinterest: "✕ Nie — cudze wnętrza",
+    zaaranzujto: "✓ Tak",
+    designerMuted: false,
+    pinterestMuted: true,
+    zaaranzujtoPositive: true,
+  },
+  {
+    id: "iteracje",
+    feature: "Możliwość iteracji i zmian",
+    designer: "Ograniczona",
+    pinterest: "✕ Brak",
+    zaaranzujto: "Bez limitu (1 kredyt = 1 iteracja)",
+    designerMuted: true,
+    pinterestMuted: true,
+  },
+  {
+    id: "spotkania",
+    feature: "Wymaga umawiania spotkań",
+    designer: "✕ Tak",
+    pinterest: "✓ Nie",
+    zaaranzujto: "✓ Nie",
+    designerMuted: true,
+    pinterestMuted: false,
+    zaaranzujtoPositive: true,
+  },
+];
