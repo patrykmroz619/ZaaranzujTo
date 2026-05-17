@@ -1,0 +1,34 @@
+{
+  "name": "landing-page",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev --port 3001",
+    "build": "astro build",
+    "start": "astro preview --port 3001",
+    "preview": "astro preview --port 3001",
+    "lint": "eslint --max-warnings 0",
+    "check-types": "astro check && tsc --noEmit",
+    "deps:update": "bun update",
+    "deps:update:latest": "bun update --latest"
+  },
+  "dependencies": {
+    "astro": "^6.3.3",
+    "@astrojs/react": "^5.0.5",
+    "@astrojs/sitemap": "^3.7.2",
+    "@astrojs/check": "^0.9.9",
+    "@tailwindcss/vite": "4.2.2",
+    "tailwindcss": "4.2.2",
+    "react": "19.2.5",
+    "react-dom": "19.2.5"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "eslint": "10.2.0",
+    "typescript": "6.0.2"
+  }
+}

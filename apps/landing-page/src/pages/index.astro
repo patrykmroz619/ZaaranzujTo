@@ -1,0 +1,12 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hello from "../components/Hello.astro";
+import { HelloReact } from "../islands/HelloReact";
+---
+
+<BaseLayout>
+  <Hello />
+  <section class="px-6 pb-16">
+    <HelloReact client:load />
+  </section>
+</BaseLayout>
