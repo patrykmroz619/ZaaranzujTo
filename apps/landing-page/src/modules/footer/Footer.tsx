@@ -1,18 +1,14 @@
+import { BrandLogo } from "@repo/ui/components/BrandLogo";
+
 export const Footer = () => (
   <footer className="py-12 border-t border-border text-sm text-muted-foreground">
     <div className="container">
       <div className="flex flex-wrap gap-6 items-center justify-between">
         <a
           href="#top"
-          className="inline-flex items-center gap-2.5 tracking-[-0.015em] text-foreground font-display text-[18px]"
+          className="inline-flex outline-none rounded-md focus-visible:ring-2 focus-visible:ring-ring"
         >
-          <span
-            className="relative w-7 h-7 rounded-xl bg-primary shrink-0 shadow-icon-inset"
-            aria-hidden="true"
-          >
-            <span className="absolute inset-1.5 border-2 border-primary-foreground border-b-0 border-r-0 rounded-tl-lg" />
-          </span>
-          <span>ZaaranżujTo</span>
+          <BrandLogo className="text-[18px]" />
         </a>
 
         <nav className="flex gap-5.5 flex-wrap">

@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { toast } from "@repo/ui/core/sonner";
-import { PageHeader } from "@repo/ui/components/page-header";
+import { PageHeader } from "@repo/ui/components/PageHeader";
 import { useProfile } from "@/core/packages/profile/use-profile";
 import { ApiError } from "@/core/packages/http";
 import { useCreateVisualization } from "@/modules/workspace/hooks/use-create-visualization";

@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { Layers, Coins } from "lucide-react";
-import { PageHeader } from "@repo/ui/components/page-header";
+import { PageHeader } from "@repo/ui/components/PageHeader";
 import { StatsCard } from "@/modules/dashboard/components/StatsCard";
 import { QuickActions } from "@/modules/dashboard/components/QuickActions";
 import { RecentProjects } from "@/modules/dashboard/components/RecentProjects";

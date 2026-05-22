@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { Wallet } from "lucide-react";
 import { Card, CardContent } from "@repo/ui/core/card";
 import { Skeleton } from "@repo/ui/core/skeleton";
-import { PageHeader } from "@repo/ui/components/page-header";
+import { PageHeader } from "@repo/ui/components/PageHeader";
 import { CreditPackageCard } from "@/modules/credits/components/CreditPackageCard";
 import { CreditPackageCardSkeleton } from "@/modules/credits/components/CreditPackageCardSkeleton";
 import { useCreditPackages } from "@/modules/credits/hooks/use-credit-packages";

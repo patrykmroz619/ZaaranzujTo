@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { ExpandableImage } from "@repo/ui/components/expandable-image";
+import { ExpandableImage } from "@repo/ui/components/ExpandableImage";
 import { useAssetUrl } from "@/modules/storage/hooks/use-asset-url";
 
 type TWorkspaceVisualizationAttributesProps = {

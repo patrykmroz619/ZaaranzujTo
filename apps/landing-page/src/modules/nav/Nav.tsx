@@ -1,3 +1,4 @@
+import { BrandLogo } from "@repo/ui/components/BrandLogo";
 import { MobileMenu } from "./MobileMenu";
 import { ThemeToggle } from "./ThemeToggle";
 
@@ -6,16 +7,10 @@ export const Nav = () => (
     <div className="container relative flex items-center justify-between h-16">
       <a
         href="#top"
-        className="inline-flex items-center gap-2.5 text-[20px] tracking-[-0.015em] font-display"
+        className="inline-flex outline-none rounded-md focus-visible:ring-2 focus-visible:ring-ring"
         aria-label="ZaaranżujTo"
       >
-        <span
-          className="relative w-7 h-7 rounded-xl bg-primary shrink-0 shadow-icon-inset"
-          aria-hidden="true"
-        >
-          <span className="absolute inset-1.5 border-2 border-primary-foreground border-b-0 border-r-0 rounded-tl-lg" />
-        </span>
-        <span>ZaaranżujTo</span>
+        <BrandLogo />
       </a>
 
       <nav className="hidden min-[761px]:flex items-center gap-7">

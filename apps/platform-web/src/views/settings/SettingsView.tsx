@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
-import { PageHeader } from "@repo/ui/components/page-header";
+import { PageHeader } from "@repo/ui/components/PageHeader";
 import { ThemeSelector } from "@/modules/settings/components/ThemeSelector";
 import { AccountActions } from "@/modules/settings/components/AccountActions";
 import { useProfile } from "@/core/packages/profile/use-profile";

@@ -2,8 +2,8 @@
 
 import * as React from "react";
 import { Maximize2 } from "lucide-react";
-import { Dialog, DialogContent } from "../core/dialog";
-import { cn } from "../lib/utils";
+import { Dialog, DialogContent } from "../../core/dialog";
+import { cn } from "../../lib/utils";
 
 type TExpandableImageProps = {
   src: string;

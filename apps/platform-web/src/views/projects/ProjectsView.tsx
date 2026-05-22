@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Plus } from "lucide-react";
 import { Button } from "@repo/ui/core/button";
-import { PageHeader } from "@repo/ui/components/page-header";
+import { PageHeader } from "@repo/ui/components/PageHeader";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui/core/select";
 import type { TProjectSort } from "@repo/contracts";
 import { ProjectCard } from "@/modules/projects/components/ProjectCard";

@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { MoreVertical, Trash2 } from "lucide-react";
 import { Button } from "@repo/ui/core/button";
-import { PageHeader } from "@repo/ui/components/page-header";
+import { PageHeader } from "@repo/ui/components/PageHeader";
 import {
   DropdownMenu,
   DropdownMenuContent,

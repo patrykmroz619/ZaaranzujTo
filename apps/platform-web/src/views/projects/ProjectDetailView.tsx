@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Plus } from "lucide-react";
 import { Button } from "@repo/ui/core/button";
-import { PageHeader } from "@repo/ui/components/page-header";
+import { PageHeader } from "@repo/ui/components/PageHeader";
 import { DeleteVisualizationDialog } from "@/modules/projects/components/DeleteVisualizationDialog";
 import { VisualizationCard } from "@/modules/projects/components/VisualizationCard";
 import { VisualizationCardSkeleton } from "@/modules/projects/components/VisualizationCardSkeleton";
