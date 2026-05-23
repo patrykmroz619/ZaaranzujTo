@@ -30,8 +30,7 @@ export const HowItWorksStep = ({
       <p className="text-muted-foreground max-w-115 text-[16.5px]">{description}</p>
       {showAdvantage && (
         <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium self-start mt-4.5 bg-accent text-accent-foreground">
-          <strong className="font-semibold">Nasza przewaga</strong>
-          <span className="opacity-80">&nbsp;vs. ChatGPT / Midjourney</span>
+          <span className="opacity-80">Zdjęcia pochodzą z panelu aplikacji ZaaranżujTo</span>
         </div>
       )}
     </div>

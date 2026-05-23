@@ -2,7 +2,11 @@
 
 import { useState, useEffect } from "react";
 
-export const MobileMenu = () => {
+type TProps = {
+  platformUrl: string;
+};
+
+export const MobileMenu = ({ platformUrl }: TProps) => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -84,7 +88,7 @@ export const MobileMenu = () => {
           Cennik
         </a>
         <a
-          href="#login"
+          href={platformUrl}
           className="mt-3.5 flex items-center justify-center gap-2 py-3.5 px-4 rounded-full text-[15px] font-medium bg-foreground text-background border border-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-[background,color,border-color] duration-150"
           onClick={close}
         >

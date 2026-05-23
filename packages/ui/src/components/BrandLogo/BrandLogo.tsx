@@ -7,7 +7,7 @@ type TBrandLogoProps = {
 
 export const BrandLogo = ({ className }: TBrandLogoProps) => {
   return (
-    <div
+    <span
       className={cn(
         "flex items-center font-display text-xl tracking-tight leading-none text-foreground",
         className,
@@ -15,6 +15,6 @@ export const BrandLogo = ({ className }: TBrandLogoProps) => {
     >
       <BrandMark className="mr-2" />
       Zaaranżuj<em className="italic text-primary font-normal">To</em>
-    </div>
+    </span>
   );
 };

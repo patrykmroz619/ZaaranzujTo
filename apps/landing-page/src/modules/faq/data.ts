@@ -27,18 +27,12 @@ export const FAQ_DATA: TFaqItem[] = [
     id: "iteracje",
     question: "Ile iteracji potrzeba, żeby osiągnąć dobry efekt?",
     answer:
-      "Większość użytkowników jest zadowolona po 3–5 iteracjach. Możesz zacząć od szerokiego stylu, a potem doprecyzować kolory, konkretne meble i detale — bez zaczynania od zera za każdym razem.",
+      "Większość użytkowników jest zadowolona po 3–5 iteracjach. Możesz zacząć od szerokiego stylu, kolorów a potem doprecyzować konkretne meble i detale — bez zaczynania od zera za każdym razem.",
   },
   {
     id: "platnosc",
     question: "Jak działa płatność? Czy kredyty wygasą?",
     answer:
       "Płacisz raz za pakiet kredytów (BLIK, karta lub przelew). Kredyty zostają na koncie bez ograniczeń czasowych. Brak abonamentu, brak automatycznego odnawiania.",
-  },
-  {
-    id: "jakos",
-    question: "Jaką jakość mają wygenerowane wizualizacje?",
-    answer:
-      "Wizualizacje generowane są w wysokiej rozdzielczości, gotowe do wydruku lub prezentacji architektowi. Realistycznie oddają materiały, oświetlenie i proporcje mebli w Twoim pomieszczeniu.",
   },
 ];

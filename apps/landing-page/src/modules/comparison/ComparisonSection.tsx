@@ -48,7 +48,7 @@ export const ComparisonSection = ({ data }: TProps) => (
             Projektant wnętrz
           </div>
           <div className="px-5.5 py-5 font-mono text-[11px] tracking-[0.12em] uppercase text-muted-foreground flex items-end">
-            Pinterest + zgadywanie
+            Inspiracje na Pinterest
           </div>
           <div
             className="px-5.5 py-5 font-mono text-[11px] tracking-[0.12em] uppercase flex items-end border-t-2 text-primary font-semibold bg-accent/60 border-t-primary"

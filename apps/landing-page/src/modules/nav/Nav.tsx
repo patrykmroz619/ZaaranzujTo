@@ -6,7 +6,7 @@ export const Nav = () => (
   <header className="sticky top-0 z-20 border-b bg-background/78 backdrop-blur-md backdrop-saturate-140 border-border/50">
     <div className="container relative flex items-center justify-between h-16">
       <a
-        href="#top"
+        href="/"
         className="inline-flex outline-none rounded-md focus-visible:ring-2 focus-visible:ring-ring"
         aria-label="ZaaranżujTo"
       >
@@ -35,7 +35,7 @@ export const Nav = () => (
         <div className="w-px h-4 bg-border" aria-hidden="true" />
         <ThemeToggle />
         <a
-          href="#login"
+          href={import.meta.env.PUBLIC_PLATFORM_URL}
           className="inline-flex items-center gap-2 py-2.25 px-4 rounded-full text-sm font-medium bg-foreground text-background border border-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-[background,color,border-color,transform,box-shadow] duration-150 hover:-translate-y-px"
         >
           Zaloguj się
@@ -54,7 +54,7 @@ export const Nav = () => (
 
       <div className="min-[761px]:hidden flex items-center gap-1">
         <ThemeToggle />
-        <MobileMenu />
+        <MobileMenu platformUrl={import.meta.env.PUBLIC_PLATFORM_URL} />
       </div>
     </div>
   </header>

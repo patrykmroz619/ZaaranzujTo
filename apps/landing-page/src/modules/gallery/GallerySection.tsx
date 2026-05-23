@@ -15,7 +15,7 @@ export const GallerySection = ({ children }: TProps) => (
           Zobacz, co zaprojektujesz
         </h2>
         <p className="mt-3.5 text-muted-foreground text-[17px]">
-          Każdy projekt możesz dopracować w&nbsp;kolejnych iteracjach — aż będzie idealny.
+          Poniższa galeria to tylko próbka możliwości aplikacji ZaaranżujTo.
         </p>
       </div>
       {children}

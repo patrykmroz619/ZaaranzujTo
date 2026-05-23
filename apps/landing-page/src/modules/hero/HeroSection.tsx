@@ -1,23 +1,22 @@
-import { PlaceholderImage } from "@/components/PlaceholderImage";
-
 export const HeroSection = () => (
   <section id="top" className="gradient-hero overflow-hidden pt-8 pb-12 sm:pt-12 sm:pb-16">
     <div className="container">
-      <div className="grid items-center gap-14 grid-cols-[1.05fr_1fr] max-[980px]:grid-cols-1 max-[980px]:gap-10">
+      <div className="grid items-center grid-cols-1 gap-10 lg:gap-12 lg:grid-cols-2">
         <div>
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium mb-5.5 bg-accent text-accent-foreground">
             <span className="w-1.5 h-1.5 rounded-full bg-current" />
-            Dla osób urządzających nowe mieszkanie
+            Twój osobisty projektant wnętrz
           </span>
 
           <h1 className="text-foreground text-[clamp(34px,4.4vw,56px)] tracking-[-0.022em]">
-            Zobacz, jak będzie wyglądać Twoje mieszkanie —{" "}
-            <em className="text-primary not-italic">zanim</em> wydasz złotówkę na meble.
+            Zaprojektuj idealne wnętrze z pomocą{" "}
+            <em className="text-primary not-italic">sztucznej inteligecji</em>
           </h1>
 
           <p className="text-muted-foreground mt-6 text-[clamp(17px,1.4vw,19px)] max-w-135">
-            Realistyczne wizualizacje wnętrz w kilka minut. Bez projektanta za 5&nbsp;000&nbsp;PLN,
-            bez weekendów na Pinterest, bez ryzyka kupna sofy która nie pasuje.
+            Zobacz fotorealistyczne wizualizacje swojego salonu czy sypialni w zaledwie kilka minut.
+            Sprawdź różne style, przetestuj pomysły i urządź mieszkanie dokładnie tak, jak marzysz –
+            bez stresu i zgadywania
           </p>
 
           <div className="mt-9 flex items-center gap-4 flex-wrap max-[400px]:flex-col max-[400px]:items-start">
@@ -58,11 +57,7 @@ export const HeroSection = () => (
           <div className="mt-7 flex gap-6 flex-wrap text-muted-foreground text-[13px]">
             <span className="inline-flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full shrink-0 bg-success" />
-              Wizualizacja w &lt; 1 min
-            </span>
-            <span className="inline-flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full shrink-0 bg-success" />6 stylów, 7 typów
-              pomieszczeń
+              Wizualizacje w kilka minut
             </span>
             <span className="inline-flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full shrink-0 bg-success" />
@@ -72,9 +67,10 @@ export const HeroSection = () => (
         </div>
 
         <div className="overflow-hidden shadow-elevated border border-border rounded-[calc(var(--radius)+4px)]">
-          <PlaceholderImage
-            label="Wizualizacja wnętrza — salon, styl skandynawski"
-            aspectRatio="4/3"
+          <img
+            src="/hero-image.avif"
+            alt="Wizualizacja wnętrza — salon, styl skandynawski"
+            className="w-full h-full object-cover"
           />
         </div>
       </div>

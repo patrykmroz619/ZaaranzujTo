@@ -13,11 +13,9 @@ export const PricingSection = ({ data }: TProps) => {
           <span className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted-foreground">
             Cennik
           </span>
-          <h2 className="mt-3.5 text-foreground text-[clamp(34px,5vw,52px)]">
-            Płacisz tylko za wizualizacje, które generujesz
-          </h2>
+          <h2 className="mt-3.5 text-foreground text-[clamp(34px,5vw,52px)]">Pakiety kredytów</h2>
           <p className="mt-3.5 text-muted-foreground text-[17px]">
-            Brak abonamentu. Brak ukrytych kosztów. Kredyty nie wygasają.
+            Brak abonamentu. Płacisz tylko za wizualizacje, które generujesz.
           </p>
         </div>
 
@@ -31,7 +29,7 @@ export const PricingSection = ({ data }: TProps) => {
           <strong className="text-foreground font-medium">
             1 kredyt = 1 wygenerowana wizualizacja.
           </strong>{" "}
-          Kredyty nie wygasają. Płatność BLIK, karta lub przelew.
+          Płatności obsługiwane przez ...
         </p>
       </div>
     </section>
