@@ -15,16 +15,16 @@
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
-    "@next/eslint-plugin-next": "16.2.3",
-    "eslint": "10.2.0",
+    "@next/eslint-plugin-next": "16.2.6",
+    "eslint": "10.4.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.5",
     "eslint-plugin-only-warn": "1.2.1",
     "eslint-plugin-react": "7.37.5",
-    "eslint-plugin-react-hooks": "7.0.1",
-    "eslint-plugin-turbo": "2.9.6",
-    "globals": "17.4.0",
-    "typescript": "6.0.2",
-    "typescript-eslint": "8.58.1"
+    "eslint-plugin-react-hooks": "7.1.1",
+    "eslint-plugin-turbo": "2.9.14",
+    "globals": "17.6.0",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.59.4"
   }
 }
