@@ -25,6 +25,7 @@ export const creditPackageSchema = z
     credits: z.number().int().positive(),
     price: creditPackagePriceSchema,
     isActive: z.boolean(),
+    isPopular: z.boolean(),
   })
   .strict();
 

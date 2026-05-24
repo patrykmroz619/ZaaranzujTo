@@ -1,3 +1,5 @@
+import { lowestPriceLabel } from "@/lib/pricing";
+
 export const HeroSection = () => (
   <section id="top" className="gradient-hero overflow-hidden pt-8 pb-12 sm:pt-12 sm:pb-16">
     <div className="container">
@@ -24,7 +26,7 @@ export const HeroSection = () => (
               href="#cennik"
               className="inline-flex items-center gap-2.5 py-4.5 px-7 rounded-full font-medium text-[17px] bg-primary text-primary-foreground transition-[transform,box-shadow] duration-150 hover:-translate-y-px shadow-cta"
             >
-              Zacznij od 29 PLN
+              Zacznij od {lowestPriceLabel} PLN
               <svg
                 width="16"
                 height="16"

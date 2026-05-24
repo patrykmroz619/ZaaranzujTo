@@ -1,7 +1,7 @@
 import { Logger, Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import z from "zod";
-import creditPackagesData from "./credit-packages.json";
+import { CREDIT_PACKAGES } from "@repo/contracts/credits";
 
 const logger = new Logger("ConfigurationModule");
 
@@ -53,7 +53,7 @@ const validateAndLoadConfig = () => {
 };
 
 const loadCreditPackages = () => ({
-  CREDIT_PACKAGES_JSON: JSON.stringify(creditPackagesData),
+  CREDIT_PACKAGES_JSON: JSON.stringify(CREDIT_PACKAGES),
 });
 
 const resolveEnvFilePath = () => {

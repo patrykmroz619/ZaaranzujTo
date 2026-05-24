@@ -1,11 +1,10 @@
-import type { TPricingPackage } from "./data";
+import { CREDIT_PACKAGES } from "@repo/contracts/credits";
 import { PricingCard } from "./PricingCard";
 
-type TProps = {
-  data: TPricingPackage[];
-};
+const packages = CREDIT_PACKAGES.filter((pkg) => pkg.isActive);
+const maxPricePerCredit = Math.max(...packages.map((pkg) => pkg.price.amount / pkg.credits));
 
-export const PricingSection = ({ data }: TProps) => {
+export const PricingSection = () => {
   return (
     <section id="cennik" className="py-24 max-[720px]:py-16">
       <div className="container">
@@ -20,9 +19,14 @@ export const PricingSection = ({ data }: TProps) => {
         </div>
 
         <div className="grid grid-cols-3 gap-5 max-[880px]:grid-cols-1 items-stretch">
-          {data.map((pkg) => (
-            <PricingCard key={pkg.id} pkg={pkg} />
-          ))}
+          {packages.map((pkg) => {
+            const savingsPercent = Math.round(
+              (1 - pkg.price.amount / pkg.credits / maxPricePerCredit) * 100,
+            );
+            return (
+              <PricingCard key={pkg.packageCode} pkg={pkg} savingsPercent={savingsPercent} />
+            );
+          })}
         </div>
 
         <p className="text-center text-muted-foreground text-[13.5px] mt-7">

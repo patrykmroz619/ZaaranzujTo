@@ -1,11 +1,12 @@
-import type { TPricingPackage } from "./data";
+import type { TCreditPackage } from "@repo/contracts/credits";
 
 type TProps = {
-  pkg: TPricingPackage;
+  pkg: TCreditPackage;
+  savingsPercent: number;
 };
 
-export const PricingCard = ({ pkg }: TProps) => {
-  const perCredit = pkg.pricePln / pkg.credits;
+export const PricingCard = ({ pkg, savingsPercent }: TProps) => {
+  const perCredit = pkg.price.amount / pkg.credits;
   const isFeatured = pkg.isPopular;
 
   return (
@@ -31,13 +32,13 @@ export const PricingCard = ({ pkg }: TProps) => {
         </small>
       </div>
 
-      <div className="text-[17px] font-medium">{pkg.pricePln} PLN</div>
+      <div className="text-[17px] font-medium">{pkg.price.amount} PLN</div>
 
       <div className="flex items-center gap-2 text-muted-foreground text-[13px]">
         {perCredit.toFixed(2).replace(".", ",")} PLN&nbsp;/&nbsp;wizualizacja
-        {pkg.savingsPercent !== null && (
+        {savingsPercent > 0 && (
           <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold tracking-[0.02em] bg-accent text-accent-foreground">
-            −{pkg.savingsPercent}%
+            −{savingsPercent}%
           </span>
         )}
       </div>
@@ -53,7 +54,7 @@ export const PricingCard = ({ pkg }: TProps) => {
               : "bg-transparent text-foreground border-border"
           }`}
         >
-          Zacznij od {pkg.pricePln} PLN
+          Zacznij od {pkg.price.amount} PLN
         </a>
       </div>
     </div>

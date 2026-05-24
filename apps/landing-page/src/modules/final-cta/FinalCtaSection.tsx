@@ -1,3 +1,5 @@
+import { lowestPriceLabel } from "@/lib/pricing";
+
 export const FinalCtaSection = () => (
   <section id="start" className="gradient-hero py-24 max-[720px]:py-16 text-center">
     <div className="container">
@@ -16,7 +18,7 @@ export const FinalCtaSection = () => (
         href="#"
         className="inline-flex items-center gap-2.5 mt-8 py-4.5 px-7 rounded-full font-medium text-[17px] bg-primary text-primary-foreground transition-[transform,box-shadow] duration-150 hover:-translate-y-px shadow-cta"
       >
-        Zacznij od 29 PLN
+        Zacznij od {lowestPriceLabel} PLN
         <svg
           width="16"
           height="16"

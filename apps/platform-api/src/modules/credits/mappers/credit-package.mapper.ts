@@ -21,6 +21,7 @@ export const mapCreditPackageConfigToContract = (params: {
       currency: packageConfig.price.currency,
     },
     isActive: packageConfig.isActive,
+    isPopular: packageConfig.isPopular,
   });
 };
 

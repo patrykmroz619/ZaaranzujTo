@@ -1,3 +1,5 @@
+import { lowestPriceLabel } from "@/lib/pricing";
+
 export type TComparisonRow = {
   id: string;
   feature: string;
@@ -15,7 +17,7 @@ export const COMPARISON_DATA: TComparisonRow[] = [
     feature: "Koszt",
     designer: "Od kilkuset do kilku tysięcy PLN",
     pinterest: "Pozornie za darmo (czas + pomyłki)",
-    zaaranzujto: "Od 29 PLN",
+    zaaranzujto: `Od ${lowestPriceLabel} PLN`,
     designerMuted: true,
     pinterestMuted: true,
   },

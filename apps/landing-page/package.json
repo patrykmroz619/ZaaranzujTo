@@ -20,6 +20,7 @@
     "@astrojs/check": "^0.9.9",
     "@tailwindcss/vite": "4.2.2",
     "@repo/ui": "workspace:*",
+    "@repo/contracts": "workspace:*",
     "tailwindcss": "4.2.2",
     "react": "19.2.6",
     "react-dom": "19.2.6",

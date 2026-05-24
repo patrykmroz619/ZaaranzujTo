@@ -12,6 +12,7 @@ const creditPackageSchema = z
       currency: z.string().length(3),
     }),
     isActive: z.boolean().default(true),
+    isPopular: z.boolean().default(false),
   })
   .strict();
 

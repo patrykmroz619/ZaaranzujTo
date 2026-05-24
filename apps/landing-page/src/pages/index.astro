@@ -11,7 +11,6 @@ import { FinalCtaSection } from "@/modules/final-cta";
 import { Footer } from "@/modules/footer";
 
 import { GALLERY_DATA } from "@/modules/gallery/data";
-import { PRICING_DATA } from "@/modules/pricing/data";
 import { FAQ_DATA } from "@/modules/faq/data";
 import { COMPARISON_DATA } from "@/modules/comparison/data";
 ---
@@ -25,7 +24,7 @@ import { COMPARISON_DATA } from "@/modules/comparison/data";
     </GallerySection>
     <HowItWorksSection />
     <ComparisonSection data={COMPARISON_DATA} />
-    <PricingSection data={PRICING_DATA} />
+    <PricingSection />
     <FaqSection data={FAQ_DATA} client:visible />
     <FinalCtaSection />
   </main>
