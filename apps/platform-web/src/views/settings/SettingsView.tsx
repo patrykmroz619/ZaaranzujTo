@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { PageHeader } from "@repo/ui/components/PageHeader";
 import { ThemeSelector } from "@/modules/settings/components/ThemeSelector";
-import { AccountActions } from "@/modules/settings/components/AccountActions";
+import { AccountSettings } from "@/modules/settings/components/AccountSettings";
 import { useProfile } from "@/core/packages/profile/use-profile";
 
 export const SettingsView = () => {
@@ -20,10 +20,10 @@ export const SettingsView = () => {
   }, [profile?.theme, setTheme]);
 
   return (
-    <div className="max-w-2xl space-y-5">
+    <div className="space-y-5">
       <PageHeader title={t("title")} subtitle={t("subtitle")} />
       <ThemeSelector />
-      <AccountActions />
+      <AccountSettings />
     </div>
   );
 };

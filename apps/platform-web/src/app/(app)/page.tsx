@@ -1,15 +1,7 @@
-import { redirect } from "next/navigation";
-import { auth } from "@clerk/nextjs/server";
-import { LandingView } from "@/views/landing";
+import { DashboardView } from "@/views/dashboard";
 
-const RootPage = async () => {
-  const { userId } = await auth();
-
-  if (userId) {
-    redirect("/dashboard");
-  }
-
-  return <LandingView />;
+const RootPage = () => {
+  return <DashboardView />;
 };
 
 export default RootPage;

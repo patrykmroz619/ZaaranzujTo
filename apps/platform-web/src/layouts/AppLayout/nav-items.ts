@@ -7,7 +7,7 @@ type TNavItem = {
 };
 
 export const navItems: TNavItem[] = [
-  { labelKey: "dashboard", href: "/dashboard", icon: Home },
+  { labelKey: "dashboard", href: "/", icon: Home },
   { labelKey: "projects", href: "/projects", icon: FolderOpen },
   { labelKey: "credits", href: "/credits", icon: Coins },
   { labelKey: "settings", href: "/settings", icon: Settings },

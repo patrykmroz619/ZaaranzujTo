@@ -161,14 +161,9 @@
     "themeLight": "Jasny",
     "themeDark": "Ciemny",
     "themeSystem": "Systemowy",
-    "account": "Konto",
-    "cancel": "Anuluj",
-    "deleteAccount": "Usuń konto",
-    "deleteAccountConfirm": "Czy na pewno chcesz usunąć konto? Wszystkie Twoje dane zostaną trwale usunięte.",
-    "deleteAccountTitle": "Usunąć konto?",
-    "deleteAccountConsequences": "Stracisz dostęp do wszystkich projektów, wizualizacji i pozostałego salda kredytów. Tej operacji nie można cofnąć.",
-    "deleteAccountTypePrompt": "Aby potwierdzić, wpisz „{phrase}”:",
-    "deleteAccountConfirmPhrase": "USUŃ KONTO"
+    "account": "Ustawienia konta",
+    "accountSubtitle": "Zmień dane profilu, hasło lub usuń konto.",
+    "manageAccount": "Zarządzaj kontem"
   },
   "styles": {
     "scandinavian": "Skandynawski",

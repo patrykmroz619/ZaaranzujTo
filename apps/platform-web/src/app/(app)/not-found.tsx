@@ -18,7 +18,7 @@ const NotFound = () => {
           {t("errors.goBack")}
         </Button>
         <Button asChild>
-          <Link href="/dashboard">{t("notFound.backHome")}</Link>
+          <Link href="/">{t("notFound.backHome")}</Link>
         </Button>
       </div>
     </div>

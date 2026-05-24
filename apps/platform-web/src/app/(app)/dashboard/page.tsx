@@ -1,7 +1,7 @@
-import { DashboardView } from "@/views/dashboard";
+import { redirect } from "next/navigation";
 
 const DashboardPage = () => {
-  return <DashboardView />;
+  redirect("/");
 };
 
 export default DashboardPage;
