@@ -11,7 +11,10 @@
       "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\patry\\\\Documents\\\\Projekty\\\\ZaaranzujTo\\\\apps\\\\landing-page\" -Recurse -Force)",
       "Bash(Select-Object FullName, PSIsContainer)",
       "Bash(Sort-Object FullName)",
-      "Bash(Format-Table -AutoSize)"
+      "Bash(Format-Table -AutoSize)",
+      "Bash(bash -n deploy/deploy.sh)",
+      "Bash(node -e \"require\\('./deploy/ecosystem.config.cjs'\\); console.log\\('ecosystem.config.cjs OK'\\)\")",
+      "WebFetch(domain:wiki.mikr.us)"
     ]
   }
 }
