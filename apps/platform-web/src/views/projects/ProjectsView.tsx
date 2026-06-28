@@ -17,12 +17,7 @@ import { useCreateProject } from "@/modules/projects/hooks/use-create-project";
 import { useDeleteProject } from "@/modules/projects/hooks/use-delete-project";
 import { useUpdateProject } from "@/modules/projects/hooks/use-update-project";
 
-const SORT_OPTIONS: TProjectSort[] = [
-  "updatedAt:desc",
-  "updatedAt:asc",
-  "name:asc",
-  "name:desc",
-];
+const SORT_OPTIONS: TProjectSort[] = ["updatedAt:desc", "updatedAt:asc", "name:asc", "name:desc"];
 
 export const ProjectsView = () => {
   const t = useTranslations();

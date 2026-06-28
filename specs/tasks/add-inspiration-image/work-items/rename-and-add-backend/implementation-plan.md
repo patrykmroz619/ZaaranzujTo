@@ -35,13 +35,15 @@ Add `inspirationPhoto` as a new optional single-file upload on the initial visua
 ### `iterationInputSchema` (contract + response shape)
 
 ```ts
-export const iterationInputSchema = z.object({
-  mode: z.string(),
-  prompt: z.string().nullable().optional(),
-  inputAsset: objectIdSchema.nullable(),
-  referenceAssets: z.array(objectIdSchema),
-  inspirationAsset: objectIdSchema.nullable().optional(),  // NEW
-}).strict();
+export const iterationInputSchema = z
+  .object({
+    mode: z.string(),
+    prompt: z.string().nullable().optional(),
+    inputAsset: objectIdSchema.nullable(),
+    referenceAssets: z.array(objectIdSchema),
+    inspirationAsset: objectIdSchema.nullable().optional(), // NEW
+  })
+  .strict();
 ```
 
 ### `TUploadedIterationAssetsBundle` (internal type)
@@ -50,7 +52,7 @@ export const iterationInputSchema = z.object({
 export type TUploadedIterationAssetsBundle = {
   inputAssetId: string | null;
   referenceAssetIds: string[];
-  inspirationAssetId: string | null;  // NEW
+  inspirationAssetId: string | null; // NEW
   outputAssetId: string;
 };
 ```
@@ -63,7 +65,7 @@ type TCreateIterationParams = {
   userId: Types.ObjectId;
   prompt: string;
   inputPhoto: TUploadedFile | undefined;
-  inspirationPhoto: TUploadedFile | undefined;  // NEW
+  inspirationPhoto: TUploadedFile | undefined; // NEW
   parentIterationId: string | undefined;
   referencePhotos: TUploadedFile[];
 };
@@ -78,7 +80,7 @@ type TCreateVisualizationParams = {
   projectId: string;
   body: TCreateVisualizationRequest;
   inputPhoto: TUploadedFile | undefined;
-  inspirationPhoto: TUploadedFile | undefined;  // NEW
+  inspirationPhoto: TUploadedFile | undefined; // NEW
   referencePhotos: TUploadedFile[];
 };
 ```
@@ -128,20 +130,22 @@ Add `hasInspirationPhoto: boolean` to `TFirstIterationPromptParams` only (subseq
 
 **Image section** — the `images` object is built sequentially by position. With the new field, the positions are:
 
-| Position | Condition | Key | Description |
-|----------|-----------|-----|-------------|
-| 1 | `hasInputPhoto` | `image_1` | existing room description |
-| 2 | `hasInputPhoto && hasInspirationPhoto` | `image_2` | inspiration |
-| 1 | `!hasInputPhoto && hasInspirationPhoto` | `image_1` | inspiration |
-| last | `hasReferencePhotos && (hasInputPhoto \|\| hasInspirationPhoto)` | `remaining_images` | furniture |
-| 1 | `!hasInputPhoto && !hasInspirationPhoto && hasReferencePhotos` | `reference_images` | furniture |
+| Position | Condition                                                        | Key                | Description               |
+| -------- | ---------------------------------------------------------------- | ------------------ | ------------------------- |
+| 1        | `hasInputPhoto`                                                  | `image_1`          | existing room description |
+| 2        | `hasInputPhoto && hasInspirationPhoto`                           | `image_2`          | inspiration               |
+| 1        | `!hasInputPhoto && hasInspirationPhoto`                          | `image_1`          | inspiration               |
+| last     | `hasReferencePhotos && (hasInputPhoto \|\| hasInspirationPhoto)` | `remaining_images` | furniture                 |
+| 1        | `!hasInputPhoto && !hasInspirationPhoto && hasReferencePhotos`   | `reference_images` | furniture                 |
 
 Inspiration image description:
+
 ```
 "Design inspiration. Follow its style, colour palette, materials, and mood — do not copy specific furniture pieces, their placement, or the room layout."
 ```
 
 **Hard constraints** — when `hasInspirationPhoto`, add:
+
 ```
 "Inspiration image is a style-only reference. Do not replicate its layout, furniture arrangement, or any specific objects — extract only aesthetic cues."
 ```
@@ -151,6 +155,7 @@ Inspiration image description:
 Add `inspirationPhoto: TUploadedFile | undefined` to `TCreateIterationParams`.
 
 **Optimize:** mirror `optimizedInputPhoto` pattern:
+
 ```ts
 const optimizedInspirationPhoto = inspirationPhoto
   ? await this.imageOptimizationService.optimize(inspirationPhoto, {
@@ -165,6 +170,7 @@ const optimizedInspirationPhoto = inspirationPhoto
 **Moderate:** include `optimizedInspirationPhoto` in `moderateIterationContent` — add it to the `referencePhotos` array passed to `buildModerationImages`, or add a dedicated param. The simplest approach: add `inspirationPhoto: TUploadedFile | undefined` to the private `moderateIterationContent` params and append it to the images array alongside `inputPhoto`.
 
 **`allReferenceImages` ordering** (images array sent to AI in the order they are described by the prompt):
+
 1. `optimizedInputPhoto` (if present)
 2. `optimizedInspirationPhoto` (if present) — NEW
 3. `previousOutputImage` (subsequent iterations only)
@@ -190,8 +196,8 @@ In `createVisualization`, update `FileFieldsInterceptor` to include the new fiel
 FileFieldsInterceptor([
   { name: "inputPhoto", maxCount: 1 },
   { name: "referencePhotos", maxCount: 8 },
-  { name: "inspirationPhoto", maxCount: 1 },  // NEW
-])
+  { name: "inspirationPhoto", maxCount: 1 }, // NEW
+]);
 ```
 
 Update the `files` type annotation to add `inspirationPhoto?: TUploadedIterationFile[]`. Extract and pass:
@@ -227,12 +233,14 @@ generationInput: {
 ## Verification
 
 **Automated:**
+
 ```sh
 bun run check-types   # from monorepo root
 bun run lint          # from monorepo root
 ```
 
 **Manual:**
+
 1. POST `projects/:projectId/visualizations` with `inputPhoto`, `referencePhotos[]`, and `inspirationPhoto` — verify `inspirationAsset` is non-null in the response and the R2 key `{userId}/iterations/{uuid}/inspiration-photo` exists.
 2. POST the same endpoint without `inspirationPhoto` — verify existing behaviour is unchanged and `inspirationAsset` is `null`.
 3. GET `visualizations/:id` and `visualizations/:id/iterations` — verify `inspirationAsset` appears in `generationInput` for both endpoints.

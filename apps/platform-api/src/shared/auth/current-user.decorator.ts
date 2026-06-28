@@ -14,4 +14,4 @@ const currentUserDecoratorFactory = createParamDecorator(
   },
 );
 
-export const CurrentUser = currentUserDecoratorFactory as () => ParameterDecorator;
+export const CurrentUser = currentUserDecoratorFactory;

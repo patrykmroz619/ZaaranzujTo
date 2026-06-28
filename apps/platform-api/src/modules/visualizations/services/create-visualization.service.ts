@@ -29,7 +29,8 @@ export class CreateVisualizationService {
   ) {}
 
   createVisualization = async (params: TCreateVisualizationParams) => {
-    const { clerkId, email, projectId, body, inputPhoto, inspirationPhoto, referencePhotos } = params;
+    const { clerkId, email, projectId, body, inputPhoto, inspirationPhoto, referencePhotos } =
+      params;
 
     const user = await this.iterationAccessService.resolveAuthorizedUserForProject({
       clerkId,

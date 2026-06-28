@@ -41,7 +41,7 @@ export class ListProjectVisualizationsService {
       projectId,
       page: query.page,
       pageSize: query.pageSize,
-      sort: query.sort as TListProjectVisualizationsSort,
+      sort: query.sort,
     };
 
     const [items, totalItems] = await Promise.all([

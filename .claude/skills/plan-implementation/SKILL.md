@@ -115,7 +115,7 @@ Write to the resolved location:
 ```markdown
 # Implementation Plan: [Work-item / scope title]
 
-**Scope:** work-item `{slug}` covering subtasks `a`, `b`   (or: whole task — no subtasks)
+**Scope:** work-item `{slug}` covering subtasks `a`, `b` (or: whole task — no subtasks)
 **Part of:** specs/tasks/{task}/task-plan.md
 
 ## Goal
@@ -194,7 +194,7 @@ Close with the next step and stop — don't chain automatically:
 
 ## Notes
 
-- **Technical altitude.** This is where placement, contracts, and concrete steps live. `task-plan.md` owns the *what*; this plan owns the *how*. Don't restate the high-level breakdown — reference it.
+- **Technical altitude.** This is where placement, contracts, and concrete steps live. `task-plan.md` owns the _what_; this plan owns the _how_. Don't restate the high-level breakdown — reference it.
 - **One plan per work-item.** A scope spanning several subtasks produces a single `implementation-plan.md`, not one per subtask. The header lists the subtasks it covers; `task-plan.md` annotates each of them with the work-item slug.
 - **Respect upstream decisions.** Treat `task-plan.md`'s Planning Notes and Definition of Done as settled. Q&A at this stage is for implementation decisions the codebase can't answer, not for re-opening the breakdown.
 - **Contracts are the spine.** When a work-item introduces or changes an interface, show its exact shape — neighboring work and `/review` depend on it.

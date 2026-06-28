@@ -18,6 +18,7 @@ export const workspaceCreateSchema = z
     prompt: z.string(),
     roomPhotoFile: z.instanceof(File).optional(),
     furniturePhotoFiles: z.array(z.instanceof(File)),
+    inspirationPhotoFile: z.instanceof(File).optional(),
   })
   .superRefine((data, ctx) => {
     if (data.stylePreset === OTHER_PRESET && !data.stylePresetCustom?.trim()) {

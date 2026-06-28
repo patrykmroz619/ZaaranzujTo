@@ -23,7 +23,7 @@ export class UpdateMeProfileService {
   updateMeProfile = async (params: TUpdateMeProfileParams) => {
     const { clerkId, email, body } = params;
 
-    const patch = body as TUpdateMeRequest;
+    const patch = body;
 
     await this.getUserService.getUser({ clerkId, email });
 

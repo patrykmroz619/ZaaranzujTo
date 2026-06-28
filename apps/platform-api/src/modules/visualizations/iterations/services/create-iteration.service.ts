@@ -55,7 +55,15 @@ export class CreateIterationService {
   }
 
   createIteration = async (params: TCreateIterationParams) => {
-    const { visualization, userId, prompt, inputPhoto, inspirationPhoto, parentIterationId, referencePhotos } = params;
+    const {
+      visualization,
+      userId,
+      prompt,
+      inputPhoto,
+      inspirationPhoto,
+      parentIterationId,
+      referencePhotos,
+    } = params;
 
     const visualizationId = visualization._id.toString();
     const userIdStr = userId.toString();
@@ -312,8 +320,15 @@ export class CreateIterationService {
     paletteCustom?: string | null;
     roomTypeCustom?: string | null;
   }) => {
-    const { prompt, inputPhoto, inspirationPhoto, referencePhotos, stylePresetCustom, paletteCustom, roomTypeCustom } =
-      params;
+    const {
+      prompt,
+      inputPhoto,
+      inspirationPhoto,
+      referencePhotos,
+      stylePresetCustom,
+      paletteCustom,
+      roomTypeCustom,
+    } = params;
 
     const textParts = [
       prompt.length > 0 ? prompt : undefined,
@@ -344,7 +359,10 @@ export class CreateIterationService {
         ? { base64: inputPhoto.buffer.toString("base64"), mediaType: inputPhoto.mimetype }
         : undefined,
       inspirationPhoto
-        ? { base64: inspirationPhoto.buffer.toString("base64"), mediaType: inspirationPhoto.mimetype }
+        ? {
+            base64: inspirationPhoto.buffer.toString("base64"),
+            mediaType: inspirationPhoto.mimetype,
+          }
         : undefined,
       ...referencePhotos.map((file) => ({
         base64: file.buffer.toString("base64"),

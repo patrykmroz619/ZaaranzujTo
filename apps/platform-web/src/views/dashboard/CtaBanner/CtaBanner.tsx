@@ -14,13 +14,7 @@ export const CtaBanner = () => {
 
   return (
     <Card className="overflow-hidden border-0 relative min-h-[160px]">
-      <Image
-        src={bannerImage}
-        alt=""
-        fill
-        className="object-cover object-center"
-        priority
-      />
+      <Image src={bannerImage} alt="" fill className="object-cover object-center" priority />
       <div className="absolute inset-0 bg-linear-to-r from-black/60 to-black/10" />
       <div className="absolute inset-0 bg-linear-to-r from-primary/90 via-primary/70 to-primary/10" />
       <CardContent className="relative z-10 flex flex-col justify-center h-full min-h-[160px] p-5 md:p-6 max-w-md">

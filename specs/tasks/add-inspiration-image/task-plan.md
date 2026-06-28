@@ -26,6 +26,6 @@ Add an inspiration/reference image upload field to the visualisation creation fo
 
 Add `inspirationPhoto` as a new optional single-file field. No renames — `referencePhotos` stays as-is everywhere. Update `visualizations.controller.ts` (`FileFieldsInterceptor` to include the new field), `iteration-assets.service.ts` (storage key for the new asset), and the AI generation prompt in `create-iteration.service.ts` so the model treats the inspiration image as style/design context only — not furniture placement.
 
-### 2. `rename-and-add-frontend` — pending
+### 2. `rename-and-add-frontend` — implemented (work-item: `rename-and-add-frontend`)
 
 Rename the `referencePhotos` FormData field to `furniturePhotos` in `visualizations.api.ts` and update any related labels in `WorkspaceCreateForm`. Add a new `InspirationPhotoField` component (single-file, same constraints as `PhotoUpload`) under `apps/platform-web/src/modules/workspace/components/`. Wire the new field into `WorkspaceCreateForm` and `VisualizationCreateView` — append `inspirationPhoto` to the FormData sent to the API.

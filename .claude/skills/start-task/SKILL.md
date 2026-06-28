@@ -132,8 +132,8 @@ Then close with the next step and stop — don't chain into another skill:
 
 ## Notes
 
-- **task-info.md is a brief, not a spec.** Capture what the task *is* — title, identity, summary,
-  acceptance hints — faithfully and completely, but resist front-loading *implementation* detail
+- **task-info.md is a brief, not a spec.** Capture what the task _is_ — title, identity, summary,
+  acceptance hints — faithfully and completely, but resist front-loading _implementation_ detail
   (how to build it). That altitude belongs to `/plan-task` and `/plan-implementation`. Short inputs
   yield a short artifact; detailed inputs are preserved in full.
 - **Honor the configured integration.** Fetch from the tracker when it's actually available, and fall

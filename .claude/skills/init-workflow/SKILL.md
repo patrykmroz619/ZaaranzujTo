@@ -57,7 +57,7 @@ If nothing relevant was found, delete the "References" section before writing.
 
 Don't ask the user to restate or duplicate what the referenced files already say — referencing them
 is enough. The template's "Project conventions" section is optional: it's there only so the user can
-*extend* the standards with extra rules if they want, not a placeholder they're obliged to fill.
+_extend_ the standards with extra rules if they want, not a placeholder they're obliged to fill.
 
 If `coding-standards.md` already exists, leave the user's content alone — at most append references
 to rules files not already mentioned there, and tell the user.
@@ -74,7 +74,7 @@ it as-is or revisit anything.
 
 ### Step 2: Interview to fill `workflow-config.md`
 
-The goal is to record *how* this project's workflow integrates with the outside world, so later
+The goal is to record _how_ this project's workflow integrates with the outside world, so later
 skills can auto-fetch task data, propose branch names, and prompt for changelog entries — and
 degrade gracefully to manual input when an integration isn't available.
 
@@ -90,7 +90,7 @@ Ask in **small batches** rather than one giant form — group related questions 
 areas:
 
 **1. Task management.** Which system, if any. **Ask the user first — never infer the tracker from
-what tooling happens to be installed.** Do *not* scan for available MCP servers, CLIs (`gh`, `linear`,
+what tooling happens to be installed.** Do _not_ scan for available MCP servers, CLIs (`gh`, `linear`,
 `jira`, etc.), or env vars and then assume the project uses that tracker. The presence of a tool says
 nothing about which tracker this project actually uses; only the user knows that. So lead with the
 question, not a detection sweep.
@@ -98,7 +98,7 @@ question, not a detection sweep.
 Offer Jira, Linear, and GitHub Issues as common examples, but make clear these are only examples —
 **the user can name any other tracker** (e.g. Azure DevOps, Asana, Trello, Shortcut, a self-hosted
 tool) or choose "none". Only **after** the user has named the tracker (or "none") do you look at
-tooling — and then only for *that* tracker: help them wire it up by asking how the agent should access
+tooling — and then only for _that_ tracker: help them wire it up by asking how the agent should access
 it — an MCP server, a CLI such as `gh`, a REST API, or manual entry — and walk them through whatever
 configuration that mechanism needs (auth, base URL, project/board key, required env vars or tokens).
 For a system you don't have a built-in integration for, work with the user to find a usable access
@@ -109,13 +109,14 @@ path; if none exists, fall back to manual and record exactly what the user will 
 > integration is worse than honest "manual", because downstream skills will keep trying it. (This
 > check is for the tracker the user picked; it is not a license to go discover trackers by scanning.)
 > Check first:
+>
 > - **CLI (e.g. `gh`)** — confirm it's installed and authenticated, e.g. `gh auth status`.
 > - **MCP server** — check whether the corresponding MCP tools are actually available in this
 >   session.
 > - **REST API / other** — confirm the credentials and endpoint actually resolve before trusting them.
 >
 > If the chosen mechanism isn't available, tell the user what's missing and ask them to either
-> configure it now or fall back to manual. Record whatever is *actually* usable, and capture the
+> configure it now or fall back to manual. Record whatever is _actually_ usable, and capture the
 > access details (endpoint, project key, auth method) in the config's **Notes** so downstream skills
 > can reach the tracker.
 
@@ -127,6 +128,7 @@ defaults rather than asking cold.
 prompting — look for common names at the root and a level or two down (e.g. `CHANGELOG.md`,
 `CHANGELOG`, `HISTORY.md`, `CHANGES.md`, `NEWS.md`, a `changelog/` or `changes/` directory, or
 changeset tooling like `.changeset/`). Let the finding shape the question:
+
 > - **If a changelog file is found** — don't ask whether one exists. Tell the user what you found,
 >   peek at its format (e.g. Keep a Changelog, plain dated entries, changesets), and confirm it's the
 >   one the workflow should append to. Record its location and format.

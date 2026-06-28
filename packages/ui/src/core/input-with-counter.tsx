@@ -16,13 +16,7 @@ type TCharCounterProps = {
 const CharCounter = ({ current, max, className }: TCharCounterProps) => {
   const isWarning = current > max * WARNING_RATIO;
   return (
-    <p
-      className={cn(
-        "text-xs",
-        isWarning ? "text-warning" : "text-muted-foreground",
-        className,
-      )}
-    >
+    <p className={cn("text-xs", isWarning ? "text-warning" : "text-muted-foreground", className)}>
       {current}/{max}
     </p>
   );

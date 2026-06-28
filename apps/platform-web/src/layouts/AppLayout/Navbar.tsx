@@ -12,7 +12,10 @@ export const Navbar = () => {
     <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-md">
       <div className="container flex h-14 items-center justify-between">
         <div className="flex items-center gap-6">
-          <Link href="/" className="flex items-center gap-2 outline-none rounded-md focus-visible:ring-2 focus-visible:ring-ring">
+          <Link
+            href="/"
+            className="flex items-center gap-2 outline-none rounded-md focus-visible:ring-2 focus-visible:ring-ring"
+          >
             <BrandLogo />
           </Link>
 
