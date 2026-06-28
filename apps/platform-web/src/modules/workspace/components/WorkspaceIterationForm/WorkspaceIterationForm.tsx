@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { Button } from "@repo/ui/core/button";
@@ -42,7 +42,11 @@ export const WorkspaceIterationForm = (props: TWorkspaceIterationFormProps) => {
     mode: "onChange",
   });
 
-  const furniturePhotoFiles = form.watch("furniturePhotoFiles");
+  const furniturePhotoFiles = useWatch({
+    control: form.control,
+    name: "furniturePhotoFiles",
+    defaultValue: [],
+  });
 
   return (
     <div className="w-full space-y-5 lg:w-100 lg:shrink-0">

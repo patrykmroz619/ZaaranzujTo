@@ -16,6 +16,7 @@ const mapIteration = (params: { iteration: Iteration }) => {
       prompt: iteration.generationInput.prompt,
       inputAsset: iteration.generationInput.inputAsset,
       referenceAssets: iteration.generationInput.referenceAssets,
+      inspirationAsset: iteration.generationInput.inspirationAsset ?? null,
     },
     outputAsset: iteration.outputAsset,
     result: {

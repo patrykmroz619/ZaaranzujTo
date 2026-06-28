@@ -90,6 +90,7 @@ export const FurniturePhotosField = (props: TFurniturePhotosFieldProps) => {
         <div className="grid grid-cols-4 gap-2">
           {previews.map((previewUrl, index) => (
             <div key={`${previewUrl}-${index}`} className="relative">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={previewUrl}
                 alt={`${t("workspace.furniturePhotoAlt")} ${index + 1}`}

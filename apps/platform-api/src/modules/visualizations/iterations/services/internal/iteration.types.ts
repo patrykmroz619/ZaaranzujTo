@@ -8,5 +8,6 @@ export type TUploadedFile = {
 export type TUploadedIterationAssetsBundle = {
   inputAssetId: string | null;
   referenceAssetIds: string[];
+  inspirationAssetId: string | null;
   outputAssetId: string;
 };

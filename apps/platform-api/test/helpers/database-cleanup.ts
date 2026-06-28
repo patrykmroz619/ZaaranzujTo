@@ -1,6 +1,6 @@
 import { INestApplication } from "@nestjs/common";
 import { getConnectionToken } from "@nestjs/mongoose";
-import { type Connection } from "mongoose";
+import { type Connection, ConnectionStates } from "mongoose";
 
 const getAppConnection = (input: { app: INestApplication }) => {
   try {
@@ -13,7 +13,7 @@ const getAppConnection = (input: { app: INestApplication }) => {
 export const clearDatabaseForApp = async (input: { app: INestApplication }) => {
   const connection = getAppConnection({ app: input.app });
 
-  if (!connection || connection.readyState !== 1) {
+  if (!connection || connection.readyState !== ConnectionStates.connected) {
     return;
   }
 

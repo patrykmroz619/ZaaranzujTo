@@ -18,6 +18,7 @@ import {
   ROOM_TYPE_PRESETS,
 } from "@repo/contracts";
 import { PhotoUpload } from "@/modules/workspace/components/PhotoUpload";
+import { InspirationPhotoField } from "@/modules/workspace/components/InspirationPhotoField";
 import { FurniturePhotosField } from "@/modules/workspace/components/FurniturePhotosField";
 import { NoCreditsBanner } from "@/modules/workspace/components/NoCreditsBanner";
 import { workspaceCreateSchema, type TWorkspaceCreateValues } from "../../types/workspace.types";
@@ -129,23 +130,40 @@ export const WorkspaceCreateForm = (props: TWorkspaceCreateFormProps) => {
       prompt: "",
       roomPhotoFile: undefined,
       furniturePhotoFiles: [],
+      inspirationPhotoFile: undefined,
     },
     mode: "onChange",
   });
 
-  const roomPhotoFile = form.watch("roomPhotoFile");
-  const furniturePhotoFiles = form.watch("furniturePhotoFiles");
+  const roomPhotoFile = useWatch({ control: form.control, name: "roomPhotoFile" });
+  const furniturePhotoFiles = useWatch({
+    control: form.control,
+    name: "furniturePhotoFiles",
+    defaultValue: [],
+  });
+  const inspirationPhotoFile = useWatch({ control: form.control, name: "inspirationPhotoFile" });
 
   const roomPhotoPreview = useMemo(() => {
     if (!roomPhotoFile) return null;
     return URL.createObjectURL(roomPhotoFile);
   }, [roomPhotoFile]);
 
+  const inspirationPhotoPreview = useMemo(() => {
+    if (!inspirationPhotoFile) return null;
+    return URL.createObjectURL(inspirationPhotoFile);
+  }, [inspirationPhotoFile]);
+
   useEffect(() => {
     return () => {
       if (roomPhotoPreview) URL.revokeObjectURL(roomPhotoPreview);
     };
   }, [roomPhotoPreview]);
+
+  useEffect(() => {
+    return () => {
+      if (inspirationPhotoPreview) URL.revokeObjectURL(inspirationPhotoPreview);
+    };
+  }, [inspirationPhotoPreview]);
 
   return (
     <div className="mx-auto w-full max-w-2xl">
@@ -245,6 +263,22 @@ export const WorkspaceCreateForm = (props: TWorkspaceCreateFormProps) => {
                   <FormMessage />
                 </FormItem>
               )}
+            />
+
+            <InspirationPhotoField
+              preview={inspirationPhotoPreview}
+              onUpload={(file) =>
+                form.setValue("inspirationPhotoFile", file, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                })
+              }
+              onRemove={() =>
+                form.setValue("inspirationPhotoFile", undefined, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                })
+              }
             />
 
             <FurniturePhotosField

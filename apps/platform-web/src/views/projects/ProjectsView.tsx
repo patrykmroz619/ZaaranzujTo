@@ -17,12 +17,7 @@ import { useCreateProject } from "@/modules/projects/hooks/use-create-project";
 import { useDeleteProject } from "@/modules/projects/hooks/use-delete-project";
 import { useUpdateProject } from "@/modules/projects/hooks/use-update-project";
 
-const SORT_OPTIONS: TProjectSort[] = [
-  "updatedAt:desc",
-  "updatedAt:asc",
-  "name:asc",
-  "name:desc",
-];
+const SORT_OPTIONS: TProjectSort[] = ["updatedAt:desc", "updatedAt:asc", "name:asc", "name:desc"];
 
 export const ProjectsView = () => {
   const t = useTranslations();
@@ -33,7 +28,7 @@ export const ProjectsView = () => {
 
   const { projects, isLoading, error } = useProjects({ query: { sort, page: 1, pageSize: 20 } });
   const { mutate: createProject, isPending: isCreating } = useCreateProject();
-  const { mutate: deleteProject, isPending: isDeleting } = useDeleteProject();
+  const { mutate: deleteProject } = useDeleteProject();
   const { mutate: updateProject, isPending: isUpdating } = useUpdateProject();
 
   const handleCreateProject = (name: string) => {
@@ -139,6 +134,7 @@ export const ProjectsView = () => {
       />
 
       <EditProjectNameDialog
+        key={editProjectId ?? "none"}
         open={!!editProject}
         onOpenChange={() => setEditProjectId(null)}
         currentName={editProject?.name ?? ""}

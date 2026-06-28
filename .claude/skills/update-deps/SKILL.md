@@ -84,6 +84,7 @@ If type checking or the build fails:
 6. Repeat for each failing package.
 
 Common causes after a `--latest` update:
+
 - Renamed exports or moved entry points (check the package's CHANGELOG or migration guide via Context7).
 - New peer-dependency requirements — install the missing peer with `bun add <pkg> --dev` in the relevant workspace.
 - Removed or changed TypeScript types — update call sites to match the new signature.

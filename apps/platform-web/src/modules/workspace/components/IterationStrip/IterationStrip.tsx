@@ -1,5 +1,6 @@
 "use client";
 
+import NextImage from "next/image";
 import { Image as ImageIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { TIterationObject } from "@repo/contracts";
@@ -20,13 +21,13 @@ const IterationThumbnail = (props: TIterationThumbnailProps) => {
   return (
     <button
       onClick={() => onSelect(iteration.id)}
-      className={`flex-shrink-0 rounded-lg border-2 p-1 transition-all ${
+      className={`shrink-0 rounded-lg border-2 p-1 transition-all ${
         isActive ? "border-primary shadow-card" : "border-transparent hover:border-border"
       }`}
     >
-      <div className="flex h-16 w-24 items-center justify-center rounded bg-muted overflow-hidden">
+      <div className="relative h-16 w-24 rounded bg-muted overflow-hidden">
         {imageUrl ? (
-          <img src={imageUrl} alt={label} className="h-full w-full object-cover" />
+          <NextImage fill unoptimized src={imageUrl} alt={label} className="object-cover" />
         ) : (
           <ImageIcon className="h-6 w-6 text-muted-foreground/30" />
         )}

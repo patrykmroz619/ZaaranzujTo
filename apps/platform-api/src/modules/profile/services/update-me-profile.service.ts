@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { meResponseSchema, type TUpdateMeRequest } from "@repo/contracts/me";
+import { meResponseSchema } from "@repo/contracts/me";
 
 import { GetBalanceService } from "../../credits/services/get-balance.service";
 import { GetUserService } from "../../users/services/get-user.service";
@@ -23,7 +23,7 @@ export class UpdateMeProfileService {
   updateMeProfile = async (params: TUpdateMeProfileParams) => {
     const { clerkId, email, body } = params;
 
-    const patch = body as TUpdateMeRequest;
+    const patch = body;
 
     await this.getUserService.getUser({ clerkId, email });
 

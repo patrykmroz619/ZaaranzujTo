@@ -57,7 +57,7 @@ export class StorageController {
       id: asset._id.toString(),
       mimeType: asset.mimeType,
       sizeBytes: asset.sizeBytes,
-      createdAt: (asset as any).createdAt?.toISOString() || new Date().toISOString(),
+      createdAt: asset.createdAt.toISOString(),
     };
   }
 }

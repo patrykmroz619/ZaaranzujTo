@@ -9,16 +9,20 @@ import type { TUploadedFile } from "./iteration.types";
 
 type TValidateFilesParams = {
   inputPhoto: TUploadedFile | undefined;
+  inspirationPhoto: TUploadedFile | undefined;
   referencePhotos: TUploadedFile[];
 };
 
 @Injectable()
 export class IterationFilesValidatorService {
   validateFiles = (params: TValidateFilesParams) => {
-    const { inputPhoto, referencePhotos } = params;
+    const { inputPhoto, inspirationPhoto, referencePhotos } = params;
 
     if (inputPhoto) {
       this.validateFile({ file: inputPhoto });
+    }
+    if (inspirationPhoto) {
+      this.validateFile({ file: inspirationPhoto });
     }
     referencePhotos.forEach((file) => this.validateFile({ file }));
   };

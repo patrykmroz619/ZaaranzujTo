@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common";
 
 import { GetUserService } from "../../../users/services/get-user.service";
-import type { TListVisualizationIterationsSort } from "../../schemas/visualization.schema";
 import { VisualizationsRepository } from "../../repositories/visualizations.repository";
 import {
   listVisualizationIterationsQuerySchema,
@@ -44,7 +43,7 @@ export class ListVisualizationIterationsService {
       visualizationId,
       page: parsedQuery.page,
       pageSize: parsedQuery.pageSize,
-      sort: parsedQuery.sort as TListVisualizationIterationsSort,
+      sort: parsedQuery.sort,
     });
 
     const totalPages =
@@ -62,6 +61,7 @@ export class ListVisualizationIterationsService {
           prompt: iteration.generationInput.prompt,
           inputAsset: iteration.generationInput.inputAsset,
           referenceAssets: iteration.generationInput.referenceAssets,
+          inspirationAsset: iteration.generationInput.inspirationAsset ?? null,
         },
         outputAsset: iteration.outputAsset,
         result: {

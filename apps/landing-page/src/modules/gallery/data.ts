@@ -42,9 +42,19 @@ export const ROOM_TYPE_LABELS: Record<TRoomType, string> = {
   przedpokoj: "Przedpokój",
 };
 
-const STYLES = ["skandynawski", "nowoczesny", "industrialny", "boho", "klasyczny", "minimalistyczny"] as const;
+const STYLES = [
+  "skandynawski",
+  "nowoczesny",
+  "industrialny",
+  "boho",
+  "klasyczny",
+  "minimalistyczny",
+] as const;
 
-function makeIterationSeq(roomType: TRoomType, styles: [string, string, string]): TIterationSequence {
+function makeIterationSeq(
+  roomType: TRoomType,
+  styles: [string, string, string],
+): TIterationSequence {
   const label = ROOM_TYPE_LABELS[roomType];
   return {
     kind: "iteration-sequence",

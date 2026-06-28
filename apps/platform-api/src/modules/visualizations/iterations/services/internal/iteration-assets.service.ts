@@ -8,6 +8,7 @@ import type { TUploadedIterationAssetsBundle, TUploadedFile } from "./iteration.
 type TUploadAssetsForIterationParams = {
   userId: string;
   inputPhoto: TUploadedFile | undefined;
+  inspirationPhoto: TUploadedFile | undefined;
   referencePhotos: TUploadedFile[];
   outputMediaType: string;
   outputBytes: Uint8Array;
@@ -20,9 +21,11 @@ export class IterationAssetsService {
   uploadAssetsForIteration = async (
     params: TUploadAssetsForIterationParams,
   ): Promise<TUploadedIterationAssetsBundle> => {
-    const { userId, inputPhoto, referencePhotos, outputMediaType, outputBytes } = params;
+    const { userId, inputPhoto, inspirationPhoto, referencePhotos, outputMediaType, outputBytes } =
+      params;
 
     let inputAssetId: string | null = null;
+    let inspirationAssetId: string | null = null;
 
     const randomId = randomUUID();
 
@@ -35,6 +38,17 @@ export class IterationAssetsService {
         mimeType: inputPhoto.mimetype,
       });
       inputAssetId = asset._id.toString();
+    }
+
+    if (inspirationPhoto) {
+      const key = `${userId}/iterations/${randomId}/inspiration-photo`;
+      const asset = await this.fileAssetsService.uploadAsset({
+        userId,
+        key,
+        buffer: inspirationPhoto.buffer,
+        mimeType: inspirationPhoto.mimetype,
+      });
+      inspirationAssetId = asset._id.toString();
     }
 
     const referenceAssets = await Promise.all(
@@ -59,6 +73,7 @@ export class IterationAssetsService {
 
     return {
       inputAssetId,
+      inspirationAssetId,
       referenceAssetIds: referenceAssets.map((asset) => asset._id.toString()),
       outputAssetId: outputAsset._id.toString(),
     };

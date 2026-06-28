@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Menu, X, LogOut } from "lucide-react";
@@ -17,12 +17,7 @@ export const MobileNav = () => {
   const signOut = useSignOut();
   const isMobile = useIsMobile();
 
-  // Close when viewport resizes above mobile breakpoint
-  useEffect(() => {
-    if (!isMobile && open) {
-      setOpen(false);
-    }
-  }, [isMobile, open]);
+  const isNavOpen = open && isMobile;
 
   const handleNavigation = (href: string) => {
     router.push(href);
@@ -32,10 +27,10 @@ export const MobileNav = () => {
   return (
     <>
       <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setOpen(!open)}>
-        {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        {isNavOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
       </Button>
 
-      {open && (
+      {isNavOpen && (
         <>
           <div
             className="fixed inset-0 top-14 z-40 bg-black/40 md:hidden"

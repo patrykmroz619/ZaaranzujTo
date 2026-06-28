@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "@repo/ui/core/button";
 import {
@@ -24,11 +24,6 @@ export const EditProjectNameDialog = (props: TEditProjectNameDialogProps) => {
   const { open, onOpenChange, currentName, onSave, isPending } = props;
   const [name, setName] = useState(currentName);
   const t = useTranslations();
-
-  useEffect(() => {
-    if (!open) return;
-    setName(currentName);
-  }, [open, currentName]);
 
   const trimmedName = name.trim();
   const isNameChanged = useMemo(

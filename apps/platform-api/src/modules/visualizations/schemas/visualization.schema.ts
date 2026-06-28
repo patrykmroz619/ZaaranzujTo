@@ -42,6 +42,9 @@ export class IterationInput {
 
   @Prop({ type: [String], required: true, default: [] })
   referenceAssets: string[];
+
+  @Prop({ required: false, default: null, type: String })
+  inspirationAsset: string | null;
 }
 
 const IterationInputSchema = SchemaFactory.createForClass(IterationInput);

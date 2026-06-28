@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 
-export type FileAssetDocument = FileAsset & Document;
+export type FileAssetDocument = FileAsset & Document & { createdAt: Date; updatedAt: Date };
 
 @Schema({ collection: "file_assets", timestamps: true })
 export class FileAsset {

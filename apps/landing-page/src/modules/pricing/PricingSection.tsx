@@ -23,9 +23,7 @@ export const PricingSection = () => {
             const savingsPercent = Math.round(
               (1 - pkg.price.amount / pkg.credits / maxPricePerCredit) * 100,
             );
-            return (
-              <PricingCard key={pkg.packageCode} pkg={pkg} savingsPercent={savingsPercent} />
-            );
+            return <PricingCard key={pkg.packageCode} pkg={pkg} savingsPercent={savingsPercent} />;
           })}
         </div>
 
