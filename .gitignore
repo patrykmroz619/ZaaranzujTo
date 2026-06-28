@@ -39,3 +39,7 @@ yarn-error.log*
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# Task specs (local only)
+specs/tasks/*
+!specs/tasks/.gitkeep
