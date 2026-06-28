@@ -77,6 +77,7 @@ export class VisualizationsController {
     FileFieldsInterceptor([
       { name: "inputPhoto", maxCount: 1 },
       { name: "referencePhotos", maxCount: 8 },
+      { name: "inspirationPhoto", maxCount: 1 },
     ]),
   )
   createVisualization(
@@ -87,6 +88,7 @@ export class VisualizationsController {
     files: {
       inputPhoto?: TUploadedIterationFile[];
       referencePhotos?: TUploadedIterationFile[];
+      inspirationPhoto?: TUploadedIterationFile[];
     } = {},
   ) {
     const parsedParams = visualizationProjectIdParamsSchema.parse(params);
@@ -111,6 +113,7 @@ export class VisualizationsController {
       projectId: parsedParams.projectId,
       body: bodyResult.data,
       inputPhoto,
+      inspirationPhoto: files.inspirationPhoto?.[0],
       referencePhotos: files.referencePhotos ?? [],
     });
   }
@@ -204,6 +207,7 @@ export class VisualizationsController {
       userId: user._id,
       prompt: bodyResult.data.prompt,
       inputPhoto: undefined,
+      inspirationPhoto: undefined,
       parentIterationId: bodyResult.data.parentIterationId,
       referencePhotos: files.referencePhotos ?? [],
     });

@@ -4,6 +4,7 @@ type TFirstIterationPromptParams = {
   roomType?: string;
   prompt?: string;
   hasInputPhoto: boolean;
+  hasInspirationPhoto: boolean;
   hasReferencePhotos: boolean;
 };
 
@@ -16,7 +17,15 @@ type TSubsequentIterationPromptParams = {
 };
 
 export const generateFirstIterationPrompt = (params: TFirstIterationPromptParams): string => {
-  const { stylePreset, palette, roomType, prompt, hasInputPhoto, hasReferencePhotos } = params;
+  const {
+    stylePreset,
+    palette,
+    roomType,
+    prompt,
+    hasInputPhoto,
+    hasInspirationPhoto,
+    hasReferencePhotos,
+  } = params;
 
   // ── images ────────────────────────────────────────────────────────────────
   const images: Record<string, string> = {};
@@ -26,8 +35,15 @@ export const generateFirstIterationPrompt = (params: TFirstIterationPromptParams
       "Photo of the actual room. It defines the geometry, perspective, lighting direction, and every architectural detail of the output.";
   }
 
+  if (hasInspirationPhoto) {
+    const key = hasInputPhoto ? "image_2" : "image_1";
+    images[key] =
+      "Design inspiration. Follow its style, colour palette, materials, and mood — do not copy specific furniture pieces, their placement, or the room layout.";
+  }
+
   if (hasReferencePhotos) {
-    const key = hasInputPhoto ? "remaining_images" : "reference_images";
+    const hasAnyPhoto = hasInputPhoto || hasInspirationPhoto;
+    const key = hasAnyPhoto ? "remaining_images" : "reference_images";
     images[key] =
       "Furniture and decor references. Each piece appears in the output with its exact type, silhouette, proportions, materials, and color — one reference, one object.";
   }
@@ -40,6 +56,12 @@ export const generateFirstIterationPrompt = (params: TFirstIterationPromptParams
       "Room architecture is locked to the input photo. Walls, openings, ceiling, and built-in features stay exactly as shown — nothing added, removed, moved, resized, or reshaped.",
       "Camera position, lens, perspective, and framing match the input photo precisely.",
       "All furniture and decor must fit inside the visible room boundaries.",
+    );
+  }
+
+  if (hasInspirationPhoto) {
+    hardConstraints.push(
+      "Inspiration image is a style-only reference. Do not replicate its layout, furniture arrangement, or any specific objects — extract only aesthetic cues.",
     );
   }
 

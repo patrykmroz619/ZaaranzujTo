@@ -13,6 +13,7 @@ type TCreateVisualizationParams = {
   projectId: string;
   body: TCreateVisualizationRequest;
   inputPhoto: TUploadedFile | undefined;
+  inspirationPhoto: TUploadedFile | undefined;
   referencePhotos: TUploadedFile[];
 };
 
@@ -28,7 +29,7 @@ export class CreateVisualizationService {
   ) {}
 
   createVisualization = async (params: TCreateVisualizationParams) => {
-    const { clerkId, email, projectId, body, inputPhoto, referencePhotos } = params;
+    const { clerkId, email, projectId, body, inputPhoto, inspirationPhoto, referencePhotos } = params;
 
     const user = await this.iterationAccessService.resolveAuthorizedUserForProject({
       clerkId,
@@ -54,6 +55,7 @@ export class CreateVisualizationService {
         userId: user._id,
         prompt: body.prompt ?? "",
         inputPhoto,
+        inspirationPhoto,
         parentIterationId: undefined,
         referencePhotos,
       });

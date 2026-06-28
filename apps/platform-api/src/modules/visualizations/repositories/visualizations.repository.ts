@@ -71,6 +71,7 @@ type TAppendIterationForVisualizationForUserParams = {
     prompt: string | null;
     inputAsset: string | null;
     referenceAssets: string[];
+    inspirationAsset: string | null;
   };
   outputAsset: string | null;
   resultImageAssetId: string | null;

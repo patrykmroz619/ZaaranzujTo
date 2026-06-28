@@ -243,6 +243,7 @@ export const iterationInputSchema = z
     prompt: z.string().nullable().optional(),
     inputAsset: objectIdSchema.nullable(),
     referenceAssets: z.array(objectIdSchema),
+    inspirationAsset: objectIdSchema.nullable().optional(),
   })
   .strict();
 

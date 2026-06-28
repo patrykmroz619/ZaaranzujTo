@@ -28,6 +28,7 @@ type TCreateIterationParams = {
   userId: Types.ObjectId;
   prompt: string;
   inputPhoto: TUploadedFile | undefined;
+  inspirationPhoto: TUploadedFile | undefined;
   parentIterationId: string | undefined;
   referencePhotos: TUploadedFile[];
 };
@@ -54,14 +55,14 @@ export class CreateIterationService {
   }
 
   createIteration = async (params: TCreateIterationParams) => {
-    const { visualization, userId, prompt, inputPhoto, parentIterationId, referencePhotos } = params;
+    const { visualization, userId, prompt, inputPhoto, inspirationPhoto, parentIterationId, referencePhotos } = params;
 
     const visualizationId = visualization._id.toString();
     const userIdStr = userId.toString();
 
     this.logger.log(
       `[createIteration] START visualizationId=${visualizationId} ` +
-        `hasInputPhoto=${!!inputPhoto} parentIterationId=${parentIterationId ?? "none"} ` +
+        `hasInputPhoto=${!!inputPhoto} hasInspirationPhoto=${!!inspirationPhoto} parentIterationId=${parentIterationId ?? "none"} ` +
         `referencePhotosCount=${referencePhotos.length} hasPrompt=${!!prompt}`,
     );
 
@@ -75,11 +76,18 @@ export class CreateIterationService {
 
     this.iterationFilesValidatorService.validateFiles({
       inputPhoto,
+      inspirationPhoto,
       referencePhotos,
     });
 
     const optimizedInputPhoto = inputPhoto
       ? await this.imageOptimizationService.optimize(inputPhoto, {
+          maxDimensionPx: 1024,
+          quality: 72,
+        })
+      : undefined;
+    const optimizedInspirationPhoto = inspirationPhoto
+      ? await this.imageOptimizationService.optimize(inspirationPhoto, {
           maxDimensionPx: 1024,
           quality: 72,
         })
@@ -92,6 +100,7 @@ export class CreateIterationService {
     await this.moderateIterationContent({
       prompt,
       inputPhoto: optimizedInputPhoto,
+      inspirationPhoto: optimizedInspirationPhoto,
       referencePhotos: optimizedReferencePhotos,
       stylePresetCustom: visualization.stylePresetCustom,
       paletteCustom: visualization.paletteCustom,
@@ -149,6 +158,7 @@ export class CreateIterationService {
           roomType: effectiveRoomType,
           prompt,
           hasInputPhoto: !!inputPhoto,
+          hasInspirationPhoto: !!optimizedInspirationPhoto,
           hasReferencePhotos: referencePhotos.length > 0,
         });
 
@@ -168,6 +178,13 @@ export class CreateIterationService {
         allReferenceImages.push({
           base64: optimizedInputPhoto.buffer.toString("base64"),
           mediaType: optimizedInputPhoto.mimetype,
+        });
+      }
+
+      if (optimizedInspirationPhoto) {
+        allReferenceImages.push({
+          base64: optimizedInspirationPhoto.buffer.toString("base64"),
+          mediaType: optimizedInspirationPhoto.mimetype,
         });
       }
 
@@ -207,6 +224,7 @@ export class CreateIterationService {
       const registeredAssetsBundle = await this.iterationAssetsService.uploadAssetsForIteration({
         userId: userIdStr,
         inputPhoto: optimizedInputPhoto,
+        inspirationPhoto: optimizedInspirationPhoto,
         referencePhotos: optimizedReferencePhotos,
         outputMediaType: optimizedOutput.mimetype,
         outputBytes: optimizedOutput.buffer,
@@ -224,6 +242,7 @@ export class CreateIterationService {
             prompt: prompt.length > 0 ? prompt : null,
             inputAsset: registeredAssetsBundle.inputAssetId,
             referenceAssets: registeredAssetsBundle.referenceAssetIds,
+            inspirationAsset: registeredAssetsBundle.inspirationAssetId,
           },
           outputAsset: registeredAssetsBundle.outputAssetId,
           resultImageAssetId: registeredAssetsBundle.outputAssetId,
@@ -287,12 +306,13 @@ export class CreateIterationService {
   private moderateIterationContent = async (params: {
     prompt: string;
     inputPhoto: TUploadedFile | undefined;
+    inspirationPhoto: TUploadedFile | undefined;
     referencePhotos: TUploadedFile[];
     stylePresetCustom?: string | null;
     paletteCustom?: string | null;
     roomTypeCustom?: string | null;
   }) => {
-    const { prompt, inputPhoto, referencePhotos, stylePresetCustom, paletteCustom, roomTypeCustom } =
+    const { prompt, inputPhoto, inspirationPhoto, referencePhotos, stylePresetCustom, paletteCustom, roomTypeCustom } =
       params;
 
     const textParts = [
@@ -306,6 +326,7 @@ export class CreateIterationService {
       text: textParts.length > 0 ? textParts.join("\n") : undefined,
       images: this.buildModerationImages({
         inputPhoto,
+        inspirationPhoto,
         referencePhotos,
       }),
     });
@@ -313,13 +334,17 @@ export class CreateIterationService {
 
   private buildModerationImages = (params: {
     inputPhoto: TUploadedFile | undefined;
+    inspirationPhoto: TUploadedFile | undefined;
     referencePhotos: TUploadedFile[];
   }): Array<{ base64: string; mediaType: string }> => {
-    const { inputPhoto, referencePhotos } = params;
+    const { inputPhoto, inspirationPhoto, referencePhotos } = params;
 
     return [
       inputPhoto
         ? { base64: inputPhoto.buffer.toString("base64"), mediaType: inputPhoto.mimetype }
+        : undefined,
+      inspirationPhoto
+        ? { base64: inspirationPhoto.buffer.toString("base64"), mediaType: inspirationPhoto.mimetype }
         : undefined,
       ...referencePhotos.map((file) => ({
         base64: file.buffer.toString("base64"),
