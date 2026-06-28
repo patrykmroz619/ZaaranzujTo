@@ -6,7 +6,7 @@ type TDeleteMeAccountPlaceholderParams = {
 
 @Injectable()
 export class DeleteMeAccountPlaceholderService {
-  deleteMeAccount = async (params: TDeleteMeAccountPlaceholderParams) => {
+  deleteMeAccount = (params: TDeleteMeAccountPlaceholderParams) => {
     const { clerkId } = params;
 
     throw new NotImplementedException(

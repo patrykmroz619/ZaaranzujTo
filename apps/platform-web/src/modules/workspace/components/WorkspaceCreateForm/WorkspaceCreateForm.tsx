@@ -135,9 +135,13 @@ export const WorkspaceCreateForm = (props: TWorkspaceCreateFormProps) => {
     mode: "onChange",
   });
 
-  const roomPhotoFile = form.watch("roomPhotoFile");
-  const furniturePhotoFiles = form.watch("furniturePhotoFiles");
-  const inspirationPhotoFile = form.watch("inspirationPhotoFile");
+  const roomPhotoFile = useWatch({ control: form.control, name: "roomPhotoFile" });
+  const furniturePhotoFiles = useWatch({
+    control: form.control,
+    name: "furniturePhotoFiles",
+    defaultValue: [],
+  });
+  const inspirationPhotoFile = useWatch({ control: form.control, name: "inspirationPhotoFile" });
 
   const roomPhotoPreview = useMemo(() => {
     if (!roomPhotoFile) return null;

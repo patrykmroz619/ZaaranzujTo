@@ -1,5 +1,6 @@
 "use client";
 
+import NextImage from "next/image";
 import { useTranslations } from "next-intl";
 import { Image as ImageIcon, Loader2 } from "lucide-react";
 import type { TIterationObject } from "@repo/contracts";
@@ -31,13 +32,15 @@ export const WorkspacePreview = (props: TWorkspacePreviewProps) => {
             <p className="text-sm text-muted-foreground">{t("generatingMessage")}</p>
           </div>
         ) : hasResult ? (
-          <div className="relative aspect-video bg-muted flex items-center justify-center overflow-hidden">
+          <div className="relative aspect-video bg-muted overflow-hidden">
             {activeImageUrl && activeIteration ? (
               <>
-                <img
+                <NextImage
+                  fill
+                  unoptimized
                   src={activeImageUrl}
                   alt={t("generatedVisualization")}
-                  className="h-full w-full object-cover"
+                  className="object-cover"
                 />
                 <VisualizationDownloadButton
                   assetId={activeIteration.result.imageAssetId}

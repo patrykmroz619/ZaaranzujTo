@@ -1,6 +1,4 @@
 import { Injectable } from "@nestjs/common";
-import type { TListProjectVisualizationsSort } from "../schemas/visualization.schema";
-
 import { ValidateProjectOwnershipService as ProjectsValidateProjectOwnershipService } from "../../projects/services/validate-project-ownership.service";
 import { GetUserService } from "../../users/services/get-user.service";
 import { type TListProjectVisualizationsQuery } from "../visualizations.dto";

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "@repo/ui/core/sonner";
 import { useProfile } from "@/core/packages/profile/use-profile";
@@ -38,14 +38,10 @@ export const useWorkspace = (params: TUseWorkspaceParams) => {
       }
     : null;
 
-  useEffect(() => {
-    if (!visualization) return;
-    const lastIteration = visualization.iterations[visualization.iterations.length - 1];
-    if (lastIteration) {
-      setActiveIterationId(lastIteration.id);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visualization?.id]);
+  const lastIterationId = visualization?.iterations[visualization.iterations.length - 1]?.id ?? "";
+  const resolvedActiveIterationId = iterations.some((it) => it.id === activeIterationId)
+    ? activeIterationId
+    : lastIterationId;
 
   const onIterate = async (values: TWorkspaceIterationValues) => {
     if (!activeIterationId) return;
@@ -92,7 +88,7 @@ export const useWorkspace = (params: TUseWorkspaceParams) => {
     isLoading,
     isGenerating,
     creditBalance,
-    activeIterationId,
+    activeIterationId: resolvedActiveIterationId,
     iterations,
     visualizationAttributes,
     visualizationName: visualization?.name ?? "",

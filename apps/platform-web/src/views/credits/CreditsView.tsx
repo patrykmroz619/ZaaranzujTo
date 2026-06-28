@@ -18,7 +18,7 @@ export const CreditsView = () => {
   const activePackages = (packages?.items ?? []).filter((pkg) => pkg.isActive);
   const balance = profile?.creditBalance ?? 0;
 
-  const handleBuy = (_packageCode: string) => {
+  const handleBuy = () => {
     // Payment integration is out of scope for this feature
   };
 

@@ -1,9 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import {
-  listProjectsQuerySchema,
-  listProjectsResponseSchema,
-  type TProjectSort,
-} from "@repo/contracts/projects";
+import { listProjectsQuerySchema, listProjectsResponseSchema } from "@repo/contracts/projects";
 
 import { GetUserService } from "../../users/services/get-user.service";
 import { ProjectsRepository } from "../repositories/projects.repository";

@@ -28,7 +28,7 @@ export const ProjectsView = () => {
 
   const { projects, isLoading, error } = useProjects({ query: { sort, page: 1, pageSize: 20 } });
   const { mutate: createProject, isPending: isCreating } = useCreateProject();
-  const { mutate: deleteProject, isPending: isDeleting } = useDeleteProject();
+  const { mutate: deleteProject } = useDeleteProject();
   const { mutate: updateProject, isPending: isUpdating } = useUpdateProject();
 
   const handleCreateProject = (name: string) => {
@@ -134,6 +134,7 @@ export const ProjectsView = () => {
       />
 
       <EditProjectNameDialog
+        key={editProjectId ?? "none"}
         open={!!editProject}
         onOpenChange={() => setEditProjectId(null)}
         currentName={editProject?.name ?? ""}

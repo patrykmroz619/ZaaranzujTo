@@ -1,5 +1,6 @@
 "use client";
 
+import NextImage from "next/image";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Image as ImageIcon, MoreVertical, Trash2 } from "lucide-react";
@@ -31,9 +32,15 @@ export const VisualizationCard = (props: TVisualizationCardProps) => {
       className="group cursor-pointer overflow-hidden transition-shadow hover:shadow-elevated"
       onClick={() => router.push(`/projects/${projectId}/workspace/${visualization.id}`)}
     >
-      <div className="aspect-video bg-muted flex items-center justify-center">
+      <div className="relative aspect-video bg-muted overflow-hidden">
         {thumbnailUrl ? (
-          <img src={thumbnailUrl} alt={visualization.name} className="h-full w-full object-cover" />
+          <NextImage
+            fill
+            unoptimized
+            src={thumbnailUrl}
+            alt={visualization.name}
+            className="object-cover"
+          />
         ) : (
           <ImageIcon className="h-12 w-12 text-muted-foreground/30" />
         )}

@@ -36,6 +36,7 @@ export const PhotoUpload = (props: TPhotoUploadProps) => {
       <p className="text-xs text-muted-foreground">{t("workspace.roomPhotoOptional")}</p>
       {preview ? (
         <div className="relative">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={preview} alt="Room" className="h-40 w-full rounded-lg object-cover" />
           <Button
             variant="secondary"

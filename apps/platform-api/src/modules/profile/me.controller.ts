@@ -4,7 +4,7 @@ import { AuthGuard, CurrentUser, type TAuthData } from "../../shared/auth";
 import { DeleteMeAccountPlaceholderService } from "./services/delete-me-account-placeholder.service";
 import { MeProfileService } from "./services/me-profile.service";
 import { UpdateMeProfileService } from "./services/update-me-profile.service";
-import { DeleteMeDto, UpdateMeDto } from "./profile.dto";
+import { UpdateMeDto } from "./profile.dto";
 
 @Controller("me")
 export class MeController {
@@ -35,8 +35,8 @@ export class MeController {
 
   @Delete()
   @UseGuards(AuthGuard)
-  async deleteMeAccount(@CurrentUser() currentUser: TAuthData, @Body() _body: DeleteMeDto) {
-    await this.deleteMeAccountPlaceholderService.deleteMeAccount({
+  deleteMeAccount(@CurrentUser() currentUser: TAuthData) {
+    this.deleteMeAccountPlaceholderService.deleteMeAccount({
       clerkId: currentUser.userId,
     });
   }

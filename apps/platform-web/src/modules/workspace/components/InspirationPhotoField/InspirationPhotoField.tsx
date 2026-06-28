@@ -36,6 +36,7 @@ export const InspirationPhotoField = (props: TInspirationPhotoFieldProps) => {
       <p className="text-xs text-muted-foreground">{t("workspace.inspirationPhotoOptional")}</p>
       {preview ? (
         <div className="relative">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={preview}
             alt={t("workspace.inspirationPhoto")}
