@@ -132,16 +132,15 @@ export const WorkspaceCreateForm = (props: TWorkspaceCreateFormProps) => {
       furniturePhotoFiles: [],
       inspirationPhotoFile: undefined,
     },
-    mode: "onChange",
+    mode: "all",
   });
 
-  const roomPhotoFile = useWatch({ control: form.control, name: "roomPhotoFile" });
-  const furniturePhotoFiles = useWatch({
-    control: form.control,
-    name: "furniturePhotoFiles",
-    defaultValue: [],
-  });
-  const inspirationPhotoFile = useWatch({ control: form.control, name: "inspirationPhotoFile" });
+  // TODO: React Compiler cannot memoize React Hook Form's watch() API safely. Consider refactoring to avoid direct watch() calls in the component when better support is available.
+  /* eslint-disable react-hooks/incompatible-library */
+  const roomPhotoFile = form.watch("roomPhotoFile");
+  const furniturePhotoFiles = form.watch("furniturePhotoFiles");
+  const inspirationPhotoFile = form.watch("inspirationPhotoFile");
+  /* eslint-enable react-hooks/incompatible-library */
 
   const roomPhotoPreview = useMemo(() => {
     if (!roomPhotoFile) return null;

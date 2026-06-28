@@ -43,11 +43,11 @@ export const useWorkspace = (params: TUseWorkspaceParams) => {
     ? activeIterationId
     : lastIterationId;
 
-  const onIterate = async (values: TWorkspaceIterationValues) => {
-    if (!activeIterationId) return;
+  const onIterate = async (values: TWorkspaceIterationValues): Promise<boolean> => {
+    if (!resolvedActiveIterationId) return false;
 
     const formData = new FormData();
-    formData.append("parentIterationId", activeIterationId);
+    formData.append("parentIterationId", resolvedActiveIterationId);
     formData.append("prompt", values.prompt);
     values.furniturePhotoFiles.forEach((file) => formData.append("referencePhotos", file));
 
@@ -56,6 +56,7 @@ export const useWorkspace = (params: TUseWorkspaceParams) => {
       if (result) {
         setActiveIterationId(result.iteration.iterationId);
       }
+      return true;
     } catch (err) {
       if (err instanceof ApiError) {
         switch (err.code) {
@@ -77,6 +78,7 @@ export const useWorkspace = (params: TUseWorkspaceParams) => {
       } else {
         toast.error(t("errors.500"));
       }
+      return false;
     }
   };
 

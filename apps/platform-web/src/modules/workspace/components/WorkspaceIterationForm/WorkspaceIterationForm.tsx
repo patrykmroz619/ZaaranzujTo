@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useForm, useWatch } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { Button } from "@repo/ui/core/button";
@@ -26,7 +26,7 @@ type TWorkspaceIterationFormProps = {
   visualizationAttributes: TVisualizationAttributes;
   isGenerating: boolean;
   creditBalance: number;
-  onSubmit: (values: TWorkspaceIterationValues) => Promise<void>;
+  onSubmit: (values: TWorkspaceIterationValues) => Promise<boolean>;
 };
 
 export const WorkspaceIterationForm = (props: TWorkspaceIterationFormProps) => {
@@ -42,11 +42,9 @@ export const WorkspaceIterationForm = (props: TWorkspaceIterationFormProps) => {
     mode: "onChange",
   });
 
-  const furniturePhotoFiles = useWatch({
-    control: form.control,
-    name: "furniturePhotoFiles",
-    defaultValue: [],
-  });
+  // TODO: React Compiler cannot memoize React Hook Form's watch() API safely. Consider refactoring to avoid direct watch() calls in the component when better support is available.
+  /* eslint-disable-next-line react-hooks/incompatible-library */
+  const furniturePhotoFiles = form.watch("furniturePhotoFiles");
 
   return (
     <div className="w-full space-y-5 lg:w-100 lg:shrink-0">
@@ -96,8 +94,8 @@ export const WorkspaceIterationForm = (props: TWorkspaceIterationFormProps) => {
               <Button
                 type="button"
                 onClick={form.handleSubmit(async (values) => {
-                  await onSubmit(values);
-                  form.reset({ prompt: "", furniturePhotoFiles: [] });
+                  const success = await onSubmit(values);
+                  if (success) form.reset({ prompt: "", furniturePhotoFiles: [] });
                 })}
                 disabled={!form.formState.isValid || isGenerating}
                 className="w-full gradient-warm text-primary-foreground border-0"
