@@ -42,6 +42,8 @@ export const WorkspaceIterationForm = (props: TWorkspaceIterationFormProps) => {
     mode: "onChange",
   });
 
+  // TODO: React Compiler cannot memoize React Hook Form's watch() API safely. Consider refactoring to avoid direct watch() calls in the component when better support is available.
+  /* eslint-disable-next-line react-hooks/incompatible-library */
   const furniturePhotoFiles = form.watch("furniturePhotoFiles");
 
   return (
