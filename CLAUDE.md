@@ -17,6 +17,16 @@ Bun + Turborepo monorepo with the following workspaces:
 - `packages/ui` — Shared React components (no business logic)
 - `packages/eslint-config`, `packages/typescript-config` — Shared tooling configs
 
+Each workspace has its own `CLAUDE.md` with stack-specific rules. This root file
+holds only repo-wide guidance; the nested files load on demand when Claude works
+in that workspace (or at launch when you start Claude from that directory):
+
+- `apps/platform-api/CLAUDE.md` — NestJS backend
+- `apps/platform-web/CLAUDE.md` — Next.js frontend
+- `apps/landing-page/CLAUDE.md` — Astro landing page
+- `packages/contracts/CLAUDE.md` — shared Zod contracts
+- `packages/ui/CLAUDE.md` — shared React components
+
 ## Commands
 
 All commands run from the monorepo root (`ZaaranzujTo/`).
@@ -55,55 +65,9 @@ bun run test:e2e
 | Auth      | Clerk (shared between frontend and backend)                          |
 | Contracts | `@repo/contracts` — Zod schemas + TypeScript types                   |
 
-## Architecture
-
-### apps/landing-page
-
-Static marketing site built with Astro 6.
-
-### apps/platform-api
-
-NestJS REST API.
-
-### apps/platform-web
-
-Next.js 16 App Router frontend.
-
-### packages/contracts
-
-Defines the shared API contract between frontend and backend using Zod schemas. Both apps import from `@repo/contracts`.
-
-## Rules
-
-### Backend Rules — NestJS
-
-- Use `AuthGuard` to protect routes using `@UseGuards(AuthGuard)`.
-- Favor single responsibility principle for services.
-- If a module contains more than one service/controller/repository, store them in a dedicated folder called `services`, `controllers`, or `repositories` in the module directory.
-- Define DTOs using the `nestjs-zod` package in `<module-name>.dto.ts` files and use them in controllers to validate request data.
-- Do not export repositories from modules. If you need to use a repository in another module, create a service in the module that owns the repository and export the service instead.
-- Repositories shouldn't contain any business logic; they should be simple wrappers around database operations. Services should contain all the business logic and use repositories to interact with the database.
-
-### Frontend Rules — Common (React)
-
-- Keep components small and focused on a single responsibility.
-- If a component starts mixing data fetching, mapping logic, and complex JSX structure, split it into smaller components and helper files.
-- For larger views, keep one orchestration component for data loading and delegate rendering to presentational child components.
-- Each component should have its own folder with `index.ts` file.
-
-### Frontend Rules — Next.js (platform-web)
-
-- Follow vertical slice architecture, grouping related components, hooks, and styles together.
-- Domain-specific logic should be stored in the `modules` folder following vertical slice architecture.
-- When creating new pages, add a dedicated component in the `views` folder and keep `page.tsx` as thin as possible.
-- Store reusable components without business logic in the `@repo/ui` package. In newly added views, analyze if there is a potential for reuse of some parts of the code and, if so, extract them to the `@repo/ui` package.
-
-### Frontend Rules — Astro (landing-page)
-
-- Prefer React for all components (`.tsx`), even static ones — avoid writing `.astro` components.
-- Minimize JavaScript shipped to the browser — use `client:visible` or `client:idle` for islands that don't need to be interactive immediately; only use `client:load` when the component must be interactive on page load.
-
 ## Code Style
+
+These conventions apply across every workspace.
 
 - Use `T` prefix for types (e.g., `TUser`, `TProject`)
 - Prefer `type` over `interface`
