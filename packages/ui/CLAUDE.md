@@ -7,7 +7,9 @@
 
 ## Structure
 
-`src/` is organized as: `components/`, `core/`, `hooks/`, `lib/`, `styles/`.
+> Full folder anatomy, import boundaries, and segment rules: [`DIRECTORY_STRUCTURE.md`](./DIRECTORY_STRUCTURE.md).
+
+`src/` is organized as: `tokens/`, `core/`, `components/`, `hooks/`, `lib/`.
 
 ## Rules — React (common)
 
